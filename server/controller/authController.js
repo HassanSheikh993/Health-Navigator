@@ -7,13 +7,13 @@ import { generateToken } from "../config/generateToken.js";
 
 export const loginUser = async (req,res)=>{
     const {email,password} = req.body;
-    if(!email || !password) return res.status(400).json({message:"Incomplete Data"})
+    if(!email || !password) return res.status(400).json({message:"Incomplete Data",status:false})
 
    const userExist = await findUserByEmail(email);
-   if(userExist === false) return res.status(404).json({message:"user not found"})
+   if(userExist === false) return res.status(404).json({message:"user not found",success: false})
 
    const isMatch = await userExist.matchPassword(password);
-   if(!isMatch) return res.status(401).json({message:"Incorrect Password"});
+   if(!isMatch) return res.status(401).json({message:"Incorrect Password",success: false});
 
 const token = generateToken(userExist._id);
 
@@ -24,7 +24,8 @@ res.cookie("token", token, {
   maxAge: 30 * 24 * 60 * 60 * 1000, // optional: 30 days
 });
 
-   res.status(200).json(userExist);
+  //  res.status(200).json(userExist);
+  res.json({ success: true, message: "Login successful",userEmail:userExist.userEmail});
 
 }
 
@@ -43,8 +44,9 @@ export const registration = async(req,res)=>{
      tempUsers[email] = { name, email, password, role, verificationCode };
 
     await sendEmail(email, verificationCode);
-    res.status(200).json({ message: "Verification code sent to email" });
+    res.status(200).json({ message: "Verification code sent to email",status: true });
 
+  
 
     }catch(err){
         return res.status(500).send(`Error in registration function ${err}`)
@@ -57,7 +59,7 @@ export const verifyEmailCode = async (req, res) => {
     const tempUser = tempUsers[email];
 
     if (!tempUser || tempUser.verificationCode != code) {
-      return res.status(400).json({ message: "Invalid or expired code" });
+      return res.status(400).json({ message: "Invalid or expired code",success: true });
     }
 
     const newUser = await User.create({
