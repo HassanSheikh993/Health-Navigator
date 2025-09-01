@@ -39,3 +39,21 @@ if(req.file){
         res.status(500).json({ message: "Error updating profile", error });
     }
 };
+
+
+
+
+export const loginUserData = async (req, res) => {
+    try {
+        const result = await User.findById(req.user.id).select("-password"); // exclude password
+        
+        if (!result) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json(result);
+    } catch (err) {
+        console.error("Error in loginUserData:", err);
+        return res.status(500).json({ message: "Server error" });
+    }
+};
