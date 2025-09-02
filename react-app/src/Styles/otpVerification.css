@@ -1,0 +1,89 @@
+/* OTP Verification Styles */
+.otp_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.otp_form_box {
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.otp_heading {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.otp_instruction {
+  color: #7f8c8d;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.otp_instruction strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.otp_form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.otp_input {
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  text-align: center;
+  letter-spacing: 4px;
+  font-weight: bold;
+}
+
+.otp_input:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+.otp_submit {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.otp_submit:hover {
+  background-color: #2980b9;
+}
+
+.otp_status_message {
+  margin-top: 1.5rem;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.otp_status_message {
+  color: #27ae60;
+}
+
+.otp_status_message.error {
+  color: #e74c3c;
+}

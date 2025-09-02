@@ -1,0 +1,216 @@
+
+
+
+
+.edit_old_container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    background-image: url("../../public/images/profileBackground2.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.edit_old_main {
+    background: #fffffff6;
+    border: 1px solid #ddd;
+    padding: 30px;
+    max-width: 900px;
+    width: 100%;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.edit_old_title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.edit_old_form {
+    display: flex;
+    gap: 30px;
+}
+
+.edit_old_left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.edit_old_image_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit_old_profile_image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.edit_old_file_input {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.edit_old_right {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.edit_old_row {
+    display: flex;
+    gap: 20px;
+}
+
+.edit_old_form_detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.edit_old_form_detail label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #34495e;
+}
+
+
+
+.edit_old_form_detail input,
+.edit_old_form_detail textarea {
+    padding: 8px 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.edit_old_form_detail textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.edit_old_form_button {
+    padding: 10px;
+     background-color: #53C5B2;
+    border: none;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 150px;
+}
+
+.edit_old_form_button:hover {
+    background-color: #59d6c1;
+}
+
+.updateProfile_message {
+    margin-top: 10px;
+    color: #2980b9;
+}
+
+
+
+
+
+/* For tablets and smaller (max width 768px) */
+@media (max-width: 768px) {
+    .edit_old_form {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .edit_old_left, 
+    .edit_old_right {
+        width: 100%;
+    }
+
+    .edit_old_row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .edit_old_profile_image {
+        width: 120px;
+        height: 120px;
+    }
+
+    .edit_old_form_button {
+        width: 100%;
+    }
+}
+
+/* For small mobile devices (max width 480px) */
+@media (max-width: 480px) {
+    .edit_old_main {
+        padding: 15px;
+        gap: 15px;
+    }
+
+    .edit_old_title {
+        font-size: 20px;
+    }
+
+    .edit_old_profile_image {
+        width: 100px;
+        height: 100px;
+    }
+
+    .edit_old_form_detail input,
+    .edit_old_form_detail textarea {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+form textarea {
+    margin: 0 20px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Light border */
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form textarea:focus {
+    border-color: #5796E6; /* Highlight border on focus */
+    box-shadow: 0 0 8px rgba(134, 86, 237, 0.5); /* Glow effect */
+}
+
+form textarea[type="submit"] {
+    background-color: #5796E6cc; /* Solid color for submit button */
+    color: white;
+    cursor: pointer;
+    font-weight: 600; /* Bold text */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+form textarea[type="submit"]:hover {
+    background-color: #5796E6; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}

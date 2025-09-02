@@ -1,0 +1,95 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .DoctorDashBoard_container {
+    padding: 20px;
+    margin-bottom: 30px;
+    background-image: url("/images/doctor4.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .DoctorDashBoard_container_h1 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #1e293b;
+  }
+  
+  .top_part {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+  }
+  
+  .notification_box {
+    /* background-color: #9DE2DF; */
+    background-color: #EAEAEAcc;
+    padding: 30px;
+    text-align: center;
+    flex: 1 1 250px;
+    min-width: 250px;
+    max-width: 400px;
+    border-radius: 10px;
+    /* box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px; */
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+  }
+  
+  .notification_box_heading {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: #0f172a;
+  }
+  
+  .notification_box h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1e293b;
+  }
+  
+  .message_user_to_dr_container {
+    padding: 20px;
+  }
+  
+  .message_user_to_dr_container h3 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: #0f172a;
+  }
+  
+  .message_user_to_dr_container h4 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 500;
+    color: #475569;
+  }
+  
+  .message_user_to_dr_messages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    padding: 0 10px;
+  }
+  
+  .user_messages {
+    background-color: #48cae4;
+    border-radius: 15px;
+    padding: 20px;
+    color: #fff;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: rgba(0, 0, 0, 0.15) 0px 4px 12px;
+  }
+  
+  .user_messages:hover {
+    transform: translateY(-5px);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 6px 20px;
+  }
+  

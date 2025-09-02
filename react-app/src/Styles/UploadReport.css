@@ -1,0 +1,423 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+.UploadReportHeroSection{
+    background-color: #BDD7DB;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10vw;
+
+}
+
+.UploadReportHeroSection h1{
+    font-size: 1.5rem;
+    font-weight: bolder;
+}
+
+
+/* Base Styles */
+.mainSection {
+    max-height: 100%;
+    display: flex;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    column-gap: 20px;
+  }
+
+  .mainSection_guide h2{
+    margin-bottom: 2%;
+  }
+  
+  .mainSection_uploadReport {
+    padding: 3%;
+    width: 40%;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+  }
+  
+  .mainSection_uploadReport .dragAndUploadFile {
+    display: flex;
+    align-items: center;
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    margin-top: 5%;
+  }
+  
+  .mainSection_uploadReport .dragAndUploadFile .dragAndUploadFile_img {
+    background-color: #BDD7DB;
+    padding: 5px 8px;
+  }
+  
+  .mainSection_uploadReport .dragAndUploadFile img {
+    height: 40px;
+  }
+  
+  .mainSection_uploadReport .dragAndUploadFile p {
+    padding-left: 1rem;
+  }
+  
+  .border {
+    margin: 30px 0px;
+    border-top: 2px solid black;
+  }
+  
+  .mainSection_uploadReport button {
+    border: none;
+    background-color: #53C5B2;
+    color: white;
+    padding: 8px 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    box-shadow:  0px 5px 15px rgba(0, 0, 0, 0.35);
+  }
+  
+  .mainSection_guide {
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    width: 60%;
+    padding: 3%;
+  }
+  
+  .mainSection_guide .subPart {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+  }
+  
+  .mainSection_guide .subPart .subPart_image {
+    height: 250px;
+    width: 650px;
+  }
+  
+  .mainSection_guide .subPart .subPart_image img {
+    height: 100%;
+    width: 100%;
+  }
+  .subPart_list ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-top: 4%;
+}
+
+.subPart_list ul li {
+    position: relative;
+    padding-left: 1.5em;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center; /* Ensures alignment */
+}
+
+.subPart_list ul li::before {
+    content: "\25C6"; /* Unicode for ◆ */
+    position: absolute;
+    left: 0;
+    color: #53c5b2;
+    font-size: 1.2em;
+    line-height: 1;
+}
+
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .mainSection {
+      flex-direction: column;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+  
+    .mainSection_uploadReport,
+    .mainSection_guide {
+      width: 100%;
+      margin-bottom: 20px;
+    }
+  
+    .mainSection_guide .subPart {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .mainSection_guide .subPart .subPart_image {
+      width: 100%;
+      height: 250px;
+      width: 350px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .mainSection {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  
+    .mainSection_uploadReport .dragAndUploadFile {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .mainSection_uploadReport .dragAndUploadFile p {
+      padding-left: 0;
+      margin-top: 10px;
+    }
+  
+    .mainSection_guide .subPart .subPart_image {
+      height: auto;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .mainSection_uploadReport a {
+      padding: 8px 10px;
+      font-size: 0.9rem;
+    }
+  
+    .mainSection_guide h2,
+    .mainSection_uploadReport h2 {
+      font-size: 1.5rem;
+    }
+  
+    .mainSection_guide .subPart .subPart_image {
+      height: auto;
+    }
+  
+    .subPart_list ul li {
+      font-size: 0.9rem;
+    }
+  }
+
+
+
+
+
+
+
+
+/* Base Styles */
+.AIGeneratedAnalysis_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 5% 15%;
+  margin-top: 25%;
+  margin-bottom: 10%;
+  max-height: 50vw;
+}
+
+
+.AIGeneratedAnalysis_resultBox {
+  background-color: #E7F1F2;
+  padding: 2%;
+  margin-top: 3%;
+  margin-bottom: 2%;
+  font-size: 0.8rem;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 100%; /* Ensure the box takes full width */
+}
+
+
+
+.AIGeneratedAnalysis_shareButton {
+  align-self: flex-end;
+  width: 100%; /* Ensure the button container takes full width */
+  text-align: right; /* Align text and button to the right */
+
+}
+
+.AIGeneratedAnalysis_shareButton button {
+  border: none;
+  background-color: #53C5B2;
+  color: white;
+  padding: 8px 40px;
+  border-radius: 10px;
+  width: auto; /* Adjust width to fit content */
+  text-align: center;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
+  margin-left: 0; /* Reset margin */
+  margin-top: 1.5%;
+  cursor: pointer;
+   margin-right: 10px;
+}
+
+.AIGeneratedAnalysis_shareButton p {
+  font-size: 0.8rem;
+  margin-bottom: 10px; /* Add spacing between text and button */
+}
+
+.report-container h1{
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
+.report-container h2{
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #00a676;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
+
+
+@media (max-width: 1024px) {
+  .AIGeneratedAnalysis_container {
+    margin: 5% 10%; 
+    max-height: none;
+  }
+
+  .AIGeneratedAnalysis_container h2 {
+    font-size: 1.5rem; /* Adjust heading size for tablets */
+  }
+
+  .AIGeneratedAnalysis_resultBox {
+    font-size: 0.9rem; /* Slightly larger font for readability */
+  }
+
+  .AIGeneratedAnalysis_shareButton {
+    align-self: center; /* Center the button container */
+    text-align: center; /* Center text and button */
+    margin-top: 20px; /* Add spacing above the button */
+  }
+
+  .AIGeneratedAnalysis_shareButton a {
+    width: 40%; /* Adjust button width for tablets */
+  }
+}
+
+
+
+
+
+
+@media (max-width: 768px) {
+  .AIGeneratedAnalysis_container {
+    margin: 5% 5%; /* Further reduce side margins */
+    max-height: none; /* Remove max-height restriction */
+  }
+
+  .AIGeneratedAnalysis_resultBox {
+    font-size: 1rem; /* Increase font size for smaller screens */
+    padding: 5%; /* Add more padding for better spacing */
+  }
+
+  .AIGeneratedAnalysis_shareButton {
+    align-self: center; /* Center the button container */
+    text-align: center; /* Center text and button */
+  }
+
+  .AIGeneratedAnalysis_shareButton a {
+    width: 60%; /* Adjust button width for smaller screens */
+  }
+  .heart_image2{
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .AIGeneratedAnalysis_container {
+    margin: 5% 2%; /* Minimal side margins for mobile */
+  }
+
+  .AIGeneratedAnalysis_resultBox {
+    font-size: 0.9rem; /* Slightly smaller font for mobile */
+    padding: 10%; /* More padding for better readability */
+  }
+
+  .AIGeneratedAnalysis_shareButton a {
+    width: 80%; /* Wider button for easier tapping on mobile */
+    padding: 10px 5px; /* Slightly larger padding for better touch targets */
+  }
+
+  .AIGeneratedAnalysis_shareButton p {
+    font-size: 0.9rem; /* Slightly larger text for mobile */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.heart_image{
+  position: absolute;
+  right: 10px;
+  top: 40px;
+  z-index: 1;
+}
+
+
+
+
+.heart_image img::before{
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(174, 202, 215,0.5);
+  z-index: 1; 
+}
+.heart_image img{
+  height: 15vw;
+  max-height: 15vw;
+  min-height: 100px; 
+  opacity: 0.2;
+}
+
+
+.medicalCross_image{
+  height: 200px;
+  width: 200px;
+  position: absolute;
+  left: 10px;
+  top: 10px;
+}
+
+.medicalCross_image img{
+  height: 100%;
+  width: 100%;
+  opacity: 0.2;
+ 
+}
+
+.heart_image2{
+  height: 15vw;
+  max-height: 50px;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+.heart_image2 img{
+  height: 100%;
+  width: 100%;
+
+}

@@ -1,0 +1,357 @@
+/* *{
+    box-sizing: border-box;
+}
+body{
+    
+}
+.navBar ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+.navBar ul li{
+    padding: 10px;
+}
+.header{
+    display: flex;
+    
+    align-items: center;
+    
+  
+}
+.navBar{
+    margin: 0 auto;
+}
+ .loginbtn{
+    margin-right: 120px;
+    
+} 
+button{
+    background-color: rgb(83, 193,174);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 10px;
+}
+.logo{
+    margin-left: 120px;
+}
+
+
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .logo {
+        margin: 10px 0;
+    }
+
+    .navBar {
+        width: 100%;
+        text-align: center;
+    }
+
+    .navBar ul {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .navBar ul li {
+        width: 100%;
+        padding: 10px 0;
+    }
+
+    .loginbtn {
+        margin-right: 0;
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navBar ul {
+        display: none; 
+        flex-direction: column;
+        position: absolute;
+        background-color: rgb(8, 31, 61);
+        width: 100%;
+        left: 0;
+        top: 60px;
+        text-align: center;
+    }
+
+    .navBar ul.active {
+        display: flex;
+    }
+
+    .navBar ul li {
+        padding: 15px;
+        border-bottom: 1px solid white;
+    }
+
+    .menu-icon {
+        display: block;
+        cursor: pointer;
+        font-size: 24px;
+        color: white;
+        position: absolute;
+        right: 20px;
+        top: 15px;
+    }
+} */
+
+/* General Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+
+}
+
+/* Logo */
+.logo {
+    /* margin-left: 100px; */
+    margin-bottom: 20px;
+    
+}
+
+/* Navigation */
+.navBar {
+    margin: 0 auto;
+}
+
+.navBar ul {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    
+}
+
+.navBar ul li {
+    padding: 10px 15px;
+     &:hover{
+        color: #4C90E8;
+    }
+}
+
+.navBar ul li a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+     &:hover{
+        color: #4C90E8;
+    }
+}
+
+/* Login Button */
+.loginbtn {
+    margin-right: 20px;
+}
+
+button {
+    background-color: rgb(83, 193, 174);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.menu-icon{
+    display: none;
+}
+
+/* 
+.nav_profile{
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid #3d88ea;
+    padding: 5px;
+    border-radius: 10px;
+    
+    &:hover{
+        color: #4C90E8;
+    }
+} */
+
+.nav_profile {
+    padding: 0.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 2px solid #3d88ea;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: bold;
+}
+
+.nav_profile:hover {
+    background-color: #e9ecef;
+}
+
+
+
+
+.nav_dropDown_container {
+  position: absolute;
+  top: 100%;
+  right: 1%;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+  padding: 10px;
+  width: 120px;
+}
+
+.nav_dropDown_item {
+  margin: 5px 0;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: background-color 0.2s ease;
+}
+
+.nav_dropDown_item:hover {
+  background-color: #f0f0f0;
+}
+
+
+.nav_profile_icon{
+    cursor: pointer;
+}
+
+
+/* Responsive Navbar for Tablets */
+@media screen and (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        text-align: center;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+    .navBar{
+        width: 100%;
+        display: flex;
+          flex-direction: row;
+       justify-content: space-around;
+       align-items: center;
+    }
+    .navBar ul {
+        width: 80%;
+    }
+
+    .navBar ul li {
+        width: 80%;
+        padding: 10px 0;
+    }
+
+    .loginbtn {
+        margin-top: 10px;
+        margin-right: 0;
+    }
+    .menu-icon{
+       
+        align-self: flex-start;
+    }
+}
+
+/* Mobile View - Navigation Toggle */
+@media screen and (max-width: 480px) {
+    .header{
+        display: flex;
+        flex-direction: row;
+    }
+       .menu-icon {
+        display: block;
+        cursor: pointer;
+        font-size: 28px;
+        color: black;
+      
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+
+    /* .menu-icon {
+        display: block;
+        cursor: pointer;
+        font-size: 28px;
+        color: black;
+        position: absolute;
+        right: 20px;
+        top: 15px;
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+    } */
+    .navBar{
+        display: none;
+    }
+  
+    /* .navBar ul {
+       
+        flex-direction: column;
+        position: absolute;
+        background-color: rgb(8, 31, 61);
+        width: 100%;
+        left: 0;
+        top: 60px;
+        text-align: center;
+        padding: 10px 0;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+         display: none; 
+    }
+
+    .navBar ul.active {
+        display: flex;
+    }
+
+    .navBar ul li {
+        padding: 15px;
+        border-bottom: 1px solid white;
+    }
+
+    .navBar ul li a {
+        color: white;
+    } */
+}
+
+
+.nav_userProfile_image {
+  width: 80px;           /* fixed width */
+  height: 80px;          /* fixed height */
+  border-radius: 50%;    /* makes it a circle */
+  object-fit: cover;     /* ensures image fills the circle without distortion */
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}
+
+
+
+/* ---------------- */
+
+

@@ -1,0 +1,139 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Main Container */
+.main_container {
+    width: 100%;
+    
+}
+
+.one {
+    background-color: #E3EDEF;
+}
+
+/* Top Part Container - Default (Mobile) */
+.main_top_part {
+    display: flex;
+    flex-direction: column; /* Stack children vertically on smaller screens */
+    padding: 5% 3%; /* Use percentages for padding */
+}
+/* Images Part - Default (Mobile) */
+.top_part_images_part {
+    width: 100%; /* Full width on smaller screens */
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Center images on smaller screens */
+    gap: 10px; /* Space between images */
+    padding: 20px 0; /* Add some padding */
+}
+
+.top_part_images_part .images {
+    height: 100px; /* Smaller size for mobile */
+    width: 100px;
+    flex-shrink: 0; /* Prevent shrinking */
+}
+
+.top_part_images_part img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%; /* Circular images */
+}
+
+/* Image Positioning - Default (Mobile) */
+.image1,
+.image2,
+.image3 {
+    position: relative;
+    left: 0; /* Reset positioning for smaller screens */
+    top: 0;
+}
+
+/* Details Part - Default (Mobile) */
+.top_part_details {
+    width: 100%; /* Full width on smaller screens */
+
+    padding: 5% 3%; /* Use percentages for padding */
+    text-align: center; /* Center text on smaller screens */
+}
+
+.top_part_details h2 {
+    font-size: 1.8rem; /* Relative font size */
+    margin-bottom: 10px;
+}
+
+.top_part_details p {
+    font-size: 1rem; 
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.top_part_details a {
+    text-decoration: none;
+    color: white;
+    padding: 10px 20px; /* Adjust padding */
+    background-color: #53C5B2;
+    border-radius: 10px;
+    display: inline-block; /* Ensure proper spacing */
+}
+
+/* Media Queries for Larger Screens */
+
+@media (min-width: 1024px) {
+    .top_part_images_part {
+       display: block;
+    }
+    .top_part_details h2 {
+        font-size: 2rem; /* Larger font size for bigger screens */
+    }
+
+    .top_part_details p {
+        font-size: 1.2rem; /* Larger font size for bigger screens */
+    }
+
+    
+}
+
+
+@media (min-width: 768px) {
+    .main_top_part {
+        flex-direction: row; /* Switch to horizontal layout on larger screens */
+        flex-wrap: nowrap; /* Prevent wrapping */
+    }
+
+    .top_part_images_part {
+        width: 45%; /* Restore original width */
+        justify-content: flex-start; /* Align images to the left */
+        display: block;
+    }
+
+    .top_part_details {
+        width: 55%; /* Restore original width */
+        text-align: left; /* Align text to the left */
+    }
+
+    .top_part_images_part .images {
+        height: 120px; /* Restore original size */
+        width: 120px;
+    }
+
+    /* Image Positioning for Larger Screens */
+    .image1 {
+        left: 40%; /* Restore positioning */
+    }
+
+    .image2 {
+        left: 10%;
+        top: 10%;
+    }
+
+    .image3 {
+        left: 55%;
+        bottom: 10%;
+    }
+}
+

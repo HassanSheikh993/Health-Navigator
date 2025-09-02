@@ -1,0 +1,57 @@
+.OurPhilosophy_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 5%;
+    gap: 20px;
+    flex-wrap: wrap; /* Ensures stacking on smaller screens */
+}
+
+/* Left Section */
+.OurPhilosophy_leftPart {
+    flex: 1;
+    min-width: 250px; /* Ensures it doesn’t shrink too much */
+    text-align: center;
+    color: #4C90E8
+}
+
+
+
+.OurPhilosophy_leftPart img {
+    display: block;
+    margin: auto;
+    height: 80px;
+    max-width: 100%;
+    margin-top: 20px;
+}
+
+/* Right Section */
+.OurPhilosophy_rightPart {
+    flex: 2;
+    min-width: 300px;
+    font-size: 1rem;
+}
+
+.OurPhilosophy_rightPart h4 {
+    font-size: 1.4rem;
+    font-weight: lighter;
+    font-style: italic;
+    margin-bottom: 5px;
+    color: #2F5A92;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .OurPhilosophy_container {
+        flex-direction: column; /* Stack elements vertically */
+        text-align: center;
+    }
+
+    .OurPhilosophy_leftPart img {
+        height: 60px; /* Smaller image on small screens */
+    }
+
+    .OurPhilosophy_rightPart h4 {
+        font-size: 1.1rem;
+    }
+}
