@@ -3,6 +3,7 @@ import { Report } from "../model/reportModel.js";
 export const uploadReport = async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    console.log(req.user.id)
 
     const newReport = await Report.create({
       user: req.user.id, 
