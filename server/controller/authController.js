@@ -146,3 +146,8 @@ export const updatePasswordController  = async(req,res)=>{
       res.status(500).json({ message: "Error updating password", error: error.message });
   }
 }
+
+export const logoutUser = (req,res)=>{
+ res.clearCookie('token', { path: '/' });
+  res.status(200).json({ message: 'Logged out successfully', status: true });
+}
