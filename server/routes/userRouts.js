@@ -1,5 +1,5 @@
 import express from "express";
-import { loginUser, registration,verifyEmailCode,forgetPassword,verifyForgetPasswordOTP, updatePasswordController } from "../controller/authController.js";
+import { loginUser, registration,verifyEmailCode,forgetPassword,verifyForgetPasswordOTP, updatePasswordController, logoutUser } from "../controller/authController.js";
 
 import { loginUserData, updateProfile } from "../controller/userController.js";
 import { upload } from "../middleWares/multerMiddleware.js";
@@ -19,3 +19,5 @@ router.post("/update-password",updatePasswordController)
 router.put("/update-profile",upload.single("file"),updateProfile)
 
 router.get("/loginUserData",auth,loginUserData)
+
+router.get("/logout-user",logoutUser);
