@@ -1,5 +1,6 @@
 import { Report } from "../model/reportModel.js";
 import { SharedReport } from "../model/sharedReportModel.js";
+import { User } from "../model/userModel.js";
 
 export const uploadReport = async (req, res) => {
   try {
@@ -72,11 +73,12 @@ export const displayReports = async(req,res) => {
 
 export const getAllReportsForDoctor = async(req,res) => {
   try{
-   const doctorEmail = "try1@gmail.com";
-   if(!doctorEmail) return res.status(400).json({message:"Doctor Email Missing"});
+   const doctor = await User.findById(req.user.id);
+   const doctor_email = doctor.email;
+  //  if(!doctorEmail) return res.status(400).json({message:"Doctor Email Missing"});
 
-   const result = await SharedReport.find({doctor_email:doctorEmail})
-                 .populate("patient_id","_id name email")
+   const result = await SharedReport.find({doctor_email:doctor_email})
+                 .populate("patient_id","_id name email picture")
                  .populate("report_id","reportPath simplifiedReport");
 
   if (!result || result.length === 0) {
