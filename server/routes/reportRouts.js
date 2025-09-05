@@ -8,5 +8,5 @@ export const reportRouter = express.Router();
 reportRouter.post("/upload-report",auth, uploadMedicalReport.single("report"), uploadReport);
 reportRouter.get("/allReports",displayReports)
 reportRouter.post("/sendReports",sendReportToDoctor)
-reportRouter.get("/getDoctorReports",getAllReportsForDoctor)
+reportRouter.get("/getDoctorReports",auth,getAllReportsForDoctor)
 
