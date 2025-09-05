@@ -19,7 +19,8 @@ export const uploadReport = async (req, res) => {
 };
 
 
-export const displayAllReports = async(req,res)=>{
+// This function is responsible for displaying one single report
+export const getSingleReport = async(req,res)=>{
   try{
     const reportID = "68b85b2545898537812426bb";
   const response = await Report.findById(reportID).populate("user", "name email");
@@ -40,7 +41,8 @@ export const sendReportToDoctor = async(req,res)=>{
 
   const sharedReports = reportsID.map((id)=>({
     report_id:id,
-    patient_id:req.user.id,
+    // patient_id:req.user.id,
+    patient_id:"68b5854f3356b9543c2887a0",
     doctor_email:doctorEmail
   }))
 
@@ -50,4 +52,41 @@ export const sendReportToDoctor = async(req,res)=>{
   console.log("Error in sendReportToDoctor function ",err);
     res.status(500).json({ message: "Error sending report to doctor", error: err.message });
  }
+}
+
+// This function is responsible for displaying reports to user, user saved reports
+export const displayReports = async(req,res) => {
+  try{
+     const userId = "68b5854f3356b9543c2887a0";
+     const result = await Report.find({user:userId}).populate("user","name email");
+     if(!result) return res.status(404).json({message:"Reports not found"});
+     if (!result || result.length === 0) {
+  return res.status(404).json({ message: "No reports" });
+}
+      res.status(200).json(result);
+  }catch(err){
+    console.log("Error in displayAllReports function ",err);
+    res.status(500).json({ message: "Error displaying report", error: err.message });
+  }
+}
+
+export const getAllReportsForDoctor = async(req,res) => {
+  try{
+   const doctorEmail = "try1@gmail.com";
+   if(!doctorEmail) return res.status(400).json({message:"Doctor Email Missing"});
+
+   const result = await SharedReport.find({doctor_email:doctorEmail})
+                 .populate("patient_id","_id name email")
+                 .populate("report_id","reportPath simplifiedReport");
+
+  if (!result || result.length === 0) {
+  return res.status(404).json({ message: "No reports" });
+}
+
+  res.status(200).json(result);               
+
+  }catch(err){
+console.log("Error in getAllReportsForDoctor function ",err);
+    res.status(500).json({ message: "Error getAllReportsForDoctor", error: err.message });
+  }
 }
