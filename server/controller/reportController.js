@@ -73,11 +73,10 @@ export const displayReports = async(req,res) => {
 
 export const getAllReportsForDoctor = async(req,res) => {
   try{
-   const doctor = await User.findById(req.user.id);
-   const doctor_email = doctor.email;
-  //  if(!doctorEmail) return res.status(400).json({message:"Doctor Email Missing"});
+   
+  const doctor_id = req.user.id;
 
-   const result = await SharedReport.find({doctor_email:doctor_email})
+   const result = await SharedReport.find({doctor_id:doctor_id})
                  .populate("patient_id","_id name email picture")
                  .populate("report_id","reportPath simplifiedReport");
 
@@ -95,13 +94,17 @@ console.log("Error in getAllReportsForDoctor function ",err);
 
 export const addDoctorReview = async(req,res) => {
 try{
-    const {doctorReviewedText,doctor_email,patient_id,report_id} = req.body;
-  if(!doctorReviewedText || !doctor_email || !patient_id || !report_id) return res.status(400).json({message:"Incomplete Data"});
+    const {doctorReviewedText,patient_id,report_id} = req.body;
+  if(!doctorReviewedText || !patient_id || !report_id) return res.status(400).json({message:"Incomplete Data"});
 
 
   const result = await SharedReport.updateOne(
-    {doctor_email:doctor_email,patient_id:patient_id,report_id:report_id},
-    {$set:{doctor_review:doctorReviewedText}});
+    {doctor_id:req.user.id,patient_id:patient_id,report_id:report_id},
+    {$set:{
+      doctor_review:doctorReviewedText,
+      viewedByDoctor:true,
+      doctor_reviewedAt: new Date() 
+    }});
 
        if (result.modifiedCount > 0) {
       return res.status(201).json({ message: "Review Sent" });
