@@ -92,3 +92,26 @@ console.log("Error in getAllReportsForDoctor function ",err);
     res.status(500).json({ message: "Error getAllReportsForDoctor", error: err.message });
   }
 }
+
+export const addDoctorReview = async(req,res) => {
+try{
+    const {doctorReviewedText,doctor_email,patient_id,report_id} = req.body;
+  if(!doctorReviewedText || !doctor_email || !patient_id || !report_id) return res.status(400).json({message:"Incomplete Data"});
+
+
+  const result = await SharedReport.updateOne(
+    {doctor_email:doctor_email,patient_id:patient_id,report_id:report_id},
+    {$set:{doctor_review:doctorReviewedText}});
+
+       if (result.modifiedCount > 0) {
+      return res.status(201).json({ message: "Review Sent" });
+    } else {
+      return res.status(404).json({ message: "No matching report found" });
+    }
+      
+}catch(err){
+  console.log("Error in addDoctorReview function ",err);
+  res.status(500).json({ message: "Error addDoctorReview", error: err.message });
+}
+    
+}
