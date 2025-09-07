@@ -35,20 +35,20 @@ export const getSingleReport = async(req,res)=>{
 
 export const sendReportToDoctor = async(req,res)=>{
  try{
-   const{reports,doctorEmail} = req.body;
-  if(!reports || !doctorEmail) return res.status(400).json({message:"Missing required fields"});
+   const{reports,doctor_id} = req.body;
+  if(!reports || !doctor_id) return res.status(400).json({message:"Missing required fields"});
 
   const reportsID = Array.isArray(reports) ? reports : [reports];
 
   const sharedReports = reportsID.map((id)=>({
     report_id:id,
     // patient_id:req.user.id,
-    patient_id:"68b5854f3356b9543c2887a0",
-    doctor_email:doctorEmail
+    patient_id:"68b85c1c45898537812426dd",
+    doctor_id:doctor_id
   }))
 
   const result = await SharedReport.insertMany(sharedReports);
-  res.status(201).json({message:`Report send to ${doctorEmail}`});
+  res.status(201).json({message:`Report send`});
  }catch(err){
   console.log("Error in sendReportToDoctor function ",err);
     res.status(500).json({ message: "Error sending report to doctor", error: err.message });
@@ -147,3 +147,30 @@ export const getReportStats = async (req, res) => {
     res.status(500).json({ message: "Error fetching stats", error: err.message });
   }
 };
+
+
+export const doctorReviewHistory = async(req,res) => {
+  try{
+    const doctor_id= req.user.id;
+    const result = await SharedReport.find({
+      $and:[
+        {doctor_id:doctor_id},
+        {viewedByDoctor:true}
+      ]
+    }).populate("patient_id","_id name email picture")
+      .populate("report_id","_id reportPath")
+
+    
+  if (!result || result.length === 0) {
+  return res.status(404).json({ message: "No reports" });
+}
+
+res.status(200).json(result);
+
+
+  }catch(err){
+    console.log("Error in doctorReviewHistory function ",err);
+    res.status(500).json({ message: "Error doctorReviewHistory", error: err.message });
+
+  }
+}
