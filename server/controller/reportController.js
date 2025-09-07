@@ -118,3 +118,32 @@ try{
 }
     
 }
+
+
+export const getReportStats = async (req, res) => {
+  try {
+    const doctor_id = req.user.id;
+
+    const startOfToday = new Date();
+    startOfToday.setHours(0, 0, 0, 0);
+
+    const startOfMonth = new Date();
+    startOfMonth.setDate(1);
+    startOfMonth.setHours(0, 0, 0, 0);
+
+    const todayCount = await SharedReport.countDocuments({
+      doctor_id: doctor_id,
+      createdAt: { $gte: startOfToday }
+    });
+
+    const monthCount = await SharedReport.countDocuments({
+      doctor_id: doctor_id,
+      createdAt: { $gte: startOfMonth }
+    });
+
+    res.status(200).json({ today: todayCount, month: monthCount });
+  } catch (err) {
+    console.log("Error in getReportStats", err);
+    res.status(500).json({ message: "Error fetching stats", error: err.message });
+  }
+};
