@@ -58,8 +58,8 @@ export const sendReportToDoctor = async(req,res)=>{
 // This function is responsible for displaying reports to user, user saved reports
 export const displayReports = async(req,res) => {
   try{
-     const userId = "68b5854f3356b9543c2887a0";
-     const result = await Report.find({user:userId}).populate("user","name email");
+     const userId = req.user.id;
+     const result = await Report.find({user:userId}).populate("user","name email picture");
      if(!result) return res.status(404).json({message:"Reports not found"});
      if (!result || result.length === 0) {
   return res.status(404).json({ message: "No reports" });
@@ -172,5 +172,23 @@ res.status(200).json(result);
     console.log("Error in doctorReviewHistory function ",err);
     res.status(500).json({ message: "Error doctorReviewHistory", error: err.message });
 
+  }
+}
+
+
+export const deleteUserReport = async(req,res) => {
+  try{
+    const {ids} = req.body;
+    if(!ids) return res.status(400).json({message:"Report Id is not send"});
+
+    const result =    await Report.deleteMany({ _id: { $in: ids } });
+    if(result.deletedCount <= 0) return res.status(404).json({message:"No Report Deleted"});
+
+   res.status(200).json({ message: "Report Deleted" });
+
+
+  }catch(err){
+ console.log("Error in deleteUserReport function ",err);
+    res.status(500).json({ message: "Error deleteUserReport", error: err.message });
   }
 }
