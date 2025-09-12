@@ -19,12 +19,12 @@ const token = generateToken(userExist._id);
 
 res.cookie("token", token, {
   httpOnly: true,
-  secure: false, // 🔁 set true if using HTTPS (e.g., in production)
-  sameSite: "lax", // 🔁 or "None" if cross-origin and using HTTPS
-  maxAge: 30 * 24 * 60 * 60 * 1000, // optional: 30 days
+  secure: false, 
+  sameSite: "lax", 
+  maxAge: 30 * 24 * 60 * 60 * 1000, 
 });
 
-  //  res.status(200).json(userExist);
+
   res.json({ success: true, message: "Login successful",userEmail:userExist.userEmail});
 
 }
