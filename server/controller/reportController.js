@@ -62,7 +62,7 @@ export const displayReports = async(req,res) => {
      const result = await Report.find({user:userId}).populate("user","name email picture");
      if(!result) return res.status(404).json({message:"Reports not found"});
      if (!result || result.length === 0) {
-  return res.status(404).json({ message: "No reports" });
+  return res.status(200).json([]);
 }
       res.status(200).json(result);
   }catch(err){
@@ -162,7 +162,7 @@ export const doctorReviewHistory = async(req,res) => {
 
     
   if (!result || result.length === 0) {
-  return res.status(404).json({ message: "No reports" });
+  return res.status(200).json([]);
 }
 
 res.status(200).json(result);
