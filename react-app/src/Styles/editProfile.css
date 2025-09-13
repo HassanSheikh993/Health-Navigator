@@ -1,7 +1,4 @@
 
-
-
-
 .edit_old_container {
     display: flex;
     justify-content: center;
@@ -213,4 +210,31 @@ form textarea[type="submit"] {
 form textarea[type="submit"]:hover {
     background-color: #5796E6; /* Darker shade on hover */
     transform: translateY(-2px); /* Slight lift effect */
+}
+
+
+
+
+
+
+.edit_old_title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.edit_old_title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #2563eb, #3b82f6);
+  border-radius: 2px;
 }

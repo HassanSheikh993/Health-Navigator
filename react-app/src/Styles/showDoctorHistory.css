@@ -1,0 +1,230 @@
+/* ===== DOCTOR HISTORY STYLING ===== */
+.doctorHistory__container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.doctorHistory__heading {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+  text-align: center;
+}
+
+.doctorHistory__heading::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: #2563eb;
+}
+
+.doctorHistory__noData {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+  padding: 3rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* History Cards */
+.doctorHistory__card {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #2563eb;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.doctorHistory__card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+.doctorHistory__patientImage {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.doctorHistory__patientName,
+.doctorHistory__patientEmail,
+.doctorHistory__report,
+.doctorHistory__review,
+.doctorHistory__date {
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.doctorHistory__patientName strong,
+.doctorHistory__patientEmail strong,
+.doctorHistory__report strong,
+.doctorHistory__review strong,
+.doctorHistory__date strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.doctorHistory__reportLink {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-left: 0.5rem;
+}
+
+.doctorHistory__reportLink:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.doctorHistory__review {
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+  margin: 1rem 0;
+}
+
+.doctorHistory__divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+  margin: 1.5rem 0;
+}
+
+/* Status Badges (for future use) */
+.doctorHistory__status {
+  display: inline-block;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-left: 1rem;
+}
+
+.doctorHistory__status--completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.doctorHistory__status--pending {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .doctorHistory__container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .doctorHistory__heading {
+    font-size: 1.8rem;
+  }
+  
+  .doctorHistory__card {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .doctorHistory__container {
+    padding: 1rem;
+  }
+  
+  .doctorHistory__heading {
+    font-size: 1.5rem;
+  }
+  
+  .doctorHistory__patientImage {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .doctorHistory__patientName,
+  .doctorHistory__patientEmail,
+  .doctorHistory__report,
+  .doctorHistory__review,
+  .doctorHistory__date {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.doctorHistory__container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.doctorHistory__card {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Loading State */
+.doctorHistory__patientImage {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+}
+
+/* Empty State Enhancement */
+.doctorHistory__noData::before {
+  content: '📋';
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+/* Print Styles */
+@media print {
+  .doctorHistory__container {
+    box-shadow: none;
+    padding: 0;
+  }
+  
+  .doctorHistory__reportLink {
+    color: #2563eb;
+    background: none;
+    padding: 0;
+    text-decoration: underline;
+  }
+}

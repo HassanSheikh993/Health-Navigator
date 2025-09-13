@@ -2,6 +2,7 @@ import { useState, useRef,useEffect} from "react";
 import { AnalyzeReport } from "./analysisReport";
 import "../../styles/UploadReport.css";
 // import {Nav} from "../../Health Navigator/Nav";
+import { uploadMedicalReport } from "../../services/medicalReport";
 
 
 export function UploadReport() {
@@ -11,11 +12,15 @@ export function UploadReport() {
   const [selectFileUpload, setSelectFileUpload] = useState(null);
   const [showLoader,setShowLoader] = useState(false);
   const sectionRef = useRef(null);
+  const[showNoFileSelected,setShowNoFileSelected] = useState(false)
+
+
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
         setSelectFileUpload(selectedFile);
       setSelectedFileName(selectedFile.name); 
+       setShowNoFileSelected(false);
       console.log("Uploaded file:", selectedFile.name);
       console.log("selected file: ", selectFileUpload)
     }
@@ -29,6 +34,11 @@ export function UploadReport() {
 
 
 function handleAnalyzeReport(){
+  if(!selectFileUpload){
+    setShowNoFileSelected(true)
+     return;
+  }
+
   setCondition(true)
   setShowLoader(true)
 
@@ -97,6 +107,7 @@ function handleAnalyzeReport(){
             setCondition(!condition)}>Analyze Report</button> */}
 
             <button onClick={handleAnalyzeReport}>Analyze Report</button>
+            {showNoFileSelected && <p className="noFileSelected_message">No File Selected</p>}
 
 
         {/* <button onClick={() => {
@@ -126,10 +137,12 @@ function handleAnalyzeReport(){
           </div>
         </div>
       </div>
-      
-      {showLoader && <span ref={sectionRef} className="loader"></span>}
 
-      {condition && <AnalyzeReport/>}
+      
+      
+      {showLoader && selectFileUpload && <span ref={sectionRef} className="loader"></span>}
+
+      {condition && selectFileUpload && <AnalyzeReport report={selectFileUpload}/>}
     </div>
 
      </>

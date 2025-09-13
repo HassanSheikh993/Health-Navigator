@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import reportupload from '../assets/reportupload.png'
 import doctor from '../assets/doctor.png'
 import trendimg from '../assets/trend.png'
@@ -6,14 +6,43 @@ import docs from '../assets/docs.png'
 import docimg from '../assets/docimg2.png'
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom';
+import { loginUserData } from '../services/api'
+import { SignInPopUp } from '../components/signInToContinue/signInPopUp'
 function Features() {
      const navigate = useNavigate();
+     const [userData,setLoginData] = useState();
+     const [showPopup, setShowPopup] = useState(false);
 
   const handleUploadClick = () => {
     navigate('/upload-report');
   };
+
+async function callBack() {
+  const result = await loginUserData();
+
+  if (!result) {
+    setLoginData(null);   // user not logged in
+  } else {
+    setLoginData(result); // user logged in
+  }
+
+  console.log("YEH HAI RESULT ", result);
+}
+
+
+  useEffect(()=>{
+  callBack();
+  },[])
+
+function handleClosePopup() {
+    setShowPopup(false);
+  }
+
+
+
     return (
         <>
+
             <div className="headingabout">
                 <h1>Why Choose Health Navigator?</h1>
                 <h3>UNLOCK POWERFUL FEATURES TO UNDERSTAND AND TRACK YOUR HEALTH WITH EASE </h3>
@@ -33,7 +62,7 @@ function Features() {
                       
                     </div>
                 </div>
-                <div className="card">
+                {/* <div className="card">
                     <div className="cardimg">
                         <img src={trendimg}></img>
                     </div>
@@ -42,9 +71,32 @@ function Features() {
                         <h6>Visual graph and progress bars for tracking key health matrics</h6>
                     </div>
                     <div className="cardbutton">
-                    <Link to='/TrackHealth'>→</Link>
+                    <Link to='/allReports'>→</Link>
                     </div>
-                </div>
+                </div> */}
+
+
+
+
+<div className="card">
+  <div className="cardimg">
+    <img src={trendimg} alt="trend" />
+  </div>
+  <div className="cardtitle">
+    <h5>TRACK HEALTH TRENDS</h5>
+    <h6>Visual graph and progress bars for tracking key health matrics</h6>
+  </div>
+  <div className="cardbutton">
+    {userData ? (
+      <Link to="/allReports">→</Link>
+    ) : (
+      <button onClick={() => setShowPopup(true)} className="link-button">→</button>
+    )}
+  </div>
+</div>
+
+
+                
                 <div className="card">
                     <div className="cardimg">
                         <img src={doctor}></img>
@@ -102,6 +154,12 @@ function Features() {
             <div className="endpoint">
      <h3>"Your Health,Simplified-Understand, Track and Take Action!"</h3>
             </div>
+
+
+            {showPopup && (
+  <SignInPopUp   isOpen={showPopup} 
+  onClose={handleClosePopup}  />
+)}
             
         </>
 

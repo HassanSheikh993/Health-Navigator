@@ -1,16 +1,41 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import "../../Styles/sendDoctorPopUp.css"
+import { sendReportToDoctor } from "../../services/medicalReport";
 
-export function SendReportPopup({ isOpen, onClose,doctor }) {
+export function SendReportPopup({ isOpen, onClose,doctor,selectedReports }) {
      const [sendReport,setSendReport] = useState(false);
+     const [message,setMessage] = useState("");
       const doctorId = doctor;
       console.log(doctorId);
       
+  useEffect(() => {
+    if (isOpen) {
+      setMessage("");
+      setSendReport(false);
+    }
+  }, [isOpen]);
+
 if (!isOpen) return null;
 
-function sendReportToDoctor(){
-    setSendReport(true)
+async function handleSendReportToDoctor() {
+  const report_ids = selectedReports.map((data) => data._id);
+
+  setSendReport(true); // loader start
+
+  try {
+    const result = await sendReportToDoctor(report_ids, doctor._id);
+    console.log(result);
+
+    if (result || result.message) {
+      setMessage(result.message);
+    }
+  } catch (err) {
+    setMessage("Something went wrong!");
+    console.error(err);
+  } finally {
+    setSendReport(false); // loader stop (jab result ya error aa jaye)
+  }
 }
 
 
@@ -30,10 +55,13 @@ function sendReportToDoctor(){
           <button className="popup-cancel-btn" onClick={onClose}>
             Cancel
           </button>
-          <button className="popup-confirm-btn" onClick={sendReportToDoctor}>
+          <button className="popup-confirm-btn" onClick={handleSendReportToDoctor}>
             Send Report
           </button>
         </div>
+        {
+          message && <p>{message}</p>
+        }
 
 {
     sendReport && <span className="loader"></span>

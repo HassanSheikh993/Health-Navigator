@@ -12,6 +12,7 @@ import { SendReportPopup } from "./sendDoctorPopUp";
 
 
 
+
 export function ContactDoctor() {
   const [showPopup, setShowPopup] = useState(false);
   const [showMoreIndex, setShowMoreIndex] = useState(null);
@@ -21,6 +22,7 @@ export function ContactDoctor() {
 
   const location = useLocation();
   const shareMode = location.state?.shareMode || false;
+   const selectedReports = location.state?.selectedReports || [];
 
   const toggleDetails = (index) => {
     setShowMoreIndex(showMoreIndex === index ? null : index);
@@ -45,8 +47,8 @@ export function ContactDoctor() {
     setDoctors(result);
   }
 
-  function handleSendReport(doctor) {
-    setSelectedDoctor(doctor);
+   function handleSendReport(doctor) {
+     setSelectedDoctor(doctor); 
     setShowPopup(true);
   }
 
@@ -113,6 +115,7 @@ export function ContactDoctor() {
         isOpen={showPopup} 
         onClose={handleClosePopup} 
         doctor={selectedDoctor}
+        selectedReports={selectedReports}
        
       />
     </>

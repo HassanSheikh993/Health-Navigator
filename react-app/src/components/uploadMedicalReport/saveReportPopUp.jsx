@@ -1,14 +1,24 @@
 
 import { useState } from "react";
 import "../../Styles/sendDoctorPopUp.css"
+import { uploadMedicalReport } from "../../services/medicalReport";
 
-export function SaveReportPopup({ isOpen, onClose }) {
+export function SaveReportPopup({ isOpen, onClose,report }) {
      const [sendReport,setSendReport] = useState(false);
+     const [message,setMessage] = useState("");
+     
 
 if (!isOpen) return null;
 
-function sendReportToDoctor(){
-    setSendReport(true)
+async function sendReportToDoctor(){
+  setSendReport(true)
+  const result = await uploadMedicalReport(report);
+  console.log("kkkk ",result)
+  if(result){
+    setSendReport(false);
+    setMessage(result.message);
+  }
+    
 }
 
 
@@ -31,6 +41,7 @@ function sendReportToDoctor(){
             Save Report
           </button>
         </div>
+        <p>{message}</p>
 
 {
     sendReport && <span className="loader"></span>

@@ -1,17 +1,7 @@
 
 /* @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poetsen+One&display=swap'); */
 
-/* *{
-    font-family: "Poetsen One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-    } */
 
-    /* *{
-  font-family: "Bebas Neue", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-} */
 
 body{
     font-family: 'Poppins', sans-serif;
@@ -25,3 +15,27 @@ body{
   font-style: normal;
  
 } */
+
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light-gray);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+
+
+
+

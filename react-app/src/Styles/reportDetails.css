@@ -1,0 +1,304 @@
+/* ===== REPORT DETAILS STYLING ===== */
+.reportDetails__container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.reportDetails__title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.reportDetails__title::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: #2563eb;
+}
+
+.reportDetails__noData {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 3rem 0;
+  padding: 2rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Patient Info Section */
+.reportDetails__patientInfo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  border-left: 4px solid #2563eb;
+}
+
+.reportDetails__patientImage {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.reportDetails__patientImage:hover {
+  transform: scale(1.05);
+}
+
+.reportDetails__patientName {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0.5rem 0;
+}
+
+.reportDetails__patientEmail,
+.reportDetails__date {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0.3rem 0;
+  display: flex;
+  align-items: center;
+}
+
+.reportDetails__patientEmail::before {
+  content: '✉️';
+  margin-right: 0.5rem;
+}
+
+.reportDetails__date::before {
+  content: '📅';
+  margin-right: 0.5rem;
+}
+
+/* Report Files Section */
+.reportDetails__files {
+  margin-bottom: 2rem;
+}
+
+.reportDetails__filesTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.reportDetails__fileBlock {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.reportDetails__fileBlock:hover {
+  border-color: #2563eb;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+.reportDetails__fileLabel {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0;
+}
+
+.reportDetails__fileLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  background: #2563eb;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+}
+
+.reportDetails__fileLink:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.reportDetails__fileLink::before {
+  content: '📄';
+  margin-right: 0.5rem;
+}
+
+.reportDetails__fileMissing {
+  color: #94a3b8;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Review Section */
+.reportDetails__review {
+  padding: 1.5rem;
+  background: #f8fafc;
+  border-radius: 10px;
+  border-left: 4px solid #10b981;
+}
+
+.reportDetails__reviewTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+
+.reportDetails__reviewTitle::before {
+  content: '💬';
+  margin-right: 0.5rem;
+}
+
+.reportDetails__textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 1rem;
+  resize: vertical;
+  transition: all 0.3s ease;
+  margin-bottom: 1.2rem;
+}
+
+.reportDetails__textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.reportDetails__button {
+  padding: 0.8rem 1.8rem;
+  background: #10b981;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.reportDetails__button:hover {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reportDetails__container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .reportDetails__title {
+    font-size: 1.8rem;
+  }
+  
+  .reportDetails__patientInfo {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.2rem;
+  }
+  
+  .reportDetails__fileBlock {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .reportDetails__fileLink {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .reportDetails__container {
+    padding: 1rem;
+  }
+  
+  .reportDetails__title {
+    font-size: 1.5rem;
+  }
+  
+  .reportDetails__patientImage {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .reportDetails__patientName {
+    font-size: 1.2rem;
+  }
+}
+
+/* Animation for page load */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reportDetails__container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* Status indicators for files */
+.reportDetails__fileLink--available {
+  background: #10b981;
+}
+
+.reportDetails__fileLink--available:hover {
+  background: #059669;
+}
+
+.reportDetails__fileLink--pending {
+  background: #f59e0b;
+}
+
+.reportDetails__fileLink--pending:hover {
+  background: #d97706;
+}

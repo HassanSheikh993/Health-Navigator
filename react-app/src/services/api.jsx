@@ -86,20 +86,38 @@ export const logoutUser = async () => {
 
 // -----------------------------------------
 
-export const loginUserData = async()=>{
-  try{
-    let response = await fetch("http://localhost:8000/api/loginUserData",{
-    method:"GET",
-    credentials:"include"
-  });
-   const data = await response.json();
-  return data;  
-  }catch(err){
-     console.error("Error fetching doctors:", err);
-        return []; 
+// export const loginUserData = async()=>{
+//   try{
+//     let response = await fetch("http://localhost:8000/api/loginUserData",{
+//     method:"GET",
+//     credentials:"include"
+//   });
+//    const data = await response.json();
+//   return data;  
+//   }catch(err){
+//      console.error("Error fetching doctors:", err);
+//         return []; 
+//   }
+
+// }
+
+
+export const loginUserData = async () => {
+  try {
+    let response = await fetch("http://localhost:8000/api/loginUserData", {
+      method: "GET",
+      credentials: "include"
+    });
+
+    if (response.status === 401) {
+      return null;
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (err) {
+    console.error("Error fetching user:", err);
+    return null;
   }
-
-
-}
-
-
+};

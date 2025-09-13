@@ -12,6 +12,7 @@
     justify-content: center;
     align-items: center;
     padding: 10vw;
+    
 
 }
 
@@ -28,7 +29,9 @@
     margin-left: 10%;
     margin-right: 10%;
     margin-top: 5%;
+    margin-bottom: 5%;
     column-gap: 20px;
+  
   }
 
   .mainSection_guide h2{
@@ -204,9 +207,10 @@
   justify-content: center;
   align-items: center;
   margin: 5% 15%;
-  margin-top: 25%;
-  margin-bottom: 10%;
-  max-height: 50vw;
+  /* margin-top: 25%; */
+  /* margin-bottom: 10%; */
+  /* max-height: 50vw; */
+  height: max-content;
 }
 
 
@@ -420,4 +424,10 @@
   height: 100%;
   width: 100%;
 
+}
+
+
+.noFileSelected_message{
+  text-align: center;
+  margin-top: 10px;
 }

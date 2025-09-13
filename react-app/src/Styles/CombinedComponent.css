@@ -6,7 +6,7 @@
   }
   
   /* Main Container */
-  .main_container {
+ .main_container {
     width: 100%;
   }
   
@@ -14,33 +14,33 @@
     background-color: #e3edef;
   }
   
-  /* Top Part Container - Default (Mobile) */
+
   .main_top_part {
     display: flex;
-    flex-direction: column; /* Stack children vertically on smaller screens */
-    padding: 5% 3%; /* Use percentages for padding */
+    flex-direction: column; 
+    padding: 5% 3%; 
   }
   
-  /* Images Part - Default (Mobile) */
+
   .top_part_images_part {
-    width: 100%; /* Full width on smaller screens */
+    width: 100%; 
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Center images on smaller screens */
-    gap: 10px; /* Space between images */
-    padding: 20px 0; /* Add some padding */
+    justify-content: center; 
+    gap: 10px; 
+    padding: 20px 0; 
   }
   
   .top_part_images_part .images {
-    height: 100px; /* Smaller size for mobile */
+    height: 100px;
     width: 100px;
-    flex-shrink: 0; /* Prevent shrinking */
+    flex-shrink: 0;
   }
   
   .top_part_images_part img {
     height: 100%;
     width: 100%;
-    border-radius: 50%; /* Circular images */
+    border-radius: 50%; 
     transition: 0.5s height ease, 0.5s width ease ;
     &:hover{
       height: 110%;
@@ -49,24 +49,24 @@
     }
   }
   
-  /* Image Positioning - Default (Mobile) */
+
   .image1,
   .image2,
   .image3 {
     position: relative;
-    left: 0; /* Reset positioning for smaller screens */
+    left: 0; 
     top: 0;
   }
   
-  /* Details Part - Default (Mobile) */
+
   .top_part_details {
-    width: 100%; /* Full width on smaller screens */
-    padding: 5% 3%; /* Use percentages for padding */
-    text-align: center; /* Center text on smaller screens */
+    width: 100%; 
+    padding: 5% 3%; 
+    text-align: center; 
   }
   
   .top_part_details h2 {
-    font-size: 1.8rem; /* Relative font size */
+    font-size: 1.8rem; 
     margin-bottom: 10px;
     color: #4C90E8;
   }
@@ -80,17 +80,31 @@
   .top_part_details a {
     text-decoration: none;
     color: white;
-    padding: 10px 20px; /* Adjust padding */
+    padding: 10px 20px; 
     background-color: #53c5b2;
     border-radius: 10px;
-    display: inline-block; /* Ensure proper spacing */
+    display: inline-block; 
     font-size: 1.2rem;
     transition: 0.5s background-color ease;
 
     &:hover{
       background-color: #4cb5a3 ;
     }
-  }
+  } 
+
+
+
+
+
+  /* ----------------------------- */
+
+
+  
+
+
+  /* ------------------- */
+
+
 
 
   
@@ -318,5 +332,10 @@
     top: 50%;
   }
 }
+
+
+
+
+/* ------------------- */
 
 
