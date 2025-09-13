@@ -48,7 +48,7 @@ export const loginUserData = async (req, res) => {
         const result = await User.findById(req.user.id).select("-password"); // exclude password
         
         if (!result) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(200).json([]);
         }
 
         return res.status(200).json(result);
