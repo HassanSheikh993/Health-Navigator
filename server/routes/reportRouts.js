@@ -1,5 +1,5 @@
 import express from "express";
-import { addDoctorReview, deleteUserReport, displayReports, doctorReviewHistory, getAllReportsForDoctor, getReportStats, sendReportToDoctor, uploadReport } from "../controller/reportController.js";
+import { addDoctorReview, deleteUserReport, displayReports, doctorReviewHistory, getAllReportsForDoctor, getReportStats, getUserReportsWithFeedback, sendReportToDoctor, uploadReport } from "../controller/reportController.js";
 import { auth } from "../middleWares/authMiddleware.js";
 import { uploadMedicalReport } from "../middleWares/uploadMedicalReport.js";
 
@@ -15,4 +15,6 @@ reportRouter.get("/getReportStats",auth,getReportStats)
 reportRouter.get("/doctorReviewHistory",auth,doctorReviewHistory)
 
 reportRouter.delete("/deleteUserReport",auth,deleteUserReport);
+
+reportRouter.get("/getUserReportsWithFeedback",getUserReportsWithFeedback)
 
