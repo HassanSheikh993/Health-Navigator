@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-
 const reportFolder = path.join(__dirname, "..", "public", "medicalReports");
 if (!fs.existsSync(reportFolder)) {
   fs.mkdirSync(reportFolder, { recursive: true });
@@ -14,7 +13,15 @@ if (!fs.existsSync(reportFolder)) {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, reportFolder),
-  filename: (req, file, cb) => cb(null, Date.now() + path.extname(file.originalname))
+  filename: (req, file, cb) => {
+    const uniqueName = Date.now() + path.extname(file.originalname);
+    cb(null, uniqueName);
+
+    // add relative path (yeh DB ke liye use karna hai)
+    // req.filePath = `/medicalReports/${uniqueName}`;
+      file.relativePath = `medicalReports/${uniqueName}`;
+    
+  },
 });
 
 // only allow pdf, jpg, png
