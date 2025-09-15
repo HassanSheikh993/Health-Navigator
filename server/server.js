@@ -30,6 +30,7 @@ app.use(cookieParser())
 
 
 app.use('/uploadProfileImages', express.static(path.join(__dirname, 'public', 'uploadProfileImages')));
+app.use('/medicalReports', express.static(path.join(__dirname, 'public', 'medicalReports')));
 
 app.use("/api",router)
 app.use("/api",doctorRouter);
