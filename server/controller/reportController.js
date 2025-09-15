@@ -4,12 +4,14 @@ import { User } from "../model/userModel.js";
 
 export const uploadReport = async (req, res) => {
   try {
+    console.log("REPORT: ",req.file.path)
     if (!req.file) return res.status(400).json({ message: "No file uploaded" });
     console.log(req.user.id)
 
     const newReport = await Report.create({
       user: req.user.id, 
-      reportPath: req.file.path
+      // reportPath: req.file.path
+      reportPath: req.file.relativePath,
     });
 
     res.status(201).json({ message: "Report uploaded successfully", report: newReport });
@@ -21,6 +23,8 @@ export const uploadReport = async (req, res) => {
 
 
 // This function is responsible for displaying one single report
+
+
 export const getSingleReport = async(req,res)=>{
   try{
     const reportID = "68b85b2545898537812426bb";
@@ -191,4 +195,25 @@ export const deleteUserReport = async(req,res) => {
  console.log("Error in deleteUserReport function ",err);
     res.status(500).json({ message: "Error deleteUserReport", error: err.message });
   }
+}
+
+export const getUserReportsWithFeedback = async(req,res) =>{
+ try{
+   const userId = "68b85c1c45898537812426dd";
+
+   const result = await SharedReport.find({patient_id:userId})
+   .populate("doctor_id","name email picture")
+   .populate("report_id","_id reportPath");
+
+  if (!result || result.length === 0) {
+  return res.status(200).json([]);
+}
+
+res.status(200).json(result);
+
+ }catch(err){
+  console.log("Error in getUserReportsWithFeedback function ",err);
+    res.status(500).json({ message: "Error getUserReportsWithFeedback", error: err.message });
+ }
+
 }
