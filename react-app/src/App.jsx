@@ -32,6 +32,9 @@ import { LiverReportsChart } from "./components/try";
 import{ LiverReportsLineChart } from "./components/try2";
 import { LiverReportsBarChart } from "./components/try3";
 import { UploadMedicalReportMainPage } from "./components/uploadMedicalReport/uploadMedicalReportMain";
+import { MainUserReportsWithFeedback } from "./components/userFeedBackReports/getUserReportsWithFeedback";
+import { Test1 } from "./components/practice/test1";
+
 
 
 
@@ -63,12 +66,13 @@ function App() {
         <Route path="/reportDetails" element={<ReportDetails/>} />
          <Route path="/showDoctorHistory" element={<DoctorHistory/>} />
           <Route path="/allReports" element={<AllUserReport/>} />
+          <Route path="/userFeedBack-history" element={<MainUserReportsWithFeedback/>} />
           
-          <Route path="/try" element={<LiverReportsBarChart/>} />
-          <Route path="/try2" element={<LiverReportsLineChart/>} />
+          {/* <Route path="/try" element={<LiverReportsBarChart/>} />
+          <Route path="/try2" element={<LiverReportsLineChart/>} /> */}
 
 
-        
+     <Route path="/test1" element={<Test1/>} />
         
        
 

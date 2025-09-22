@@ -119,3 +119,15 @@ export const sendReportToDoctor = async(reports,doctor_id)=>{
   const res = await result.json();
   return res;
 }
+
+
+
+export const getUserReportsWithFeedback = async()=>{
+  const result = await fetch("http://localhost:8000/api/getUserReportsWithFeedback",{
+    method:"GET",
+    credentials:"include"
+  })
+
+  const res = await result.json();
+  return res;
+}

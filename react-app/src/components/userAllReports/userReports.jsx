@@ -43,8 +43,10 @@ return(
 
 async function getAllReports() {
   try {
+ 
     const result = await displayReports();
-
+ 
+   
     if (!result || result.length === 0) {
       setData([]);
       setMessage("No reports available.");
@@ -54,6 +56,7 @@ async function getAllReports() {
     }
 
   } catch (err) {
+   
     console.error("Error fetching reports:", err);
     setData([]);
     setMessage("Failed to fetch reports.");
