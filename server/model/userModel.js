@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema({
     password: { type: String },
     role: { type: String },
     isVerified: { type: Boolean, default: false },
-    picture:{type:String},
+    picture:{type:String, default:"https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"},
     contactNumber: { type: String },
     country: { type: String },
     city: { type: String },
