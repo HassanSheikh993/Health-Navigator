@@ -5,7 +5,7 @@ const reportSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
   reportPath: { type: String, required: true },
   simplifiedReport: { type: String, default: null },
-  keyValues: { type: Object, default: {} }
+  keyValues: { type: Object }
 }, { timestamps: true });
 
 
