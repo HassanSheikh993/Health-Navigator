@@ -46,8 +46,8 @@ export const sendReportToDoctor = async(req,res)=>{
 
   const sharedReports = reportsID.map((id)=>({
     report_id:id,
-    // patient_id:req.user.id,
-    patient_id:"68b85c1c45898537812426dd",
+    patient_id:req.user.id,
+  
     doctor_id:doctor_id
   }))
 
@@ -199,12 +199,14 @@ export const deleteUserReport = async(req,res) => {
 
 export const getUserReportsWithFeedback = async(req,res) =>{
  try{
-   const userId = "68b85c1c45898537812426dd";
+   const userId = req.user.id;
+   console.log(userId)
 
    const result = await SharedReport.find({patient_id:userId})
    .populate("doctor_id","name email picture")
    .populate("report_id","_id reportPath");
 
+   console.log(result);
   if (!result || result.length === 0) {
   return res.status(200).json([]);
 }
