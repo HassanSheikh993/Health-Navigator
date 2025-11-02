@@ -1,37 +1,43 @@
+
+
+
+import api from "./apiConnection";
+
 export const forgetPassword = async (email) => {
   console.log(email);
-  let response = await fetch("http://localhost:8000/api/forgetPassword", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: email }), // ✅ send as JSON object
-  });
 
-  let result = await response.json();
-  return result;
+  try {
+    const response = await api.post("/forgetPassword", { email });
+    console.log("API call:", response.data);
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    if (error.response) {
+      return { status: error.response.status, data: error.response.data };
+    }
+    return { status: 500, data: { message: "Network error" } };
+  }
 };
 
-
-export const verifyOTP_forForgetPassword = async (email,code) =>{
-     const response = await fetch("http://localhost:8000/api/verify-OTP-forget-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, code }),
-  });
-  return await response.json();
-
-}
-
+export const verifyOTP_forForgetPassword = async (email, code) => {
+  try {
+    const response = await api.post("/verify-OTP-forget-password", { email, code });
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    if (error.response) {
+      return { status: error.response.status, data: error.response.data };
+    }
+    return { status: 500, data: { message: "Network error" } };
+  }
+};
 
 export const updatePassword = async (email, password) => {
-  const response = await fetch("http://localhost:8000/api/update-password", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ email, password }),
-  });
-
-  return await response.json();
+  try {
+    const response = await api.post("/update-password", { email, password });
+    return { status: response.status, data: response.data };
+  } catch (error) {
+    if (error.response) {
+      return { status: error.response.status, data: error.response.data };
+    }
+    return { status: 500, data: { message: "Network error" } };
+  }
 };
