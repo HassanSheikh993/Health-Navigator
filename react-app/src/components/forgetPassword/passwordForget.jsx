@@ -16,25 +16,34 @@ export function ForgetPassword() {
   async function handleOnSubmit(e) {
     e.preventDefault();
     setIsLoading(true);
-    setErrorMessage(""); // Reset error message
+    setErrorMessage(""); 
 
-    try {
-      const result = await forgetPassword(userEmail);
-      console.log(result);
+try {
+  const result = await forgetPassword(userEmail);
+  console.log("Forget Password function return: ", result);
+  console.log("status",result.status)
 
-      if (result.status) {
-        // Success case - navigate to OTP page
-        navigate("/Otp-ForgetPassword", { state: { email: userEmail } });
-      } else {
-        // Failure case - show error message
-        setErrorMessage(result.message || "Failed to send OTP");
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setErrorMessage("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+  if (result.status === 200) {
+    navigate("/Otp-ForgetPassword", { state: { email: userEmail } });
+  } else {
+    setErrorMessage(result.data?.message || "Failed to send OTP");
+  }
+} catch (error) {
+  console.error("Error:", error);
+
+
+  if (
+    error.response &&
+    [400, 404, 500].includes(error.response.status)
+  ) {
+    setErrorMessage(error.response.data?.message);
+  } else {
+    setErrorMessage("An unexpected error occurred. Please try again.");
+  }
+} finally {
+  setIsLoading(false);
+}
+
   }
 
   function handleBackToRegistration() {

@@ -10,25 +10,46 @@ export function OtpForgetPassword() {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState({ text: "", isError: false });
 
+
   async function handleOtpSubmit(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    try {
-      const result = await verifyOTP_forForgetPassword(email, otp);
+  try {
+    const result = await verifyOTP_forForgetPassword(email, otp);
+    console.log("OTP verification result:", result);
 
-      if (result.status) {
-        setMessage({ text: "Verification successful! Redirecting...", isError: false });
-        setTimeout(() => {
-          navigate("/update-password", { state: { email } });
-        }, 1500);
-      } else {
-        setMessage({ text: result.message || "Invalid OTP. Please try again.", isError: true });
-      }
-    } catch (error) {
-      setMessage({ text: "An error occurred. Please try again.", isError: true });
-      console.error("OTP Verification Error:", error);
+    if (result.status === 200) {
+      setMessage({ text: "Verification successful! Redirecting...", isError: false });
+
+      setTimeout(() => {
+        navigate("/update-password", { state: { email } });
+      }, 1500);
+    } else {
+      setMessage({
+        text: result.message || "Invalid OTP. Please try again.",
+        isError: true,
+      });
+    }
+  } catch (error) {
+    console.error("OTP Verification Error:", error);
+
+    if (
+      error.response &&
+      [400, 401, 500].includes(error.response.status)
+    ) {
+      setMessage({
+        text: error.response.data?.message || "Request failed. Please try again.",
+        isError: true,
+      });
+    } else {
+      setMessage({
+        text: "An unexpected error occurred. Please try again.",
+        isError: true,
+      });
     }
   }
+}
+
 
   return (
     <div className="otp_container">
