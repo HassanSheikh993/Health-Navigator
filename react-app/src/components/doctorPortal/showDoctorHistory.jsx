@@ -19,21 +19,55 @@ export function ShowDoctorHistory() {
   const [data, setData] = useState([]);
   const [message,setMessage] = useState("");
 
-  async function fetchData() {
-    try {
-      const result = await doctorReviewHistory();
-      if(!result || result.length===0){
-        setData([])
-        setMessage("No history found.")
-      }else{
-setData(result); 
-setMessage("")
-      }
+//   async function fetchData() {
+//     try {
+//       const result = await doctorReviewHistory();
+//       if(!result || result.length===0){
+//         setData([])
+//         setMessage("No history found.")
+//       }else{
+// setData(result); 
+// setMessage("")
+//       }
       
-    } catch (err) {
-      console.error("Error fetching doctor history:", err);
+//     } catch (err) {
+//       console.error("Error fetching doctor history:", err);
+//     }
+//   }
+
+
+
+
+async function fetchData() {
+  try {
+    const result = await doctorReviewHistory();
+    console.log(result);
+
+    if (!result || result.length === 0) {
+      setData([]);
+      setMessage("No history found.");
+    } else {
+      setData(result);
+      setMessage("");
     }
+  } catch (error) {
+    console.error("Error fetching doctor history:", error);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Failed to load history.");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
+
+    setData([]);
   }
+}
+
+
+
 
   useEffect(() => {
     fetchData();

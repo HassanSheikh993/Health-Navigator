@@ -135,8 +135,8 @@ export const updatePasswordController  = async(req,res)=>{
    
    if(!userExist) return res.status(404).json({message:"user not exists"});
    
-    User.password = password;
-    await User.save();
+    userExist.password = password;
+    await userExist.save(); 
 
     res.status(200).json({ message: "Password updated successfully" });
 

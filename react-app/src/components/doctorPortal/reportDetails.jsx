@@ -30,11 +30,78 @@ export function Report() {
   const reportFile = report.report_id || {};
 
 
-  async function handleReviewSend(){
+  // async function handleReviewSend(){
 
-      const result = await addDoctorReview(review,report.doctor_email,report.patient_id,report.report_id._id);
+  //     const result = await addDoctorReview(review,report.doctor_email,report.patient_id,report.report_id._id);
+  //     setReviewMessage(result.message);
+  // }
+
+
+
+  async function handleReviewSend() {
+  try {
+    const result = await addDoctorReview(
+      review,
+      report.doctor_email,
+      report.patient_id,
+      report.report_id._id
+    );
+
+    if (result && result.message) {
       setReviewMessage(result.message);
+    } else {
+      setReviewMessage("Unexpected response from the server.");
+    }
+  } catch (error) {
+    console.error("Error sending doctor review:", error);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setReviewMessage(
+        error.response.data?.message || "Failed to send review."
+      );
+    } else {
+      setReviewMessage("An unexpected error occurred. Please try again.");
+    }
   }
+}
+
+
+
+
+// async function handleReviewSend() {
+//   try {
+//     const result = await addDoctorReview(
+//       review,
+//       report.doctor_email,
+//       report.patient_id,
+//       report.report_id._id
+//     );
+
+//     if (result?.message) {
+//       setReviewMessage(result.message);
+//     } else {
+//       setReviewMessage("Unexpected response from server.");
+//     }
+//   } catch (error) {
+//     console.error("Error sending review:", error);
+
+//     if (
+//       error.response &&
+//       [400, 401, 404, 500].includes(error.response.status)
+//     ) {
+//       setReviewMessage(error.response.data?.message || "Failed to send review.");
+//     } else {
+//       setReviewMessage("An unexpected error occurred. Please try again.");
+//     }
+//   }
+// }
+
+
+
+
 
   return (
     <div className="reportDetails__container">
