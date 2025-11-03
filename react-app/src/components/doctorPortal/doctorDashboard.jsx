@@ -8,13 +8,48 @@ import { useNavigate } from "react-router-dom";
 
 export function DoctorDashBoard() {
   const [reportStats,setReportStats] = useState();
+  const [message,setMessage] = useState("");
 
-  async function getReportsCount(){
+  // async function getReportsCount(){
+  //   const result = await getReportStats();
+  //   setReportStats(result);
+
+  // }
+
+
+
+  async function getReportsCount() {
+  try {
     const result = await getReportStats();
-    setReportStats(result);
+    console.log(result);
 
+    if (!result || (result.today === 0 && result.month === 0)) {
+      setReportStats({ today: 0, month: 0 });
+      setMessage("No report stats available.");
+    } else {
+      setReportStats(result);
+      setMessage("");
+    }
+  } catch (error) {
+    console.error("Error fetching report stats:", error);
 
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Failed to load report stats.");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
+
+    setReportStats({ today: 0, month: 0 });
   }
+}
+
+
+
+
+
 
   useEffect(()=>{
 getReportsCount();
@@ -36,6 +71,7 @@ console.log("STATUS: ",reportStats)
   <NotificationBox message={"Monthly"} data={reportStats} /> */}
           
         </div>
+        {message && <p className="DoctorDashBoard_message">{message}</p>}
       </div>
     </>
   );
@@ -46,16 +82,44 @@ export function MessageSendByUserToPatient() {
 
     const [reports,setReport] = useState([]);
     const [errorMessage,setErrorMessage] = useState("");
-  async function getReports(){
-   const response = await getAllReportsForDoctor();
-   console.log(response)
+
+  // async function getReports(){
+  //  const response = await getAllReportsForDoctor();
+  //  console.log(response)
   
-   if(response.message){
-    setErrorMessage(response.message);
-   }else{
-     setReport(response);
-   }
+  //  if(response.message){
+  //   setErrorMessage(response.message);
+  //  }else{
+  //    setReport(response);
+  //  }
+  // }
+
+
+  async function getReports() {
+  try {
+    const response = await getAllReportsForDoctor();
+    console.log(response);
+
+    if (response?.message) {
+      setErrorMessage(response.message);
+    } else {
+      setReport(response);
+      setErrorMessage("");
+    }
+  } catch (error) {
+    console.error("Error fetching reports for doctor:", error);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setErrorMessage(error.response.data?.message || "Failed to load reports.");
+    } else {
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    }
   }
+}
+
 
   useEffect(()=>{
   getReports();

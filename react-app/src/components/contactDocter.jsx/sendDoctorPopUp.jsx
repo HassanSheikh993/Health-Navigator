@@ -20,23 +20,33 @@ if (!isOpen) return null;
 
 async function handleSendReportToDoctor() {
   const report_ids = selectedReports.map((data) => data._id);
-
-  setSendReport(true); // loader start
+  setSendReport(true);
 
   try {
     const result = await sendReportToDoctor(report_ids, doctor._id);
     console.log(result);
 
-    if (result || result.message) {
+    if (result?.message) {
       setMessage(result.message);
+    } else {
+      setMessage("Unexpected response from server");
     }
-  } catch (err) {
-    setMessage("Something went wrong!");
-    console.error(err);
+  } catch (error) {
+    console.error("Error sending report:", error);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Request failed");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
   } finally {
-    setSendReport(false); // loader stop (jab result ya error aa jaye)
+    setSendReport(false);
   }
 }
+
 
 
 

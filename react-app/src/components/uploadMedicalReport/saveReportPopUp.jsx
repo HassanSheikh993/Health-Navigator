@@ -10,16 +10,43 @@ export function SaveReportPopup({ isOpen, onClose,report }) {
 
 if (!isOpen) return null;
 
-async function sendReportToDoctor(){
-  setSendReport(true)
-  const result = await uploadMedicalReport(report);
-  console.log("kkkk ",result)
-  if(result){
-    setSendReport(false);
-    setMessage(result.message);
-  }
+// async function sendReportToDoctor(){
+//   setSendReport(true)
+//   const result = await uploadMedicalReport(report);
+//   console.log("kkkk ",result)
+//   if(result){
+//     setSendReport(false);
+//     setMessage(result.message);
+//   }
     
+// }
+
+async function sendReportToDoctor() {
+  try {
+    setSendReport(true);
+    const result = await uploadMedicalReport(report);
+    console.log("kkkk ", result);
+
+    if (result) {
+      setSendReport(false);
+      setMessage(result.message);
+    }
+  } catch (error) {
+    console.error("Error sending report:", error);
+    setSendReport(false);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Request failed");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
+  }
 }
+
+
 
 
 

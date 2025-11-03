@@ -41,12 +41,33 @@ return(
 
   // 
 
-async function getAllReports() {
-  try {
+// async function getAllReports() {
+//   try {
  
-    const result = await displayReports();
+//     const result = await displayReports();
  
    
+//     if (!result || result.length === 0) {
+//       setData([]);
+//       setMessage("No reports available.");
+//     } else {
+//       setData(result);
+//       setMessage("");
+//     }
+
+//   } catch (err) {
+   
+//     console.error("Error fetching reports:", err);
+//     setData([]);
+//     setMessage("Failed to fetch reports.");
+//   }
+// }
+
+async function getAllReports() {
+  try {
+    const result = await displayReports();
+    console.log(result);
+
     if (!result || result.length === 0) {
       setData([]);
       setMessage("No reports available.");
@@ -54,14 +75,22 @@ async function getAllReports() {
       setData(result);
       setMessage("");
     }
+  } catch (error) {
+    console.error("Error fetching reports:", error);
 
-  } catch (err) {
-   
-    console.error("Error fetching reports:", err);
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Failed to fetch reports.");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
+
     setData([]);
-    setMessage("Failed to fetch reports.");
   }
 }
+
 
 
   useEffect(() => {
@@ -85,22 +114,58 @@ async function getAllReports() {
     });
   };
 
-   async function handleDeleteReports(){
-      if (selectedReports.length === 0) {
+  //  async function handleDeleteReports(){
+  //     if (selectedReports.length === 0) {
+  //   setPopupMessage("Please select a file before deleting.");
+  //   setShowPopup(true);
+  //   return;
+  // }
+  //   const reportId = selectedReports.map((data)=>{
+  //       return data._id
+  //   });
+  //   const result = await deleteUserReport(reportId);
+  //     if (result && result.message) {
+  //   setMessage(result.message);
+  //   setSelectedReports([]);
+  //   getAllReports();
+  // }
+  //  }
+
+async function handleDeleteReports() {
+  if (selectedReports.length === 0) {
     setPopupMessage("Please select a file before deleting.");
     setShowPopup(true);
     return;
   }
-    const reportId = selectedReports.map((data)=>{
-        return data._id
-    });
+
+  const reportId = selectedReports.map((data) => data._id);
+  setMessage(""); // reset old message
+
+  try {
     const result = await deleteUserReport(reportId);
-      if (result && result.message) {
-    setMessage(result.message);
-    setSelectedReports([]);
-    getAllReports();
+    console.log(result);
+
+    if (result?.message) {
+      setMessage(result.message);
+      setSelectedReports([]);
+      getAllReports();
+    } else {
+      setMessage("Unexpected response from server.");
+    }
+  } catch (error) {
+    console.error("Error deleting report:", error);
+
+    if (
+      error.response &&
+      [400, 401, 404, 500].includes(error.response.status)
+    ) {
+      setMessage(error.response.data?.message || "Request failed");
+    } else {
+      setMessage("An unexpected error occurred. Please try again.");
+    }
   }
-   }
+}
+
 
 
    function handleSendReport(){
