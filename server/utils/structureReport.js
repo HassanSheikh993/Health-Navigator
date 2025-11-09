@@ -1,7 +1,8 @@
 // server/utils/structureReport.js
 import fetch from "node-fetch";
-
-const OPENROUTER_API_KEY = "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"; // Replace with your key
+import dotenv from "dotenv";
+dotenv.config();
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; // Replace with your key
 
 export const structureMedicalReport = async (extractedText) => {
   try {

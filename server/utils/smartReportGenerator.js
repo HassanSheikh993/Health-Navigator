@@ -2,8 +2,9 @@ import fetch from "node-fetch";
 import fs from "fs";
 import FormData from "form-data";
 import path from "path";
-
-const OPENROUTER_API_KEY = "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";
+import dotenv from "dotenv";
+dotenv.config();
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; 
 const OCR_SERVICE_URL = "http://localhost:5001/extract";
 
 export const generateSmartReport = async (filePath) => {
