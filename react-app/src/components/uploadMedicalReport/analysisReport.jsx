@@ -1,37 +1,36 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import html2pdf from "html2pdf.js";
 import "../../styles/UploadReport.css";
-import { SaveReportPopup } from "./saveReportPopUp";
-import { SignInPopUp } from "../signInToContinue/signInPopUp";
-import { loginUserData } from "../../services/api";
 
 export function AnalyzeReport({ report }) {
-  const [showPopup, setShowPopup] = useState(false);
-  const [userData, setLoginData] = useState(null);
+  const reportRef = useRef();
 
-  async function fetchUser() {
-    const result = await loginUserData();
-    if (!result || result.message) setLoginData(null);
-    else setLoginData(result);
-  }
+  // 🧾 Function to generate and download PDF
+  const handleDownloadPDF = () => {
+    if (!reportRef.current) return;
 
-  useEffect(() => {
-    fetchUser();
-  }, []);
+    const element = reportRef.current;
 
-  function handleSave() {
-    setShowPopup(true);
-  }
-  function handleClosePopup() {
-    setShowPopup(false);
-  }
+    const options = {
+      margin: 0.5,
+      filename: "AI_Medical_Report.pdf",
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+      pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+    };
+
+    html2pdf().set(options).from(element).save();
+  };
 
   return (
     <div className="AIGeneratedAnalysis_container">
       <h2>AI-GENERATED ANALYSIS RESULTS</h2>
 
-      <div className="AIGeneratedAnalysis_resultBox">
+      {/* Report Display */}
+      <div className="AIGeneratedAnalysis_resultBox" ref={reportRef}>
         <div className="report-container markdown-body">
           <ReactMarkdown remarkPlugins={[remarkGfm]}>
             {report}
@@ -39,21 +38,11 @@ export function AnalyzeReport({ report }) {
         </div>
       </div>
 
+      {/* Download Button */}
       <div className="AIGeneratedAnalysis_shareButton">
-        <p>Keep a Copy of Your Report – Save Now!</p>
-        <button onClick={handleSave}>Save</button>
+        <p>Download Your Smart Report as PDF</p>
+        <button onClick={handleDownloadPDF}>Download PDF</button>
       </div>
-
-      {userData && (
-        <SaveReportPopup
-          isOpen={showPopup}
-          onClose={handleClosePopup}
-          report={report}
-        />
-      )}
-      {!userData && showPopup && (
-        <SignInPopUp isOpen={showPopup} onClose={handleClosePopup} />
-      )}
     </div>
   );
 }
