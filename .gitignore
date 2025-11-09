@@ -8,7 +8,7 @@ __pycache__/
 node_modules/
 server/node_modules/
 react-app/node_modules/
-
+server/.env
 # Ignore build and logs
 dist/
 build/
