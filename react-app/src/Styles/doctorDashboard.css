@@ -1,0 +1,670 @@
+/* Global Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f8fafc;
+  color: #1e293b;
+  line-height: 1.5;
+}
+
+
+.DoctorDashBoard_container {
+  padding: 30px 20px;
+  margin-bottom: 40px;
+  border-radius: 16px;
+  background: linear-gradient(
+      rgba(255, 255, 255, 0.85),
+      rgba(255, 255, 255, 0.9)
+    ),
+    url("/images/doctor4.jpg") center/cover no-repeat;
+  box-shadow: rgba(0, 0, 0, 0.08) 0px 6px 24px;
+}
+
+.DoctorDashBoard_container_h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  color: #0f172a;
+}
+
+
+.top_part {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.notification_box {
+  background: #ffffff;
+  padding: 25px;
+  text-align: center;
+  flex: 1 1 250px;
+  min-width: 250px;
+  border-radius: 14px;
+  box-shadow: rgba(99, 99, 99, 0.1) 0px 4px 12px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.notification_box:hover {
+  transform: translateY(-5px);
+  box-shadow: rgba(50, 50, 93, 0.15) 0px 8px 24px;
+}
+
+.notification_box_heading {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.notification_box h2 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+
+.message_user_to_dr_container {
+  padding: 30px 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 20px;
+  margin-bottom: 40px;
+}
+
+.message_user_to_dr_container h3 {
+  text-align: center;
+  font-size: 1.4rem;
+  margin-bottom: 8px;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+.message_user_to_dr_container h4 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.message_user_to_dr_messages {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+
+.user_messages {
+  background: linear-gradient(135deg, #3b82f6, #60a5fa);
+  border-radius: 14px;
+  padding: 20px;
+  color: #ffffff;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 6px 16px;
+}
+
+.user_messages h3 {
+  font-size: 1.2rem;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.user_messages h4 {
+  font-weight: 400;
+  font-size: 1rem;
+}
+
+.user_messages:hover {
+  transform: translateY(-6px);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+}
+
+
+@media (max-width: 768px) {
+  .DoctorDashBoard_container_h1 {
+    font-size: 2rem;
+  }
+
+  .notification_box h2 {
+    font-size: 1.8rem;
+  }
+
+  .message_user_to_dr_container {
+    padding: 20px 15px;
+  }
+
+  .user_messages {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .DoctorDashBoard_container {
+    padding: 20px 15px;
+  }
+
+  .DoctorDashBoard_container_h1 {
+    font-size: 1.6rem;
+  }
+
+  .notification_box {
+    padding: 18px;
+  }
+
+  .notification_box h2 {
+    font-size: 1.5rem;
+  }
+} */
+
+
+/* second */
+
+/* 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    color: #334155;
+    line-height: 1.6;
+}
+
+.DoctorDashBoard_container {
+    padding: 30px 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.85) 0%, rgba(79, 70, 229, 0.85) 100%), url("/images/doctor4.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.DoctorDashBoard_container_h1 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.top_part {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.notification_box {
+    background-color: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    text-align: center;
+    flex: 1 1 280px;
+    min-width: 250px;
+    max-width: 380px;
+    border-radius: 16px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    color: #1e293b;
+}
+
+.notification_box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.notification_box_heading {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.notification_box h2 {
+    font-size: 2.8rem;
+    font-weight: 700;
+    color: #3b82f6;
+}
+
+.message_user_to_dr_container {
+    padding: 30px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.message_user_to_dr_container h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #1e293b;
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+.message_user_to_dr_container h4 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 400;
+    color: #64748b;
+    font-size: 1.1rem;
+}
+
+.message_user_to_dr_messages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+    padding: 0 10px;
+}
+
+.user_messages {
+    background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+    border-radius: 16px;
+    padding: 25px;
+    color: #fff;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+}
+
+.user_messages:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.4);
+}
+
+.user_messages h3 {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    font-weight: 500;
+}
+
+.user_messages h4 {
+    font-size: 1rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .DoctorDashBoard_container {
+        padding: 20px 15px;
+        border-radius: 0 0 15px 15px;
+    }
+    
+    .DoctorDashBoard_container_h1 {
+        font-size: 1.8rem;
+    }
+    
+    .top_part {
+        gap: 15px;
+    }
+    
+    .notification_box {
+        padding: 20px;
+        flex: 1 1 100%;
+    }
+    
+    .notification_box h2 {
+        font-size: 2.4rem;
+    }
+    
+    .message_user_to_dr_container {
+        padding: 20px 15px;
+    }
+    
+    .message_user_to_dr_container h3 {
+        font-size: 1.2rem;
+    }
+    
+    .message_user_to_dr_container h4 {
+        font-size: 1rem;
+    }
+    
+    .message_user_to_dr_messages {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .DoctorDashBoard_container_h1 {
+        font-size: 1.6rem;
+    }
+    
+    .notification_box {
+        padding: 18px;
+    }
+    
+    .notification_box_heading {
+        font-size: 1rem;
+    }
+    
+    .notification_box h2 {
+        font-size: 2rem;
+    }
+    
+    .user_messages {
+        padding: 20px;
+    }
+    
+    .user_messages h3 {
+        font-size: 1.1rem;
+    }
+} */
+
+
+
+
+
+
+
+
+/* ===== VARIABLES & RESET ===== */
+:root {
+  --primary: #2563eb;
+  --primary-dark: #1d4ed8;
+  --secondary: #0f766e;
+  --accent: #ec4899;
+  --light: #f8fafc;
+  --dark: #1e293b;
+  --gray: #64748b;
+  --light-gray: #e2e8f0;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --border-radius: 12px;
+  --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f1f5f9;
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+/* ===== LAYOUT ===== */
+.DoctorDashBoard_container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.message_user_to_dr_container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* ===== DASHBOARD HEADING ===== */
+.DoctorDashBoard_container_h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 2rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.DoctorDashBoard_container_h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* ===== NOTIFICATION BOXES ===== */
+.top_part {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.notification_box {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border-left: 4px solid var(--primary);
+}
+
+.notification_box:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.notification_box_heading {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray);
+  margin-bottom: 0.5rem;
+}
+
+.notification_box h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* ===== MESSAGES SECTION ===== */
+.message_user_to_dr_container h3 {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--gray);
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.message_user_to_dr_container h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--light-gray);
+}
+
+.message_user_to_dr_messages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===== INDIVIDUAL MESSAGE CARDS ===== */
+.user_messages {
+  background: white;
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+  border-top: 4px solid var(--secondary);
+  position: relative;
+  overflow: hidden;
+}
+
+.user_messages:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.user_messages::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  /* background: linear-gradient(90deg, var(--secondary), var(--primary)); */
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.user_messages:hover::before {
+  opacity: 1;
+}
+
+.user_messages h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 0.75rem;
+}
+
+.user_messages h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray);
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.user_messages h4::before {
+  content: 'From: ';
+  font-weight: 600;
+  color: var(--primary);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .DoctorDashBoard_container_h1 {
+    font-size: 2rem;
+  }
+  
+  .top_part {
+    grid-template-columns: 1fr;
+  }
+  
+  .message_user_to_dr_messages {
+    grid-template-columns: 1fr;
+  }
+  
+  .DoctorDashBoard_container,
+  .message_user_to_dr_container {
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .DoctorDashBoard_container_h1 {
+    font-size: 1.75rem;
+  }
+  
+  .notification_box {
+    padding: 1.25rem;
+  }
+  
+  .user_messages {
+    padding: 1.25rem;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.DoctorDashBoard_container,
+.message_user_to_dr_container {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.notification_box,
+.user_messages {
+  animation: fadeIn 0.5s ease-out;
+}
+
+/* ===== STATUS INDICATORS (for future use) ===== */
+.status-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-new {
+  background-color: var(--success);
+}
+
+.status-pending {
+  background-color: var(--warning);
+}
+
+.status-urgent {
+  background-color: var(--error);
+}
+
+
+
+
+/* ===== HISTORY BUTTON STYLING ===== */
+.MessageSendByUserToPatient_button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.MessageSendByUserToPatient_button:hover {
+  background: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+}
+
+.MessageSendByUserToPatient_button:active {
+  transform: translateY(0);
+}
+
+.MessageSendByUserToPatient_button:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+
+
+
+/* ------------ */
+.MessageSendByUserToPatient_box{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}

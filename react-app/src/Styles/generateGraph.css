@@ -1,0 +1,25 @@
+/* chart ka wrapper */
+.chart-container {
+  width: 100%;
+  max-width: 900px;
+  height: 500px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  padding: 1rem;
+}
+
+/* chart ke andar text style */
+.chart-container text {
+  font-size: 12px;
+  fill: #333;
+  font-family: "Arial", sans-serif;
+}
+
+/* axis label styling */
+.chart-container .axis-label {
+  font-weight: bold;
+  font-size: 14px;
+  fill: #555;
+}

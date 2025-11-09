@@ -1,0 +1,387 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+ 
+ .container_register {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("/images/login_background.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative; 
+    
+}
+
+
+.container_register::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.5); 
+    z-index: 1; 
+}
+
+.form_box {
+    width: 900px;
+    height: 500px; 
+    display: grid;
+    grid-template-columns: 55% 45%;
+    position: relative;
+    border-radius: 0px;
+    overflow: hidden; 
+    background-color: rgba(255, 255, 255, 0.9); 
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+    z-index: 2; 
+}
+
+/* --------------------- Intro part */
+.intro {
+    background-color: #5796E6; 
+    /* border-bottom-left-radius: 25px; */
+    padding: 30px 15px;
+    text-align: center;
+    color: black; /* Ensure text is readable */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.intro h1 {
+    margin-bottom: 20px;
+   font-weight: bold;
+    font-size: 1.8rem; /* Larger heading */
+}
+
+.intro h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem; /* Adjusted size */
+    font-weight: bold;
+}
+
+.intro p {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 20px;
+}
+
+/* ----------------------- Login/Register CSS */
+.login_register_box {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    /* border-top-right-radius: 25px; */
+    background-color: #53C5B2;
+}
+
+.signin_box,
+.register_box {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+}
+
+.signin_text {
+    margin: 15px 0 30px;
+    font-size: 1.8rem; /* Larger heading */
+    color: black; 
+    font-weight: 600;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+}
+
+form input {
+    margin: 0 20px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 10px; /* Rounded corners */
+    border: 2px solid rgba(255, 255, 255, 0.3); /* Light border */
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input:focus {
+    border-color: #5796E6; /* Highlight border on focus */
+    box-shadow: 0 0 8px rgba(134, 86, 237, 0.5); /* Glow effect */
+}
+
+form input[type="submit"] {
+    background-color: #5796E6cc; /* Solid color for submit button */
+    color: white;
+    cursor: pointer;
+    font-weight: 600; /* Bold text */
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+form input[type="submit"]:hover {
+    background-color: #5796E6; /* Darker shade on hover */
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.login_signup_option {
+    margin-top: 20px;
+    font-size: 14px;
+    color: black; /* Matching the intro color */
+}
+
+.forget_password{
+    font-size: 14px;
+    color: black;
+     cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.forget_password:hover {
+    color: #f1f1f1cc; /* Darker shade on hover */
+}
+
+.change_btn {
+    font-weight: bold;
+    cursor: pointer;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.change_btn:hover {
+    color: #f1f1f1cc; /* Darker shade on hover */
+}
+
+/* ----------------- Status Message */
+.status_message {
+    margin-top: 15px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 14px;
+    color: black; 
+}
+
+/* ------------- Register/Login Switch */
+.register_position_side {
+    position: absolute;
+    transform: translateX(100%);
+    transition: transform 0.4s ease;
+}
+
+.signin_box {
+    position: absolute;
+    transform: translateX(0);
+    transition: transform 0.4s ease;
+}
+
+.signin_box_position_change {
+    transform: translateX(100%);
+    transition: transform 0.4s ease;
+}
+
+.register_box_position_change {
+    transform: translateX(0);
+    transition: transform 0.4s ease;
+}
+
+/* ------ */
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #00a676;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ------------ */
+
+@media screen and (max-width: 990px) {
+ .login_signup_option{
+        margin: -6px;
+       
+    }
+}
+/* ----------------- Media Query */
+@media screen and (max-width: 780px) {
+
+    .intro{
+        display: none;
+    }
+    .form_box {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        border-radius: 0;
+        justify-content: center;
+        align-items: center;
+        background-image: url("/images/login_background.png");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;   
+
+    }
+
+    .form_box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.5); 
+        z-index: 1; 
+    }
+
+    .login_register_box {
+        height: 85%;
+        width: 90%;
+        border-radius: 0;
+        z-index: 2;
+        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    }
+
+
+    .signin_box,
+    .register_box {
+        padding: 10px;
+    }
+
+    form input {
+        margin: 0 10px; /* Adjusted margin for smaller screens */
+    }    
+
+    .heart_image{
+        display: none;
+    }
+
+    .login_signup_option{
+        margin: -6px;
+       
+    }
+ 
+}
+
+
+
+/* ------------------- */
+
+.passwordError{
+    border: 3px solid red;
+    background-color: #ff7474cc;
+}
+
+.loginPasswordError{
+    color:rgb(222, 15, 15);
+}
+
+.registerWithGoogle{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-weight: bold;
+
+
+    margin: 0 20px;
+    padding: 8px; /* Slightly larger padding */
+    font-size: 16px; /* Larger font size */
+    border-radius: 7px;
+    border: none;
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent */
+    transition: background-color 0.3s ease;
+
+    &:hover{
+        cursor: pointer;
+        background-color: rgba(255, 255, 255, 0.6);
+    }
+}
+
+
+
+
+/* ////////////////////////////////////// */
+
+.heart_image{
+    position: fixed;
+    left: 46%;
+    top: 60%;
+ 
+    z-index: 3;
+}
+
+.heart_image img::before{
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgb(174, 202, 215,0.5);
+    z-index: 1; 
+}
+.heart_image img{
+    height: 15vw;
+    max-height: 15vw;
+    min-height: 100px; 
+    opacity: 0.1;
+}
+
+
+/* ---------------------- */
+
+.role_selection {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 4px 0 0px;
+    gap: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: black;
+  }
+  
+  .role_selection label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+  }
+  
+  .role_selection input[type="radio"] {
+    accent-color: #5796E6; /* Blue tone */
+    width: 18px;
+    height: 18px;
+  }
+  
+  @media screen and (max-width: 780px) {
+    .role_selection {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+    }
+  }
+  

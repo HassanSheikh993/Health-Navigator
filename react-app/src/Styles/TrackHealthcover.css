@@ -1,0 +1,160 @@
+
+*{
+  
+    margin: 0;
+    padding: 0;
+}
+.coverbanner{
+    width: 100%;
+    background-color:#BDD7DB;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+}
+.coverheading{
+   width: 700px;
+  
+   display: flex;
+   flex-direction: column;
+   
+
+   align-self: center;
+margin: auto;
+margin-top: 0;
+}
+.coverheading h2{
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    font-weight: 700;
+}
+.heartimg{
+    justify-content: center;
+    margin:auto;
+ 
+    margin-bottom: 0;
+}
+.heartimg img{
+    opacity: 0.2;
+    width: 60px;
+}
+.visualgraph{
+    width: 80%;
+    height: 480px;
+    border: 2px solid black;
+    display: flex;
+    flex-direction: column;
+margin: auto;
+margin-top: 30px;
+}
+.graph{
+    display: flex;
+}
+#heartimg{
+    width: 250px;
+    opacity: 0.1;
+}
+
+#graphimg{
+    width: 350px;
+    margin-top: 40px;
+}
+.graphinfo{
+    margin-top: 50px;
+    margin-left: 40px;
+
+    width: 40%;
+}
+.previousreport{
+    width: 80%;
+    height: 450px;
+    background-color: rgb(189, 215, 219);
+    display: flex;
+    flex-direction: column;
+margin: auto;
+margin-top: 30px;
+}
+
+.previousreport h3{
+    text-align: center;
+    margin: 20px;
+}
+.previousreport h4{
+    margin-left:30px
+}
+.reportslist{
+    display: flex;
+    flex-direction: column;
+    
+}
+.report{
+    width: 350px;
+
+    height: 60px;
+    margin-left: 70px;
+    margin-top:15px;
+    padding: 5px;
+   display: flex;
+
+}
+.reportinfo{
+  display: flex;  
+}
+.reportinfo p{
+    margin: 10px;
+    margin-top: 0px;
+}
+.report img{
+    width: 60px;
+    margin: 0;
+    padding: 0;
+}
+
+.reportbtn{
+   
+    width: 80%;
+    display: flex;
+   
+    margin: auto;
+   
+}
+.reportbtn button{
+    flex-grow: 1;
+    border-radius: 18px;
+    padding: 10px 10px;
+    font-size: 20px;
+    margin-left: 5px;
+    color: white;
+    border: none;
+    background-color: rgb(83, 197, 178);
+}
+.circle-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 22px;
+    height: 20px;
+    border: 3px solid #2196F3;
+    border-radius: 50%;
+    background-color: white;
+    position: relative;
+    cursor: pointer;
+   margin-top: 10px;
+   margin-right: 5px;
+  }
+
+  .circle-checkbox:checked {
+    background-color: #2196F3;
+  }
+
+  .circle-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 8px;
+    height: 8px;
+    background-color:lightgray;
+    border-radius: 50%;
+  }

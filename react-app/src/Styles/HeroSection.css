@@ -1,0 +1,168 @@
+
+.banner{
+    background:  linear-gradient(to right, rgba(176, 206, 215, 0.85), rgba(159, 188, 195, 0.75)),
+  url('../assets/banner.png');
+    background-size: cover;
+    height:100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content:flex-end;
+}
+
+.bannercontent{
+display: flex;
+flex-direction: row;
+/* justify-content: space-between; */
+margin-top: 0px;
+
+}
+.heading{
+
+
+
+font-size: 15px;
+margin-top: 24px;
+align-content: center;
+
+margin-left: 40px;
+/* justify-self: flex-end; */
+
+}
+.heading h1{
+    font-family: "Bebas Neue", sans-serif;
+    margin-bottom: 6px;
+}
+.heading button{
+    margin-top: 12px;
+}
+.heroimg{
+    /* align-self:center; */
+/* margin-top: 50px; */
+margin-bottom: 50px;
+    /* margin-left: 30px;  */
+
+}
+.heroimg img{
+    width: 500px;
+}
+.heading button{
+    background-color: rgb(83, 193,174);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    padding: 10px 10px;
+}
+
+.front-box{
+    position: relative;
+    bottom: 100px;
+    
+display: flex;
+flex-direction: column;
+justify-self: center;
+background-color: rgb(87, 150, 230);
+justify-content:space-around;
+align-items: center;
+padding: 30px;
+color: #FFFFFF;
+width:650px;
+height: 140px;
+border-radius: 20px;
+}
+.front-box h3{
+     font-family: "Poetsen One", sans-serif;
+     font-size: 24px;
+}
+.custom-shape-divider-bottom-1742389367 {
+    position: absolute;
+    bottom: -1;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+    transform: rotate(180deg);
+}
+
+.custom-shape-divider-bottom-1742389367 svg {
+    position: relative;
+    display: block;
+    width: calc(258% + 1.3px);
+    height: 158px;
+}
+
+.custom-shape-divider-bottom-1742389367 .shape-fill {
+    fill: #FFFFFF;
+}
+
+@media screen and (max-width: 1024px) {
+    .banner {
+        height: auto;
+        padding-bottom: 50px;
+    }
+
+    .bannercontent {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+
+    .heroimg img {
+        width: 400px;
+    }
+
+    .front-box {
+        width: 100%;
+        flex-direction: column;
+        height: auto;
+        
+        padding: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .banner {
+        height: auto;
+    }
+
+    .heroimg img {
+        width: 300px;
+    }
+
+    .heading {
+        font-size: 14px; 
+       
+        margin-right: 80px;
+    }
+
+    .front-box {
+        width: 100%;
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .heroimg img {
+        width: 250px;
+    }
+
+    .heading {
+        font-size: 12px;
+       
+        margin-left: 70px;
+    }
+
+    .front-box {
+        width: 100%;
+        flex-direction: column;
+        padding: 10px;
+        height: auto;
+    }
+
+    .heading button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+}

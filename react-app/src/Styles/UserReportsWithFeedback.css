@@ -1,0 +1,198 @@
+/* ===== USER REPORTS FEEDBACK STYLING ===== */
+.userReportFeedBack_container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.userReportFeedBack_heading {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  position: relative;
+  text-align: center;
+}
+
+.userReportFeedBack_heading::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: #2563eb;
+}
+
+/* Message */
+.userReportFeedBack_message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #64748b;
+  padding: 3rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e1;
+}
+
+/* Filter Buttons */
+.userReportFeedBack_filters {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.userReportFeedBack_button {
+  display: inline-block;
+  margin: 0 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.userReportFeedBack_button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* Report Cards */
+.userReportFeedBack_card {
+  background: #f8fafc;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid #2563eb;
+  transition: all 0.3s ease;
+  position: relative;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.userReportFeedBack_card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Doctor Image */
+.userReportFeedBack_doctorImg {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Doctor Info */
+.userReportFeedBack_doctorName,
+.userReportFeedBack_doctorEmail {
+  font-size: 1rem;
+  color: #374151;
+  margin: 0.3rem 0;
+}
+
+.userReportFeedBack_doctorName strong,
+.userReportFeedBack_doctorEmail strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+/* View Report Button */
+.userReportFeedBack_viewReportButton {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.userReportFeedBack_viewReportButton:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+/* Feedback Section */
+.userReportFeedBack_feedback {
+  background: #ffffff;
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 3px solid #10b981;
+  margin: 1rem 0;
+  font-size: 1rem;
+  color: #374151;
+}
+
+.userReportFeedBack_feedback strong {
+  color: #1e293b;
+  font-weight: 600;
+}
+
+.userReportFeedBack_reviewedAt {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .userReportFeedBack_container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  .userReportFeedBack_heading {
+    font-size: 1.8rem;
+  }
+  .userReportFeedBack_card {
+    padding: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .userReportFeedBack_container {
+    padding: 1rem;
+  }
+  .userReportFeedBack_heading {
+    font-size: 1.5rem;
+  }
+  .userReportFeedBack_doctorImg {
+    width: 60px;
+    height: 60px;
+  }
+  .userReportFeedBack_doctorName,
+  .userReportFeedBack_doctorEmail,
+  .userReportFeedBack_feedback {
+    font-size: 0.9rem;
+  }
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
