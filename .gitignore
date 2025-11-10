@@ -1,0 +1,15 @@
+# Ignore virtual environments
+venv/
+server/ocr-service/venv/
+__pycache__/
+*.pyc
+
+# Ignore node modules
+node_modules/
+server/node_modules/
+react-app/node_modules/
+server/.env
+# Ignore build and logs
+dist/
+build/
+.env
