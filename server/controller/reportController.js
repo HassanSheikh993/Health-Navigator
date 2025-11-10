@@ -1,44 +1,63 @@
 import { Report } from "../model/reportModel.js";
 import path from "path";
-import { structureMedicalReport } from "../utils/structureReport.js";
+import { structureReport } from "../utils/structureReport.js";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
 
 export const uploadReport = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
     const filePath = req.file.path;
-    const relativePath = req.file.relativePath;
+    const relativePath = req.file.relativePath || req.file.filename;
 
     console.log("📄 Uploaded file:", filePath);
     console.log("👤 User ID:", req.user.id);
 
-    // Step 1 — Save basic report entry in DB
+    // Step 1 — Save base report entry in DB
     const newReport = await Report.create({
       user: req.user.id,
       reportPath: relativePath,
     });
 
-    // Step 2 — Generate Smart Report (internally calls OCR + structuring)
-  
+    // Step 2 — Extract & Structure Report
+    console.log("⚙️ Step 1: Structuring medical report...");
+    const structured = await structureReport(filePath);
 
-    const smartReport = await generateSmartReport(filePath);
+    if (!structured.success) {
+      throw new Error(`Structure failed: ${structured.error}`);
+    }
 
+    console.log("✅ Structured JSON created.");
 
-    console.log("💬 Smart report generated.");
+    // Step 3 — Generate Smart Report (Markdown)
+    console.log("⚙️ Step 2: Generating Smart Report...");
+    const smart = await generateSmartReport(structured.structuredText);
 
-    // Step 3 — Save Smart Report in DB
-    newReport.smartReport = smartReport.report;
+    if (!smart.success) {
+      throw new Error(`Smart report generation failed: ${smart.report}`);
+    }
+
+    console.log("✅ Smart Report generated successfully.");
+
+    // Step 4 — Save results in DB
+    newReport.structuredData = structured.structuredText;
+    newReport.smartReport = smart.report;
     await newReport.save();
 
+    // Step 5 — Respond to client
     res.status(201).json({
+      success: true,
       message: "Report uploaded and processed successfully",
       report: newReport,
-      smartReport: smartReport.report,
+      structuredData: structured.structuredText,
+      smartReport: smart.report,
     });
   } catch (err) {
     console.error("❌ Error in uploadReport:", err);
     res.status(500).json({
+      success: false,
       message: "Error uploading or processing report",
       error: err.message,
     });
