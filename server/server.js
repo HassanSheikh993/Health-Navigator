@@ -9,6 +9,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser";
 import { reportRouter } from "./routes/reportRouts.js";
 
+import smartReportRoutes from "./routes/smartReportRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -35,6 +36,7 @@ app.use('/medicalReports', express.static(path.join(__dirname, 'public', 'medica
 app.use("/api",router)
 app.use("/api",doctorRouter);
 app.use("/api",reportRouter);
+app.use("/api", smartReportRoutes);
 
 app.get("/",(req,res)=>{
     res.send("testing")

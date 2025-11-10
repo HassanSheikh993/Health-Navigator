@@ -1,0 +1,8 @@
+Flask
+flask-cors
+pytesseract
+pdf2image
+img2table
+opencv-python
+Pillow
+numpy
