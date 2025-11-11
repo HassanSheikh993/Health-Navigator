@@ -1,3 +1,4 @@
+// middleWares/uploadMedicalReport.js
 import multer from "multer";
 import path from "path";
 import fs from "fs";
@@ -15,16 +16,11 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, reportFolder),
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + path.extname(file.originalname);
+    file.relativePath = `medicalReports/${uniqueName}`; // ✅ set relativePath before saving
     cb(null, uniqueName);
-
-    // add relative path (yeh DB ke liye use karna hai)
-    // req.filePath = `/medicalReports/${uniqueName}`;
-      file.relativePath = `medicalReports/${uniqueName}`;
-    
   },
 });
 
-// only allow pdf, jpg, png
 const fileFilter = (req, file, cb) => {
   const allowedTypes = /pdf|jpg|jpeg|png/;
   const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
