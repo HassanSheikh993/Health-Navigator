@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, reportFolder),
   filename: (req, file, cb) => {
     const uniqueName = Date.now() + path.extname(file.originalname);
-    file.relativePath = `medicalReports/${uniqueName}`; // ✅ set relativePath before saving
+    file.relativePath = `medicalReports/${uniqueName}`; 
     cb(null, uniqueName);
   },
 });
