@@ -151,6 +151,21 @@ export const uploadMedicalReport = async (report) => {
 };
 
 
+export const saveMedicalReport = async (pdfFile, originalReport) => {
+  const formData = new FormData();
+  formData.append("aiReportPDF", pdfFile);
+  formData.append("originalReport", originalReport);
+
+  const response = await api.post("/save-report", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+  
+  return response.data;
+};
+
+
 export const sendReportToDoctor = async (reports, doctor_id) => {
   const response = await api.post("/sendReports", {
     reports: reports,
