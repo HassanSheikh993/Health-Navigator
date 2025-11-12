@@ -15,13 +15,13 @@ export const uploadReport = async (req, res) => {
     console.log("📄 Uploaded file:", filePath);
     console.log("👤 User ID:", req.user.id);
 
-    // Step 1 — Save base report entry in DB
+  
     const newReport = await Report.create({
       user: req.user.id,
       reportPath: relativePath,
     });
 
-    // Step 2 — Extract & Structure Report
+   
     console.log("⚙️ Step 1: Structuring medical report...");
     const structured = await structureReport(filePath);
 
@@ -31,7 +31,7 @@ export const uploadReport = async (req, res) => {
 
     console.log("✅ Structured JSON created.");
 
-    // Step 3 — Generate Smart Report (Markdown)
+
     console.log("⚙️ Step 2: Generating Smart Report...");
     const smart = await generateSmartReport(structured.structuredText);
 
@@ -41,12 +41,12 @@ export const uploadReport = async (req, res) => {
 
     console.log("✅ Smart Report generated successfully.");
 
-    // Step 4 — Save results in DB
+
     newReport.structuredData = structured.structuredText;
     newReport.smartReport = smart.report;
     await newReport.save();
 
-    // Step 5 — Respond to client
+  
     res.status(201).json({
       success: true,
       message: "Report uploaded and processed successfully",
@@ -64,8 +64,47 @@ export const uploadReport = async (req, res) => {
   }
 };
 
-// This function is responsible for displaying one single report
 
+
+export const saveMedicalReport = async (req, res) => {
+  try {
+    if (!req.files?.originalReport || !req.files?.aiReportPDF) {
+      return res.status(400).json({ 
+        message: "Both original report and AI report are required" 
+      });
+    }
+
+    const originalFile = req.files.originalReport[0];
+    const aiReportFile = req.files.aiReportPDF[0];
+
+    console.log("reportPath: ", originalFile.relativePath)
+    console.log("aiReportPath: ", aiReportFile.relativePath)
+
+    // Save to database
+    const newReport = await Report.create({
+      user: req.user.id,
+      reportPath: originalFile.relativePath, // Store original report path
+      smartReport: aiReportFile.relativePath, // Store AI report path
+    });
+
+    
+    res.status(201).json({
+      success: true,
+      message: "Reports saved successfully",
+      report: newReport,
+    });
+  } catch (err) {
+    console.error("Error saving report:", err);
+    res.status(500).json({
+      success: false,
+      message: "Error saving reports",
+      error: err.message,
+    });
+  }
+};
+
+
+// This function is responsible for displaying one single report
 
 export const getSingleReport = async (req, res) => {
   try {
