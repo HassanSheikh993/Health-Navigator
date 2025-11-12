@@ -1,9 +1,12 @@
 
 import { useState } from "react";
 import "../../Styles/sendDoctorPopUp.css"
-import { uploadMedicalReport } from "../../services/medicalReport";
+import { saveMedicalReport} from "../../services/medicalReport";
 
-export function SaveReportPopup({ isOpen, onClose,report }) {
+export function SaveReportPopup({ isOpen, onClose,report,pdfFile,originalReport }) {
+  console.log("++++++++++++++++++++++++++++++++++++++++++++++")
+  console.log("POP UP: ",pdfFile);
+  console.log("POP UP: ",originalReport)
      const [sendReport,setSendReport] = useState(false);
      const [message,setMessage] = useState("");
      
@@ -24,7 +27,7 @@ if (!isOpen) return null;
 async function sendReportToDoctor() {
   try {
     setSendReport(true);
-    const result = await uploadMedicalReport(report);
+    const result = await saveMedicalReport(pdfFile,originalReport);
     console.log("kkkk ", result);
 
     if (result) {

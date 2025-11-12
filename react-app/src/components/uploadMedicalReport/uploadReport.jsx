@@ -133,7 +133,7 @@ export function UploadReport() {
         {showLoader && <span ref={sectionRef} className="loader"></span>}
 
         {condition && smartReport && (
-          <AnalyzeReport report={smartReport} />
+          <AnalyzeReport report={smartReport} originalReport = {selectFileUpload} />
         )}
       </div>
     </>
