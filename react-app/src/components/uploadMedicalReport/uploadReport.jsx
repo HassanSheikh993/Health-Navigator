@@ -10,7 +10,7 @@ export function UploadReport() {
   const [showLoader, setShowLoader] = useState(false);
   const [showNoFileSelected, setShowNoFileSelected] = useState(false);
   const [smartReport, setSmartReport] = useState(null);
-
+const [structuredData, setStructuredData] = useState(null); 
   const fileInputRef = useRef(null);
   const sectionRef = useRef(null);
 
@@ -39,12 +39,15 @@ export function UploadReport() {
 
       if (result.success && result.smartReport) {
         setSmartReport(result.smartReport);
+        setStructuredData(result.structuredData || null);
       } else {
         setSmartReport("No AI-generated content available.");
+        setStructuredData(null);
       }
     } catch (error) {
       console.error("❌ Error analyzing report:", error);
       setSmartReport("Error while generating report. Please try again.");
+      setStructuredData(null);
     } finally {
       setShowLoader(false);
       setTimeout(() => {
@@ -133,7 +136,7 @@ export function UploadReport() {
         {showLoader && <span ref={sectionRef} className="loader"></span>}
 
         {condition && smartReport && (
-          <AnalyzeReport report={smartReport} />
+          <AnalyzeReport report={smartReport} originalReport = {selectFileUpload} structuredData={structuredData} />
         )}
       </div>
     </>

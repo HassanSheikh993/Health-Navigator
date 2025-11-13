@@ -12,12 +12,24 @@ import {
   doctorReviewHistory,
   deleteUserReport,
   getUserReportsWithFeedback,
+  saveMedicalReport,
 } from "../controller/reportController.js";
-
+import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js";
 export const reportRouter = express.Router();
 
 // ✅ Upload & Auto Smart Report Generation
-reportRouter.post("/upload-report", auth, uploadMedicalReport.single("report"), uploadReport);
+reportRouter.post("/upload-report", uploadMedicalReport.single("report"), uploadReport);
+
+reportRouter.post(
+  "/save-report",
+  auth,
+  saveMedicalReportMulter.fields([
+    { name: "originalReport", maxCount: 1 },
+    { name: "aiReportPDF", maxCount: 1 }
+  ]),
+  saveMedicalReport
+);
+
 
 // ✅ Standard routes
 reportRouter.get("/allReports", auth, displayReports);

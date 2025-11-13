@@ -1,54 +1,34 @@
-
 import { useState } from "react";
-import "../../Styles/sendDoctorPopUp.css"
-import { uploadMedicalReport } from "../../services/medicalReport";
+import "../../Styles/sendDoctorPopUp.css";
+import { saveMedicalReport } from "../../services/medicalReport";
 
-export function SaveReportPopup({ isOpen, onClose,report }) {
-     const [sendReport,setSendReport] = useState(false);
-     const [message,setMessage] = useState("");
-     
+export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalReport, structuredData }) {
+  const [sendReport, setSendReport] = useState(false);
+  const [message, setMessage] = useState("");
 
-if (!isOpen) return null;
+  if (!isOpen) return null;
 
-// async function sendReportToDoctor(){
-//   setSendReport(true)
-//   const result = await uploadMedicalReport(report);
-//   console.log("kkkk ",result)
-//   if(result){
-//     setSendReport(false);
-//     setMessage(result.message);
-//   }
-    
-// }
+  async function sendReportToDoctor() {
+    try {
+      setSendReport(true);
 
-async function sendReportToDoctor() {
-  try {
-    setSendReport(true);
-    const result = await uploadMedicalReport(report);
-    console.log("kkkk ", result);
+      // optional cleanup for ```json ... ```
+      const cleanReport = report ? report.replace(/```json|```/g, "").trim() : "";
 
-    if (result) {
+      const result = await saveMedicalReport(pdfFile, originalReport, structuredData);
+      console.log("✅ Saved report:", result);
+
       setSendReport(false);
-      setMessage(result.message);
-    }
-  } catch (error) {
-    console.error("Error sending report:", error);
-    setSendReport(false);
-
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setMessage(error.response.data?.message || "Request failed");
-    } else {
-      setMessage("An unexpected error occurred. Please try again.");
+      setMessage(result.message || "Report saved successfully!");
+    } catch (error) {
+      console.error("❌ Error sending report:", error);
+      setSendReport(false);
+      setMessage(
+        error.response?.data?.message ||
+          "An unexpected error occurred. Please try again."
+      );
     }
   }
-}
-
-
-
-
 
   return (
     <div className="popup-overlay">
@@ -58,7 +38,7 @@ async function sendReportToDoctor() {
         </button>
         <h1 className="popup-title">Save Medical Report</h1>
         <p className="popup-message">
-          Are you sure you want to save your medical report? 
+          Are you sure you want to save your medical report?
         </p>
         <div className="popup-buttons">
           <button className="popup-cancel-btn" onClick={onClose}>
@@ -68,12 +48,8 @@ async function sendReportToDoctor() {
             Save Report
           </button>
         </div>
-        <p>{message}</p>
-
-{
-    sendReport && <span className="loader"></span>
-}
-
+        {message && <p>{message}</p>}
+        {sendReport && <span className="loader"></span>}
       </div>
     </div>
   );
