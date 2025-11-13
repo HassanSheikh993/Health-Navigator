@@ -243,9 +243,9 @@ navigate("/contact-doctor", { state: { shareMode: true, selectedReports:selected
             {/* Simplified Report */}
             <p>
               <strong>Simplified Report:</strong>{" "}
-              {report.simplifiedReport ? (
+              {report.smartReport ? (
                 <a
-                  href={`http://localhost:8000/${report.simplifiedReport}`}
+                  href={`http://localhost:8000/${report.smartReport}`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
