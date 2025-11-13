@@ -18,7 +18,7 @@ import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js
 export const reportRouter = express.Router();
 
 // ✅ Upload & Auto Smart Report Generation
-reportRouter.post("/upload-report", auth, uploadMedicalReport.single("report"), uploadReport);
+reportRouter.post("/upload-report", uploadMedicalReport.single("report"), uploadReport);
 
 reportRouter.post(
   "/save-report",

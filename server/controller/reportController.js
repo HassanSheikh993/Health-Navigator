@@ -10,18 +10,18 @@ export const uploadReport = async (req, res) => {
     }
 
     const filePath = req.file.path;
-    const relativePath = req.file.relativePath || req.file.filename;
+    // const relativePath = req.file.relativePath || req.file.filename;
 
     console.log("📄 Uploaded file:", filePath);
-    console.log("👤 User ID:", req.user.id);
+    // console.log("👤 User ID:", req.user.id);
 
-  
-    const newReport = await Report.create({
-      user: req.user.id,
-      reportPath: relativePath,
-    });
 
-   
+    // const newReport = await Report.create({
+    //   user: req.user.id,
+    //   reportPath: relativePath,
+    // });
+
+
     console.log("⚙️ Step 1: Structuring medical report...");
     const structured = await structureReport(filePath);
 
@@ -30,7 +30,6 @@ export const uploadReport = async (req, res) => {
     }
 
     console.log("✅ Structured JSON created.");
-
 
     console.log("⚙️ Step 2: Generating Smart Report...");
     const smart = await generateSmartReport(structured.structuredText);
@@ -42,16 +41,17 @@ export const uploadReport = async (req, res) => {
     console.log("✅ Smart Report generated successfully.");
 
 
-    newReport.structuredData = structured.structuredText;
-    newReport.smartReport = smart.report;
-    await newReport.save();
+    // newReport.structuredData = structured.structuredText;
+    // newReport.smartReport = smart.report;
+    // await newReport.save();
 
-  
+
     res.status(201).json({
       success: true,
       message: "Report uploaded and processed successfully",
-      report: newReport,
+      // report: newReport,
       structuredData: structured.structuredText,
+
       smartReport: smart.report,
     });
   } catch (err) {
@@ -69,25 +69,62 @@ export const uploadReport = async (req, res) => {
 export const saveMedicalReport = async (req, res) => {
   try {
     if (!req.files?.originalReport || !req.files?.aiReportPDF) {
-      return res.status(400).json({ 
-        message: "Both original report and AI report are required" 
+      return res.status(400).json({
+        message: "Both original report and AI report are required"
       });
     }
 
     const originalFile = req.files.originalReport[0];
     const aiReportFile = req.files.aiReportPDF[0];
+    const structuredText = req.body.structuredText;
+    if (!structuredText) {
+      console.warn("⚠️ No structuredText received from frontend.");
+    }
+    console.log(structuredText);
+   
+    // 🧹 Clean markdown JSON text (remove ```json ``` wrappers)
+    let cleanText = structuredText || "";
+    cleanText = cleanText
+      .replace(/```json|```/g, "") // remove markdown fences
+      .trim()
+      // remove any junk before/after JSON
+      .replace(/^[^{\[]+/, "") // remove anything before first { or [
+      .replace(/[^}\]]+$/, ""); // remove anything after last } or ]
+
+    let testsArray = [];
+
+    try {
+      // ✅ Parse only the clean JSON block
+      const parsed = JSON.parse(cleanText);
+
+      if (Array.isArray(parsed)) {
+        testsArray = parsed;
+      } else if (parsed.tests && Array.isArray(parsed.tests)) {
+        testsArray = parsed.tests;
+      } else if (typeof parsed === "object") {
+        testsArray = [parsed];
+      }
+    } catch (err) {
+      console.warn("⚠️ Could not parse structured text as JSON:", err.message);
+      console.log("💡 Cleaned text snippet for debugging:\n", cleanText.slice(0, 300));
+    }
+
+    console.log("🧪 Extracted tests:", testsArray);
+
 
     console.log("reportPath: ", originalFile.relativePath)
     console.log("aiReportPath: ", aiReportFile.relativePath)
+
 
     // Save to database
     const newReport = await Report.create({
       user: req.user.id,
       reportPath: originalFile.relativePath, // Store original report path
       smartReport: aiReportFile.relativePath, // Store AI report path
+      keyValues: testsArray,
     });
 
-    
+
     res.status(201).json({
       success: true,
       message: "Reports saved successfully",

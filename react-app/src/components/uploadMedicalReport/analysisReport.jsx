@@ -8,7 +8,7 @@ import html2pdf from "html2pdf.js";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-export function AnalyzeReport({ report, originalReport }) {
+export function AnalyzeReport({ report, originalReport, structuredData }) {
   const [showPopup, setShowPopup] = useState(false);
   const [userData, setLoginData] = useState(null);
   const [generatedPdf, setGeneratedPdf] = useState(null); // 🟢 stores generated PDF file
@@ -120,6 +120,7 @@ export function AnalyzeReport({ report, originalReport }) {
           onClose={handleClosePopup}
           report={report}
           originalReport={originalReport}
+          structuredData={structuredData}
           pdfFile={generatedPdf}
           // onSave={handleSaveToBackend}
         />
