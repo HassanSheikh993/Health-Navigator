@@ -3,14 +3,13 @@ import { getUserReportsWithFeedback } from "../../services/medicalReport";
 import "../../Styles/UserReportsWithFeedback.css"
 import Nav from "../../Health Navigator/Nav";
 import Footer from "../../Health Navigator/Footer";
-
-
-export function MainUserReportsWithFeedback(){
-  return(
+import { RatingSection } from "../userFeedBackReports/RatingSection";
+export function MainUserReportsWithFeedback() {
+  return (
     <>
-    <Nav/>
-    <UserReportsWithFeedback/>
-    <Footer/>
+      <Nav />
+      <UserReportsWithFeedback />
+      <Footer />
     </>
   )
 }
@@ -22,7 +21,7 @@ export function UserReportsWithFeedback() {
   async function getData() {
     try {
       const result = await getUserReportsWithFeedback();
-      console.log("BBBB: ",result)
+      console.log("BBBB: ", result)
 
       if (!result || result.length === 0) {
         setData([]);
@@ -128,6 +127,10 @@ export function UserReportsWithFeedback() {
                   {new Date(item.updatedAt).toLocaleString()}
                 </p>
               </>
+            )}
+            {/* ⭐ Patient Rating System */}
+            {item.viewedByDoctor && (
+              <RatingSection item={item} refresh={getData} />
             )}
           </div>
         );

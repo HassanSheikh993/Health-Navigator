@@ -1,0 +1,42 @@
+.ratingBox {
+  margin-top: 15px;
+  padding: 12px;
+  border-top: 1px solid #ddd;
+}
+
+.starRating {
+  font-size: 26px;
+  margin-bottom: 8px;
+}
+
+.star {
+  cursor: pointer;
+  color: #ccc;
+  margin-right: 5px;
+  transition: 0.2s;
+}
+
+.star.filled {
+  color: gold;
+}
+
+.star.disabled {
+  cursor: not-allowed;
+}
+
+.reviewBox {
+  width: 100%;
+  min-height: 60px;
+  padding: 8px;
+  margin-top: 5px;
+}
+
+.submitRatingBtn {
+  margin-top: 10px;
+  padding: 8px 14px;
+  background: dodgerblue;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,6 +1,7 @@
 import { Report } from "../model/reportModel.js";
 import path from "path";
 import { structureReport } from "../utils/structureReport.js";
+import { SharedReport } from "../model/sharedReportModel.js";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
 
 export const uploadReport = async (req, res) => {
@@ -339,3 +340,40 @@ export const getUserReportsWithFeedback = async (req, res) => {
   }
 
 }
+
+export const rateDoctorFeedback = async (req, res) => {
+  try {
+    const { sharedReportId } = req.params;
+    const { rating, review } = req.body;
+    const patientId = req.user?._id;  // Assuming auth middleware sets req.user
+
+    if (!rating || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be between 1 and 5" });
+    }
+
+    const sharedReport = await SharedReport.findById(sharedReportId);
+    if (!sharedReport) {
+      return res.status(404).json({ message: "Shared report not found" });
+    }
+
+    // Ensure the patient who owns the report is the one rating it
+    if (sharedReport.patient_id.toString() !== patientId.toString()) {
+      return res.status(403).json({ message: "Not authorized to rate this report" });
+    }
+
+    sharedReport.patient_rating = rating;
+    sharedReport.patient_review = review || "";
+    sharedReport.ratedAt = new Date();
+
+    await sharedReport.save();
+
+    res.status(200).json({
+      message: "Rating submitted successfully",
+      data: sharedReport
+    });
+
+  } catch (error) {
+    console.error("Rating error:", error);
+    res.status(500).json({ message: "Server error", error });
+  }
+};

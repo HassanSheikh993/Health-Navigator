@@ -224,3 +224,11 @@ export const addDoctorReview = async (review, doctor_email, patient_id, report_i
   console.log(response.data);
   return response.data;
 };
+
+export const rateDoctorFeedback = async (sharedReportId, rating, review) => {
+  const response = await api.post(`/rate/${sharedReportId}`, {
+    rating,
+    review
+  });
+  return response.data;
+};

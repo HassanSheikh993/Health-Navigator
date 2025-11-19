@@ -13,6 +13,7 @@ import {
   deleteUserReport,
   getUserReportsWithFeedback,
   saveMedicalReport,
+  rateDoctorFeedback
 } from "../controller/reportController.js";
 import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js";
 export const reportRouter = express.Router();
@@ -40,3 +41,4 @@ reportRouter.get("/getReportStats", auth, getReportStats);
 reportRouter.get("/doctorReviewHistory", auth, doctorReviewHistory);
 reportRouter.delete("/deleteUserReport", auth, deleteUserReport);
 reportRouter.get("/getUserReportsWithFeedback", auth, getUserReportsWithFeedback);
+reportRouter.post("/rate/:sharedReportId", auth, rateDoctorFeedback);

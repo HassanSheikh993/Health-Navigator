@@ -151,18 +151,18 @@ export function Report() {
         </div>
 
         <div className="reportDetails__fileBlock">
-          <h4 className="reportDetails__fileLabel">Simplified Report</h4>
-          {reportFile.simplifiedReport ? (
+          <h4 className="reportDetails__fileLabel">Smart Report</h4>
+          {reportFile.smartReport ? (
             <a
               className="reportDetails__fileLink"
-              href={`http://localhost:8000/${reportFile.simplifiedReport}`}
+              href={`http://localhost:8000/${reportFile.smartReport}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open Simplified Report
+              Open Smart Report
             </a>
           ) : (
-            <p className="reportDetails__fileMissing">Simplified Report: NaN</p>
+            <p className="reportDetails__fileMissing">Smart Report: NaN</p>
           )}
         </div>
       </div>
