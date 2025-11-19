@@ -2,16 +2,9 @@ import "../../styles/contactDoctor.css";
 import { useState, useEffect } from "react";
 import { DoctorRecordSetUp } from "./doctorRecordSetUp";
 // import { doctorsList } from "../../services/doctorListApi";
-import { doctorsList,searchDoctors } from "../../services/doctor";
+import { doctorsList, searchDoctors } from "../../services/doctor";
 import { useLocation } from 'react-router'
 import { SendReportPopup } from "./sendDoctorPopUp";
-
-
-
-
-
-
-
 
 export function ContactDoctor() {
   const [showPopup, setShowPopup] = useState(false);
@@ -22,7 +15,7 @@ export function ContactDoctor() {
 
   const location = useLocation();
   const shareMode = location.state?.shareMode || false;
-   const selectedReports = location.state?.selectedReports || [];
+  const selectedReports = location.state?.selectedReports || [];
 
   const toggleDetails = (index) => {
     setShowMoreIndex(showMoreIndex === index ? null : index);
@@ -32,8 +25,9 @@ export function ContactDoctor() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await doctorsList();
-        setDoctors(response);  // assuming API returns an array
+        const response = await doctorsList();  // FIXED
+
+        setDoctors(response);
       } catch (error) {
         console.error("Failed to fetch doctors:", error);
       }
@@ -47,8 +41,8 @@ export function ContactDoctor() {
     setDoctors(result);
   }
 
-   function handleSendReport(doctor) {
-     setSelectedDoctor(doctor); 
+  function handleSendReport(doctor) {
+    setSelectedDoctor(doctor);
     setShowPopup(true);
   }
 
@@ -86,7 +80,26 @@ export function ContactDoctor() {
                 <div>
                   <h1 className="doctor_name">{doctor.name}</h1>
                   <h2 className="doctor_country">{doctor.country}</h2>
+
+                  {/* ⭐ Average Rating Stars */}
+                  <div className="star-display">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <span
+                        key={i}
+                        className="star"
+                        style={{ color: i < Math.round(doctor.averageRating || 0) ? "gold" : "#ccc" }}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* ⭐ Show numeric avg */}
+                  <p className="avgRatingText">
+                    {doctor.averageRating ? doctor.averageRating.toFixed(1) : "No rating yet"}
+                  </p>
                 </div>
+
               </div>
 
               <div className="doctor_buttons">
@@ -95,8 +108,8 @@ export function ContactDoctor() {
                 </button>
 
                 {shareMode && (
-                  <button 
-                    className="send_report_btn" 
+                  <button
+                    className="send_report_btn"
                     onClick={() => handleSendReport(doctor)}
                   >
                     Send Report
@@ -111,12 +124,12 @@ export function ContactDoctor() {
         ))}
       </div>
 
-      <SendReportPopup 
-        isOpen={showPopup} 
-        onClose={handleClosePopup} 
+      <SendReportPopup
+        isOpen={showPopup}
+        onClose={handleClosePopup}
         doctor={selectedDoctor}
         selectedReports={selectedReports}
-       
+
       />
     </>
   );

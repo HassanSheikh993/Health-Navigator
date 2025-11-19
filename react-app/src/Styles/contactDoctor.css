@@ -3,6 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+.avgRatingText {
+  font-size: 14px;
+  color: #555;
+  margin-top: 3px;
+}
 
 
 .doctor_container_heroSection {

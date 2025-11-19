@@ -1,70 +1,52 @@
 import { useState, useEffect } from "react";
-import { doctorReviewHistory } from "../../services/medicalReport";
+import { doctorReviewHistory } from "../../services/doctor";
 import "../../Styles/showDoctorHistory.css"
 import Nav from "../../Health Navigator/Nav";
 import Footer from "../../Health Navigator/Footer";
 
-export function DoctorHistory(){
-  return(
- <>
-    <Nav/>
-    <ShowDoctorHistory/>
-    <Footer/>
- </>
+export function DoctorHistory() {
+  return (
+    <>
+      <Nav />
+      <ShowDoctorHistory />
+      <Footer />
+    </>
   )
 }
 
 
 export function ShowDoctorHistory() {
   const [data, setData] = useState([]);
-  const [message,setMessage] = useState("");
-
-//   async function fetchData() {
-//     try {
-//       const result = await doctorReviewHistory();
-//       if(!result || result.length===0){
-//         setData([])
-//         setMessage("No history found.")
-//       }else{
-// setData(result); 
-// setMessage("")
-//       }
-      
-//     } catch (err) {
-//       console.error("Error fetching doctor history:", err);
-//     }
-//   }
+  const [message, setMessage] = useState("");
 
 
+  async function fetchData() {
+    try {
+      const result = await doctorReviewHistory();
+      console.log(result);
 
+      if (!result || result.length === 0) {
+        setData([]);
+        setMessage("No history found.");
+      } else {
+        setData(result);
+        setMessage("");
+      }
+    } catch (error) {
+      console.error("Error fetching doctor history:", error);
 
-async function fetchData() {
-  try {
-    const result = await doctorReviewHistory();
-    console.log(result);
+      if (
+        error.response &&
+        [400, 401, 404, 500].includes(error.response.status)
+      ) {
+        setMessage(error.response.data?.message || "Failed to load history.");
+      } else {
+        setMessage("An unexpected error occurred. Please try again.");
+      }
 
-    if (!result || result.length === 0) {
       setData([]);
-      setMessage("No history found.");
-    } else {
-      setData(result);
-      setMessage("");
     }
-  } catch (error) {
-    console.error("Error fetching doctor history:", error);
-
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setMessage(error.response.data?.message || "Failed to load history.");
-    } else {
-      setMessage("An unexpected error occurred. Please try again.");
-    }
-
-    setData([]);
   }
-}
 
 
 
@@ -126,6 +108,32 @@ async function fetchData() {
                 {item.doctor_review || "NaN"}
               </p>
 
+              {/* ⭐ Patient Rating Box */}
+              <div className="patientRatingBox">
+                <p className="patientReviewText"><strong>Patient Rating:</strong></p>
+
+                {item.patient_rating ? (
+                  <div className="star-display">
+                    {[1, 2, 3, 4, 5].map((num) => (
+                      <span
+                        key={num}
+                        className={`star ${num <= item.patient_rating ? "filled-star" : ""}`}
+                      >
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="noRatingYet">No rating yet</p>
+                )}
+
+                {item.patient_review && (
+                  <p className="patientReviewText">
+                    <strong>Patient Comment:</strong> {item.patient_review}
+                  </p>
+                )}
+              </div>
+
               {/* Date & Time */}
               <p className="doctorHistory__date">
                 <strong>Reviewed At:</strong>{" "}
@@ -133,6 +141,7 @@ async function fetchData() {
                   ? new Date(item.updatedAt).toLocaleString()
                   : "NaN"}
               </p>
+
 
               <hr className="doctorHistory__divider" />
             </div>

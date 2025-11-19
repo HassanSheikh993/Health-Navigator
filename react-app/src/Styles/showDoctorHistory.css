@@ -228,3 +228,7 @@
     text-decoration: underline;
   }
 }
+.star.filled-star {
+  color: gold !important;
+  font-weight: bold;
+}
