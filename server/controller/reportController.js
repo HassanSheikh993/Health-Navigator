@@ -215,35 +215,6 @@ export const getAllReportsForDoctor = async (req, res) => {
   }
 }
 
-export const addDoctorReview = async (req, res) => {
-  try {
-    const { doctorReviewedText, patient_id, report_id } = req.body;
-    if (!doctorReviewedText || !patient_id || !report_id) return res.status(400).json({ message: "Incomplete Data" });
-
-
-    const result = await SharedReport.updateOne(
-      { doctor_id: req.user.id, patient_id: patient_id, report_id: report_id },
-      {
-        $set: {
-          doctor_review: doctorReviewedText,
-          viewedByDoctor: true,
-          doctor_reviewedAt: new Date()
-        }
-      });
-
-    if (result.modifiedCount > 0) {
-      return res.status(201).json({ message: "Review Sent" });
-    } else {
-      return res.status(404).json({ message: "No matching report found" });
-    }
-
-  } catch (err) {
-    console.log("Error in addDoctorReview function ", err);
-    res.status(500).json({ message: "Error addDoctorReview", error: err.message });
-  }
-
-}
-
 
 export const getReportStats = async (req, res) => {
   try {
@@ -273,32 +244,6 @@ export const getReportStats = async (req, res) => {
   }
 };
 
-
-export const doctorReviewHistory = async (req, res) => {
-  try {
-    const doctor_id = req.user.id;
-    const result = await SharedReport.find({
-      $and: [
-        { doctor_id: doctor_id },
-        { viewedByDoctor: true }
-      ]
-    }).populate("patient_id", "_id name email picture")
-      .populate("report_id", "_id reportPath")
-
-
-    if (!result || result.length === 0) {
-      return res.status(200).json([]);
-    }
-
-    res.status(200).json(result);
-
-
-  } catch (err) {
-    console.log("Error in doctorReviewHistory function ", err);
-    res.status(500).json({ message: "Error doctorReviewHistory", error: err.message });
-
-  }
-}
 
 
 export const deleteUserReport = async (req, res) => {
@@ -340,40 +285,3 @@ export const getUserReportsWithFeedback = async (req, res) => {
   }
 
 }
-
-export const rateDoctorFeedback = async (req, res) => {
-  try {
-    const { sharedReportId } = req.params;
-    const { rating, review } = req.body;
-    const patientId = req.user?._id;  // Assuming auth middleware sets req.user
-
-    if (!rating || rating < 1 || rating > 5) {
-      return res.status(400).json({ message: "Rating must be between 1 and 5" });
-    }
-
-    const sharedReport = await SharedReport.findById(sharedReportId);
-    if (!sharedReport) {
-      return res.status(404).json({ message: "Shared report not found" });
-    }
-
-    // Ensure the patient who owns the report is the one rating it
-    if (sharedReport.patient_id.toString() !== patientId.toString()) {
-      return res.status(403).json({ message: "Not authorized to rate this report" });
-    }
-
-    sharedReport.patient_rating = rating;
-    sharedReport.patient_review = review || "";
-    sharedReport.ratedAt = new Date();
-
-    await sharedReport.save();
-
-    res.status(200).json({
-      message: "Rating submitted successfully",
-      data: sharedReport
-    });
-
-  } catch (error) {
-    console.error("Rating error:", error);
-    res.status(500).json({ message: "Server error", error });
-  }
-};

@@ -7,13 +7,10 @@ import {
   displayReports,
   sendReportToDoctor,
   getAllReportsForDoctor,
-  addDoctorReview,
   getReportStats,
-  doctorReviewHistory,
   deleteUserReport,
   getUserReportsWithFeedback,
   saveMedicalReport,
-  rateDoctorFeedback
 } from "../controller/reportController.js";
 import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js";
 export const reportRouter = express.Router();
@@ -36,9 +33,8 @@ reportRouter.post(
 reportRouter.get("/allReports", auth, displayReports);
 reportRouter.post("/sendReports", auth, sendReportToDoctor);
 reportRouter.get("/getDoctorReports", auth, getAllReportsForDoctor);
-reportRouter.put("/addDoctorReview", auth, addDoctorReview);
+
 reportRouter.get("/getReportStats", auth, getReportStats);
-reportRouter.get("/doctorReviewHistory", auth, doctorReviewHistory);
+
 reportRouter.delete("/deleteUserReport", auth, deleteUserReport);
 reportRouter.get("/getUserReportsWithFeedback", auth, getUserReportsWithFeedback);
-reportRouter.post("/rate/:sharedReportId", auth, rateDoctorFeedback);

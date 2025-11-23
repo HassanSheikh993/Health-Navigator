@@ -201,27 +201,8 @@ export const getUserReportsWithFeedback = async () => {
   return response.data;
 };
 
-
-export const doctorReviewHistory = async () => {
-  const response = await api.get("/doctorReviewHistory");
-  return response.data;
-};
-
 export const getReportStats = async () => {
   const response = await api.get("/getReportStats");
-  return response.data;
-};
-
-export const addDoctorReview = async (review, doctor_email, patient_id, report_id) => {
-  const dataToSend = {
-    doctorReviewedText: review,
-    doctor_email,
-    patient_id,
-    report_id
-  };
-
-  const response = await api.put("/addDoctorReview", dataToSend);
-  console.log(response.data);
   return response.data;
 };
 
