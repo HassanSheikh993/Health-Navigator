@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 export function UserMessage({ data }) {
   const navigate = useNavigate();
+  console.log("USER MESSAGE : ",data)
 
   function handleOnClick() {
     // Navigate to ReportDetails and send data with state
