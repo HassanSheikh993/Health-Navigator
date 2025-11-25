@@ -42,6 +42,8 @@ export const registration = async(req,res)=>{
      const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
      tempUsers[email] = { name, email, password, role, verificationCode };
+     console.log("Email:", process.env.USER_EMAIL);
+console.log("Pass:", process.env.USER_EMAIL_PASS.length);
 
     await sendEmail(email, verificationCode);
     res.status(200).json({ message: "Verification code sent to email",status: true });
@@ -59,7 +61,7 @@ export const verifyEmailCode = async (req, res) => {
     const tempUser = tempUsers[email];
 
     if (!tempUser || tempUser.verificationCode != code) {
-      return res.status(400).json({ message: "Invalid or expired code",success: true });
+      return res.status(400).json({ message: "Invalid or expired code",success: false });
     }
 
     const newUser = await User.create({
@@ -72,7 +74,7 @@ export const verifyEmailCode = async (req, res) => {
 
     delete tempUsers[email];
 
-    res.status(201).json({ message: "Email verified, account created", user: newUser });
+    res.status(201).json({ message: "Email verified, account created", user: newUser,success:true });
   } catch (err) {
     console.log("error in verifyEmailCode ",err);
     res.status(500).json({ message: `Error verifying email: ${err.message}` });
