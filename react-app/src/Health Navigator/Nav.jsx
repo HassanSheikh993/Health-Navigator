@@ -9,6 +9,7 @@ function Nav() {
   const [dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
 
+  console.log("userData ",userData)
   // Refs for detecting outside click
   const profileIconRef = useRef(null);
   const dropDownRef = useRef(null);
@@ -84,9 +85,13 @@ function Nav() {
             
 <img
   className="nav_userProfile_image"
-  src={userData.picture ? `http://localhost:8000${userData.picture}` : "/images/user.png"}
+  src={`http://localhost:8000${userData.picture}`}
   alt="User Profile"
-/>            </div>
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = "/images/user.png";
+  }}
+/>          </div>
           ) : (
             <button onClick={() => navigate('/Register')}>Login/Register</button>
           )}
