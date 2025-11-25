@@ -55,9 +55,7 @@ export function DoctorDashBoard() {
 getReportsCount();
   },[])
 
-  useEffect(()=>{
-console.log("STATUS: ",reportStats)
-  },[reportStats])
+
 
   return (
     <>
@@ -98,7 +96,7 @@ export function MessageSendByUserToPatient() {
   async function getReports() {
   try {
     const response = await getAllReportsForDoctor();
-    console.log(response);
+   
 
     if (response?.message) {
       setErrorMessage(response.message);
