@@ -42,8 +42,7 @@ export const registration = async(req,res)=>{
      const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
      tempUsers[email] = { name, email, password, role, verificationCode };
-     console.log("Email:", process.env.USER_EMAIL);
-console.log("Pass:", process.env.USER_EMAIL_PASS.length);
+
 
     await sendEmail(email, verificationCode);
     res.status(200).json({ message: "Verification code sent to email",status: true });
