@@ -34,6 +34,7 @@ app.use('/uploadProfileImages', express.static(path.join(__dirname, 'public', 'u
 app.use('/medicalReports', express.static(path.join(__dirname, 'public', 'medicalReports')));
 app.use('/originalReports', express.static(path.join(__dirname, 'public', 'originalReports')));
 app.use('/aiReports', express.static(path.join(__dirname, 'public', 'aiReports')));
+app.use('/defaultProfileImage', express.static(path.join(__dirname, 'public', 'defaultProfileImage')));
 
 app.use("/api",router)
 app.use("/api",doctorRouter);
