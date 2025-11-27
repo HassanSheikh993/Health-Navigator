@@ -46,6 +46,10 @@
   position: relative;
 }
 
+.navBar li:hover {
+  color: #2563eb;
+}
+
 .navBar a:hover {
   color: #2563eb;
 }
