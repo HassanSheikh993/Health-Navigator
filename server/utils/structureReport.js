@@ -28,7 +28,13 @@ export const structureReport = async (filePath) => {
     const rawText = await ocrResponse.text();
     console.log("🧾 Raw OCR response:", rawText);
 
-    const ocrData = JSON.parse(rawText);
+    let ocrData;
+    try {
+      ocrData = JSON.parse(rawText);
+    } catch (e) {
+      throw new Error("OCR service returned invalid JSON: " + rawText);
+    }
+
     const extractedText = ocrData.extracted_text || ocrData.text || "";
     if (!extractedText) throw new Error("No text extracted from OCR service.");
 
@@ -43,7 +49,7 @@ export const structureReport = async (filePath) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-chat-v3.1:free",
+        model: "openai/gpt-oss-20b:free",
         messages: [
           {
             role: "system",
@@ -68,8 +74,9 @@ Example JSON:
     });
 
     const structuredResult = await structureResponse.json();
+console.log(structuredResult);
     const structuredText = structuredResult?.choices?.[0]?.message?.content;
-
+console.log(structuredText);
     if (!structuredText) throw new Error("Failed to structure report text.");
 
     console.log("✅ Structured JSON generated successfully");

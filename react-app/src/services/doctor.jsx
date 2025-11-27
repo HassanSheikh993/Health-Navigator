@@ -29,15 +29,18 @@ export const doctorReviewHistory = async () => {
   return response.data;
 };
 
-export const addDoctorReview = async (review, doctor_email, patient_id, report_id) => {
+export const addDoctorReview = async (review,sharedReport_id) => {
   const dataToSend = {
-    doctorReviewedText: review,
-    doctor_email,
-    patient_id,
-    report_id
+    doctorReviewedText: review, 
+    sharedReport_id,
   };
 
   const response = await api.put("/addDoctorReview", dataToSend);
   console.log(response.data);
+  return response.data;
+};
+
+export const deleteSharedReport = async (sharedReport_id) => {
+  const response = await api.delete(`/deleteSharedReport/${sharedReport_id}`);
   return response.data;
 };

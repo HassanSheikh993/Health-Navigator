@@ -201,7 +201,8 @@ export const getAllReportsForDoctor = async (req, res) => {
 
     const result = await SharedReport.find({ doctor_id: doctor_id })
       .populate("patient_id", "_id name email picture")
-      .populate("report_id", "reportPath simplifiedReport");
+      .populate("doctor_id", "_id email")
+      .populate("report_id", "reportPath smartReport");
 
     if (!result || result.length === 0) {
       return res.status(404).json({ message: "No reports" });

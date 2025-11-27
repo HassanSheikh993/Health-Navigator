@@ -81,6 +81,7 @@
     display: inline-block; /* Ensure proper spacing */
 }
 
+
 /* Media Queries for Larger Screens */
 
 @media (min-width: 1024px) {

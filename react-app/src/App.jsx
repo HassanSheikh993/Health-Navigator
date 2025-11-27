@@ -7,8 +7,7 @@ import './Styles/Nav.css'
 import './Styles/HeroSection.css'
 import './Styles/Features.css'
 import './Styles/TrackHealthcover.css'
-
-
+import { Toaster } from "react-hot-toast";
 import Register from "./components/Registration";
 import OtpVerification from "./components/OtpVerification";
 import Homeview from './Health Navigator/Homeview';
@@ -43,7 +42,7 @@ import { Test1 } from "./components/practice/test1";
 function App() {
   return (
     <>
-   
+    <Toaster position="top-center" />
 <Router>
   <Routes>
     <Route path='/' element={<Homeview/>}/>
