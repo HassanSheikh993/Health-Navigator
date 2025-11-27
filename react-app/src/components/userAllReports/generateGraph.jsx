@@ -1,93 +1,108 @@
-import { useState, useMemo } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, AreaChart, Area, ResponsiveContainer } from "recharts";
+import { useState, useMemo, useEffect } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  ResponsiveContainer,
+} from "recharts";
 import "../../Styles/GenerateGraph.css";
 
 export function GenerateGraphs({ selectedReports }) {
   const [chartType, setChartType] = useState("bar");
   const [selectedMetrics, setSelectedMetrics] = useState([]);
 
- 
   const { allMetrics, commonMetrics } = useMemo(() => {
-    const metrics = [];
     const metricCounts = {};
 
-  
     selectedReports.forEach((report) => {
-      if (report.keyValues && Array.isArray(report.keyValues)) {
+      if (Array.isArray(report.keyValues)) {
         report.keyValues.forEach((kv) => {
-          if (kv && kv.name) {
-            if (!metricCounts[kv.name]) {
-              metricCounts[kv.name] = {
-                name: kv.name,
-                unit: kv.unit || '',
-                range: kv.range || '',
-                count: 0
-              };
-            }
-            metricCounts[kv.name].count++;
+          if (!kv?.name) return;
+          if (!metricCounts[kv.name]) {
+            metricCounts[kv.name] = {
+              name: kv.name,
+              unit: kv.unit || "",
+              range: kv.range || "",
+              count: 0,
+            };
           }
+          metricCounts[kv.name].count++;
         });
       }
     });
 
     const allMetricsArray = Object.values(metricCounts);
-    const commonMetricsArray = allMetricsArray.filter(metric => 
-      metric.count === selectedReports.length
-    ).map(metric => metric.name);
+    const commonMetricsArray = allMetricsArray
+      .filter((m) => m.count === selectedReports.length)
+      .map((m) => m.name);
 
     return {
       allMetrics: allMetricsArray,
-      commonMetrics: commonMetricsArray
+      commonMetrics: commonMetricsArray,
     };
   }, [selectedReports]);
 
-  useState(() => {
+  useEffect(() => {
     if (selectedMetrics.length === 0 && commonMetrics.length > 0) {
       setSelectedMetrics(commonMetrics);
     }
-  });
+  }, [commonMetrics, selectedMetrics]);
 
   const chartData = useMemo(() => {
     return selectedReports.map((report, idx) => {
-      const obj = { 
+      const obj = {
         name: `Report ${idx + 1}`,
         fullName: `Report ${idx + 1}`,
-        date: new Date(report.createdAt).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric'
+        date: new Date(report.createdAt).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
         }),
-        timestamp: new Date(report.createdAt).getTime()
+        timestamp: new Date(report.createdAt).getTime(),
       };
-      
+
       selectedMetrics.forEach((metricName) => {
-        if (report.keyValues && Array.isArray(report.keyValues)) {
-          const keyValueObj = report.keyValues.find(kv => kv.name === metricName);
-          const value = keyValueObj ? parseFloat(keyValueObj.value) || 0 : null;
-          obj[metricName] = value;
-        } else {
-          obj[metricName] = null;
-        }
+        const kv = report.keyValues?.find((x) => x.name === metricName);
+        obj[metricName] = kv ? parseFloat(kv.value) || 0 : null;
       });
-      
+
       return obj;
     });
   }, [selectedReports, selectedMetrics]);
 
   const colors = {
-    metrics: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+    metrics: [
+      "#1f77b4",
+      "#ff7f0e",
+      "#2ca02c",
+      "#d62728",
+      "#9467bd",
+      "#8c564b",
+      "#e377c2",
+      "#7f7f7f",
+      "#bcbd22",
+      "#17becf",
+    ],
   };
 
-  const toggleMetric = (metricName) => {
-    setSelectedMetrics(prev => 
-      prev.includes(metricName)
-        ? prev.filter(m => m !== metricName)
-        : [...prev, metricName]
+  const toggleMetric = (metric) => {
+    setSelectedMetrics((prev) =>
+      prev.includes(metric)
+        ? prev.filter((m) => m !== metric)
+        : [...prev, metric]
     );
   };
 
   const selectAllMetrics = () => {
-    setSelectedMetrics(allMetrics.map(m => m.name));
+    setSelectedMetrics(allMetrics.map((m) => m.name));
   };
 
   const clearAllMetrics = () => {
@@ -98,8 +113,8 @@ export function GenerateGraphs({ selectedReports }) {
     setSelectedMetrics(commonMetrics);
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
+  const CustomTooltip = ({ active, payload }) => {
+    if (active && payload?.length) {
       const data = payload[0].payload;
       return (
         <div className="custom-tooltip">
@@ -108,11 +123,11 @@ export function GenerateGraphs({ selectedReports }) {
             <div className="tooltip-date">{data.date}</div>
           </div>
           <div className="tooltip-content">
-            {payload.map((entry, index) => (
-              <div key={index} className="tooltip-item">
+            {payload.map((entry, i) => (
+              <div key={i} className="tooltip-item">
                 <div className="tooltip-metric">
-                  <span 
-                    className="color-indicator" 
+                  <span
+                    className="color-indicator"
                     style={{ backgroundColor: entry.color }}
                   ></span>
                   {entry.dataKey}:
@@ -135,31 +150,29 @@ export function GenerateGraphs({ selectedReports }) {
       margin: { top: 20, right: 30, left: 20, bottom: 80 },
     };
 
+    const commonChartElements = (
+      <>
+        <CartesianGrid strokeDasharray="3 3" stroke="#e8e8e8" />
+        <XAxis
+          dataKey="name"
+          angle={-45}
+          textAnchor="end"
+          height={60}
+          tick={{ fontSize: 11 }}
+          interval={0}
+        />
+        <YAxis tick={{ fontSize: 11 }} width={60} />
+        <Tooltip content={<CustomTooltip />} />
+        <Legend wrapperStyle={{ fontSize: "11px" }} iconSize={10} />
+      </>
+    );
+
     switch (chartType) {
       case "line":
         return (
           <ResponsiveContainer width="100%" height={450}>
             <LineChart {...commonProps}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
-              <XAxis 
-                dataKey="name" 
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                tick={{ fontSize: 11 }}
-                interval={0}
-              />
-              <YAxis 
-                tick={{ fontSize: 11 }}
-                width={60}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="top" 
-                height={40}
-                wrapperStyle={{ fontSize: '11px' }}
-                iconSize={10}
-              />
+              {commonChartElements}
               {selectedMetrics.map((metric, index) => (
                 <Line
                   key={metric}
@@ -167,8 +180,16 @@ export function GenerateGraphs({ selectedReports }) {
                   dataKey={metric}
                   stroke={colors.metrics[index % colors.metrics.length]}
                   strokeWidth={2.5}
-                  dot={{ fill: colors.metrics[index % colors.metrics.length], strokeWidth: 1, r: 4 }}
-                  activeDot={{ r: 6, stroke: colors.metrics[index % colors.metrics.length], strokeWidth: 2 }}
+                  dot={{ 
+                    fill: colors.metrics[index % colors.metrics.length], 
+                    strokeWidth: 1, 
+                    r: 4 
+                  }}
+                  activeDot={{ 
+                    r: 6, 
+                    stroke: colors.metrics[index % colors.metrics.length], 
+                    strokeWidth: 2 
+                  }}
                   connectNulls={true}
                 />
               ))}
@@ -180,26 +201,7 @@ export function GenerateGraphs({ selectedReports }) {
         return (
           <ResponsiveContainer width="100%" height={450}>
             <AreaChart {...commonProps}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
-              <XAxis 
-                dataKey="name" 
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                tick={{ fontSize: 11 }}
-                interval={0}
-              />
-              <YAxis 
-                tick={{ fontSize: 11 }}
-                width={60}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="top" 
-                height={40}
-                wrapperStyle={{ fontSize: '11px' }}
-                iconSize={10}
-              />
+              {commonChartElements}
               {selectedMetrics.map((metric, index) => (
                 <Area
                   key={metric}
@@ -220,26 +222,7 @@ export function GenerateGraphs({ selectedReports }) {
         return (
           <ResponsiveContainer width="100%" height={450}>
             <BarChart {...commonProps}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
-              <XAxis 
-                dataKey="name" 
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                tick={{ fontSize: 11 }}
-                interval={0}
-              />
-              <YAxis 
-                tick={{ fontSize: 11 }}
-                width={60}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="top" 
-                height={40}
-                wrapperStyle={{ fontSize: '11px' }}
-                iconSize={10}
-              />
+              {commonChartElements}
               {selectedMetrics.map((metric, index) => (
                 <Bar
                   key={metric}
