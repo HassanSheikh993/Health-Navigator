@@ -105,7 +105,7 @@ const [structuredData, setStructuredData] = useState(null);
 
             <p className="border"></p>
 
-            <button onClick={handleAnalyzeReport}>Analyze Report</button>
+            <button onClick={handleAnalyzeReport} className="uploadReport_button">Analyze Report</button>
             {showNoFileSelected && (
               <p className="noFileSelected_message">No File Selected</p>
             )}
