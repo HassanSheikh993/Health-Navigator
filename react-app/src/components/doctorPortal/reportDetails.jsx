@@ -32,6 +32,7 @@ export function Report() {
 
   const patient = report.patient_id || {};
   const reportFile = report.report_id || {};
+  console.log("REPORT FILES BHAIII: ",report)
 
   async function handleReviewSend() {
     try {
@@ -89,6 +90,7 @@ export function Report() {
         <div className="reportDetails__fileBlock">
           <h4 className="reportDetails__fileLabel">Original Report</h4>
           {reportFile.reportPath ? (
+            
             <a
               className="reportDetails__fileLink"
               href={`http://localhost:8000/${reportFile.reportPath}`}

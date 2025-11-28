@@ -80,6 +80,7 @@ export function UserReportsWithFeedback() {
       {filteredData.map((item) => {
         const doctor = item.doctor_id || {};
         const report = item.report_id || {};
+        console.log("aryyyyy ggg ",report.reportPath)
 
         const doctorImage = doctor.picture
           ? `http://localhost:8000${doctor.picture}`
@@ -103,17 +104,17 @@ export function UserReportsWithFeedback() {
 
             {/* Report Link */}
             {report.reportPath && (
-              <button
-                className="userReportFeedBack_viewReportButton"
-                onClick={() =>
-                  window.open(
-                    `http://localhost:8000${report.reportPath}`,
-                    "_blank"
-                  )
-                }
+              <div
+                className="userReportFeedBack__fileLink"
               >
-                View Report
-              </button>
+                <a
+              href={`http://localhost:8000/${report.reportPath}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Report
+            </a>
+              </div>
             )}
 
             {/* Feedback & Time (only if reviewed) */}

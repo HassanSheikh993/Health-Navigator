@@ -3,6 +3,7 @@ import { Trash2 } from "lucide-react";
 
 export function UserMessage({ data, onDelete }) {
   const navigate = useNavigate();
+  console.log("USER MESSAGE : ",data)
 
   function handleOnClick() {
     navigate("/reportDetails", { state: { report: data } });
