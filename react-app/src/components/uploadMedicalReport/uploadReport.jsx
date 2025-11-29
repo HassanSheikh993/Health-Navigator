@@ -105,7 +105,7 @@ const [structuredData, setStructuredData] = useState(null);
 
             <p className="border"></p>
 
-            <button onClick={handleAnalyzeReport}>Analyze Report</button>
+             <button onClick={handleAnalyzeReport} className="uploadReport_button">Analyze Report</button>
             {showNoFileSelected && (
               <p className="noFileSelected_message">No File Selected</p>
             )}
@@ -133,7 +133,7 @@ const [structuredData, setStructuredData] = useState(null);
           </div>
         </div>
 
-        {showLoader && <span ref={sectionRef} className="loader"></span>}
+        {showLoader && <span ref={sectionRef} className="loader uploadReport_waiting_loader"></span>}
 
         {condition && smartReport && (
           <AnalyzeReport report={smartReport} originalReport = {selectFileUpload} structuredData={structuredData} />
