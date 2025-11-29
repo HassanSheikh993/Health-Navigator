@@ -25,7 +25,7 @@ function HeroSection() {
                     <div className="heading">
                         <h1>SIMPLIFY YOUR REPORTS</h1>
                         <h3>Understand Medical Report with Ease</h3>
-                        <button onClick={handleFeatureClick}>Features</button>
+                        <button onClick={handleFeatureClick} className='heroSection_feature_button'>Features</button>
                     </div>
                     <div className="heroimg">
                         <img src={heroimg}></img>
@@ -42,22 +42,33 @@ function HeroSection() {
 
             </div>
 
-            <div className="front-box">
-                {/* <div className="search">
-    <h3>Type Keywords</h3>
-    <input type='search' placeholder='Ex Upload report etc '></input>
-    </div>
-  <div className="searchoption">
-    <h3>Select Option</h3>
-    <input type='radio'></input>
-    <label>Patient</label>
-    <input type='radio'></input>
-    <label>Doctor</label> 
-  </div>*/}
+            {/* <div className="front-box">
+ 
 <h3>All-in-One Health Report Companion</h3>
 <h5>Helping Patients & Doctors Understand Medical Reports.</h5>
 
-            </div>
+            </div> */}
+
+
+
+
+            <div className="front-box">
+  <div className="front-box-inner">
+
+    {/* FRONT SIDE */}
+    <div className="front-box-front">
+      <h3>All-in-One Health Report Companion</h3>
+      <h5>Helping Patients & Doctors Understand Medical Reports.</h5>
+    </div>
+
+    {/* BACK SIDE */}
+    <div className="front-box-back">
+      <h3>Ai-Powered Report Analysis</h3>
+      <p>Real-Time Health Monitoring, Secure & Private, Send reports to Doctors</p>
+    </div>
+
+  </div>
+</div>
 
 
 
