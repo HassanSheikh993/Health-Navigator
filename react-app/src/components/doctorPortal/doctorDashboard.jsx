@@ -2,59 +2,50 @@ import "../../styles/doctorDashboard.css"
 import { NotificationBox } from "./notificationBox";
 import { UserMessage } from "./userMessage";
 import { getAllReportsForDoctor } from "../../services/medicalReport";
+import { deleteSharedReport } from "../../services/doctor";
 import { useEffect, useState } from "react";
 import { getReportStats } from "../../services/medicalReport";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export function DoctorDashBoard() {
-  const [reportStats,setReportStats] = useState();
-  const [message,setMessage] = useState("");
-
-  // async function getReportsCount(){
-  //   const result = await getReportStats();
-  //   setReportStats(result);
-
-  // }
-
-
+  const [reportStats, setReportStats] = useState();
+  const [message, setMessage] = useState("");
 
   async function getReportsCount() {
-  try {
-    const result = await getReportStats();
-    console.log(result);
+    try {
+      const result = await getReportStats();
+      console.log(result);
 
-    if (!result || (result.today === 0 && result.month === 0)) {
+      if (!result || (result.today === 0 && result.month === 0)) {
+        setReportStats({ today: 0, month: 0 });
+        setMessage("No report stats available.");
+      } else {
+        setReportStats(result);
+        setMessage("");
+      }
+    } catch (error) {
+      console.error("Error fetching report stats:", error);
+
+      if (
+        error.response &&
+        [400, 401, 404, 500].includes(error.response.status)
+      ) {
+        setMessage(error.response.data?.message || "Failed to load report stats.");
+      } else {
+        setMessage("An unexpected error occurred. Please try again.");
+      }
+
       setReportStats({ today: 0, month: 0 });
-      setMessage("No report stats available.");
-    } else {
-      setReportStats(result);
-      setMessage("");
     }
-  } catch (error) {
-    console.error("Error fetching report stats:", error);
-
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setMessage(error.response.data?.message || "Failed to load report stats.");
-    } else {
-      setMessage("An unexpected error occurred. Please try again.");
-    }
-
-    setReportStats({ today: 0, month: 0 });
   }
-}
+  useEffect(() => {
+    getReportsCount();
+  }, [])
 
-
-
-
-
-
-  useEffect(()=>{
-getReportsCount();
-  },[])
-
+  useEffect(() => {
+    console.log("STATUS: ", reportStats)
+  }, [reportStats])
 
 
   return (
@@ -62,12 +53,12 @@ getReportsCount();
       <div className="DoctorDashBoard_container">
         <h1 className="DoctorDashBoard_container_h1">Doctor Dashboard</h1>
         <div className="top_part">
-      <NotificationBox message={"Today's"} data={reportStats?.today || 0} />
-  <NotificationBox message={"Monthly"} data={reportStats?.month || 0} />
+          <NotificationBox message={"Today's"} data={reportStats?.today || 0} />
+          <NotificationBox message={"Monthly"} data={reportStats?.month || 0} />
 
-     {/* <NotificationBox message={"Today's"} data={reportStats} />
+          {/* <NotificationBox message={"Today's"} data={reportStats} />
   <NotificationBox message={"Monthly"} data={reportStats} /> */}
-          
+
         </div>
         {message && <p className="DoctorDashBoard_message">{message}</p>}
       </div>
@@ -78,102 +69,113 @@ getReportsCount();
 export function MessageSendByUserToPatient() {
   const navigator = useNavigate()
 
-    const [reports,setReport] = useState([]);
-    const [errorMessage,setErrorMessage] = useState("");
-
-  // async function getReports(){
-  //  const response = await getAllReportsForDoctor();
-  //  console.log(response)
-  
-  //  if(response.message){
-  //   setErrorMessage(response.message);
-  //  }else{
-  //    setReport(response);
-  //  }
-  // }
-
+  const [reports, setReport] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function getReports() {
-  try {
-    const response = await getAllReportsForDoctor();
-   
+    try {
+      const response = await getAllReportsForDoctor();
+      console.log(response);
 
-    if (response?.message) {
-      setErrorMessage(response.message);
-    } else {
-      setReport(response);
-      setErrorMessage("");
-    }
-  } catch (error) {
-    console.error("Error fetching reports for doctor:", error);
+      if (response?.message) {
+        setErrorMessage(response.message);
+      } else {
+        setReport(response);
+        setErrorMessage("");
+      }
+    } catch (error) {
+      console.error("Error fetching reports for doctor:", error);
 
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setErrorMessage(error.response.data?.message || "Failed to load reports.");
-    } else {
-      setErrorMessage("An unexpected error occurred. Please try again.");
+      if (
+        error.response &&
+        [400, 401, 404, 500].includes(error.response.status)
+      ) {
+        setErrorMessage(error.response.data?.message || "Failed to load reports.");
+      } else {
+        setErrorMessage("An unexpected error occurred. Please try again.");
+      }
     }
   }
-}
 
 
-  useEffect(()=>{
-  getReports();
-  },[])
+  useEffect(() => {
+    getReports();
+  }, [])
 
 
- useEffect(() => {
-  console.log("Reports updated:", reports);
-}, [reports]);
+  useEffect(() => {
+    console.log("Reports updated:", reports);
+  }, [reports]);
 
 
+  function handleShowHistory() {
+    navigator("/showDoctorHistory")
+  }
 
-function handleShowHistory(){
-  navigator("/showDoctorHistory")
-}
+const handleDelete = async (id) => {
+  toast((t) => (
+    <div className="toast-confirm">
+      <p>Are you sure you want to delete this message?</p>
+
+      <div className="toast-buttons">
+        <button
+          className="btn-cancel"
+          onClick={() => toast.dismiss(t.id)}
+        >
+          Cancel
+        </button>
+
+        <button
+          className="btn-delete"
+          onClick={async () => {
+            toast.dismiss(t.id);
+
+            try {
+              await deleteSharedReport(id);
+
+              setReport((prev) => prev.filter((item) => item._id !== id));
+
+              toast.success("Message deleted!");
+            } catch (error) {
+              toast.error("Failed to delete message");
+            }
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  ));
+};
+
 
   return (
     <>
       <div className="message_user_to_dr_container">
-       <div className="MessageSendByUserToPatient_box">
-        <div className="MessageSendByUserToPatient_heading">
-         <h3>Ensure timely review to provide the best care possible.</h3>
-        <h4>All Messages</h4>
-       </div>
+        <div className="MessageSendByUserToPatient_box">
+          <div className="MessageSendByUserToPatient_heading">
+            <h3>Ensure timely review to provide the best care possible.</h3>
+            <h4>All Messages</h4>
+          </div>
 
-        <button className="MessageSendByUserToPatient_button" onClick={handleShowHistory}>History</button>
-       </div>
-
-        {/* <div className="message_user_to_dr_messages">
-
-         {
-  reports.map((data) => (
-     <UserMessage key={data._id} data={data} />
-  ))
-}
-
-        </div> */}
-
-
-
-{
-  errorMessage ? <p>{errorMessage}</p> :         <div className="message_user_to_dr_messages">
-
-         {
-  reports.map((data) => (
-     <UserMessage key={data._id} data={data} />
-  ))
-}
-
+          <button className="MessageSendByUserToPatient_button" onClick={handleShowHistory}>History</button>
         </div>
-}
 
+        {
+          errorMessage ? <p>{errorMessage}</p> : <div className="message_user_to_dr_messages">
 
+            {
+              reports.map((data) => (
+                <UserMessage
+                  key={data._id}
+                  data={data}
+                  onDelete={() => handleDelete(data._id)}
+                />
+              ))
+            }
 
-
-
+          </div>
+        }
 
       </div>
     </>

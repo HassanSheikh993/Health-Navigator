@@ -16,26 +16,47 @@ export const generateSmartReport = async (structuredText) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-chat-v3.1:free",
+        model: "openai/gpt-oss-20b:free",
         messages: [
           {
             role: "system",
-            content: `You are a medical AI assistant that formats all output strictly in clean Markdown, suitable for rendering directly on a website or document viewer. 
-- Use Markdown headings (#, ##, ###), bullet lists (-, *) and bold text (**text**) where appropriate.
-- Do NOT include any JSON, code blocks, or escape sequences like \\n or \\t.`,
+            content: `You are a medical AI assistant. 
+Your output MUST be clean, professional Markdown ONLY.
+Strict rules:
+- NO introductory text (no “Here is your report”, “Below is”, etc.).
+- NO extra comments, NO explanations.
+- NO JSON, NO code blocks.
+- DO NOT include placeholders like “N/A” unless truly needed.
+- Write fully polished medical language.
+- Follow the EXACT structure below.
+
+REQUIRED STRUCTURE:
+
+# Patient Profile
+(Name, age, gender pulled from structured data)
+
+# Summary of Results
+(A concise medical summary of the overall report)
+
+# Detailed Test Explanations
+(Each test explained medically: what it means, what high/low indicates, and the patient’s results)
+
+# Overall Interpretation
+(A medical interpretation of all results combined)
+
+# Recommendations
+(Clear health guidance, lifestyle advice, and next steps)
+
+# Disclaimer
+(A short professional medical disclaimer)
+
+Generate ONLY this structured Markdown.`,
           },
           {
             role: "user",
-            content: `Here is the structured JSON medical report:
-${structuredText}
+            content: `Use this structured medical JSON data to generate the Smart Health Report:
 
-Now generate a detailed Smart Health Report in professional Markdown format with these sections:
-1. Patient Profile
-2. Summary of Results
-3. Detailed Test Explanations
-4. Overall Interpretation
-5. Recommendations
-6. Disclaimer`,
+${structuredText}`,
           },
         ],
       }),
@@ -44,11 +65,12 @@ Now generate a detailed Smart Health Report in professional Markdown format with
     const finalResult = await reportResponse.json();
     const rawReport = finalResult?.choices?.[0]?.message?.content || "No report generated.";
 
-    // 🧹 Clean up Markdown
     const smartReport = rawReport.replace(/\\n/g, "\n").trim();
 
     console.log("✅ Smart report generated successfully");
+    console.log(smartReport);
     return { success: true, report: smartReport };
+
   } catch (error) {
     console.error("❌ Error generating Smart Report:", error.message);
     return { success: false, report: `Error: ${error.message}` };

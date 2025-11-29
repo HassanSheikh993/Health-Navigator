@@ -31,19 +31,21 @@ export const doctorReviewHistory = async (req, res) => {
 
 export const addDoctorReview = async (req, res) => {
   try {
-    const { doctorReviewedText, patient_id, report_id } = req.body;
-    if (!doctorReviewedText || !patient_id || !report_id) return res.status(400).json({ message: "Incomplete Data" });
+    const { doctorReviewedText, sharedReport_id } = req.body;
+    if (!doctorReviewedText || !sharedReport_id) return res.status(400).json({ message: "Incomplete Data" });
 
 
-    const result = await SharedReport.updateOne(
-      { doctor_id: req.user.id, patient_id: patient_id, report_id: report_id },
+       const result = await SharedReport.updateOne(
+      { _id: sharedReport_id },   // <-- UPDATE EXACT ROW
       {
         $set: {
           doctor_review: doctorReviewedText,
           viewedByDoctor: true,
           doctor_reviewedAt: new Date()
         }
-      });
+      }
+    );
+
 
     if (result.modifiedCount > 0) {
       return res.status(201).json({ message: "Review Sent" });
@@ -244,5 +246,33 @@ export const doctorsWithRatings = async (req, res) => {
   } catch (error) {
     console.error("Error fetching doctors with ratings:", error);
     res.status(500).json({ message: "Error fetching doctors with ratings" });
+  }
+};
+
+// DELETE SharedReport by ID
+export const deleteSharedReport = async (req, res) => {
+  try {
+    const doctor_id = req.user.id;
+    const { sharedReport_id } = req.params;
+
+    if (!sharedReport_id) {
+      return res.status(400).json({ message: "SharedReport ID missing" });
+    }
+
+    // Ensure doctor can only delete his own reports
+    const result = await SharedReport.findOneAndDelete({
+      _id: sharedReport_id,
+      doctor_id: doctor_id
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "Report not found or not authorized" });
+    }
+
+    return res.status(200).json({ message: "Report deleted successfully" });
+
+  } catch (err) {
+    console.log("Error deleting SharedReport", err);
+    res.status(500).json({ message: "Error deleting report", error: err.message });
   }
 };

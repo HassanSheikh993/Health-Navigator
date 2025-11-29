@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import "../../Styles/reportDetails.css"
+import "../../Styles/reportDetails.css";
 import Footer from "../../Health Navigator/Footer";
 import Nav from "../../Health Navigator/Nav";
 import { addDoctorReview } from "../../services/doctor";
@@ -12,7 +12,7 @@ export function ReportDetails() {
       <Report />
       <Footer />
     </>
-  )
+  );
 }
 
 export function Report() {
@@ -21,7 +21,10 @@ export function Report() {
 
   const [review, setReview] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
-  const [loading, setLoading] = useState(false); // NEW: Disable while sending
+  const [loading, setLoading] = useState(false);
+
+  // IMPORTANT: Force re-render after updating report object
+  const [, setRefresh] = useState(0);
 
   if (!report) {
     return <p className="reportDetails__noData">No Report Data Found</p>;
@@ -33,23 +36,21 @@ export function Report() {
 
   async function handleReviewSend() {
     try {
-      setLoading(true); // disable button
+      setLoading(true);
 
       const result = await addDoctorReview(
         review,
-        report.doctor_email,
-        report.patient_id,
-        report.report_id._id
+        report._id,                // **this is the SharedReport id**
       );
 
       if (result?.message) {
         setReviewMessage(result.message);
       }
 
-      // Auto-refresh UI after 1 sec
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      // 🔥 Update UI instantly without reload
+      report.doctor_review = review;      // add doctor feedback locally
+      setRefresh((x) => x + 1);            // force React to re-render
+      setReview("");                       // clear textarea
 
     } catch (error) {
       console.error("Error sending doctor review:", error);
@@ -75,12 +76,8 @@ export function Report() {
           alt="Patient"
           width="100"
         />
-        <p className="reportDetails__patientName">
-          Name: {patient.name || "NaN"}
-        </p>
-        <p className="reportDetails__patientEmail">
-          Email: {patient.email || "NaN"}
-        </p>
+        <p className="reportDetails__patientName">Name: {patient.name || "NaN"}</p>
+        <p className="reportDetails__patientEmail">Email: {patient.email || "NaN"}</p>
         <p className="reportDetails__date">
           Date: {new Date(report.createdAt).toLocaleString() || "NaN"}
         </p>
@@ -121,11 +118,12 @@ export function Report() {
           ) : (
             <p className="reportDetails__fileMissing">Smart Report: NaN</p>
           )}
+
         </div>
       </div>
 
       {/* Doctor Review */}
-     <div className="reportDetails__review">
+      <div className="reportDetails__review">
         <h3 className="reportDetails__reviewTitle">Doctor Review</h3>
 
         {/* If doctor ALREADY reviewed */}
@@ -138,16 +136,17 @@ export function Report() {
             {/* Patient Rating Section */}
             {report.patient_rating ? (
               <div className="patientRatingBox">
-                <p><strong>Patient Rating:</strong></p>
+                <p>
+                  <strong>Patient Rating:</strong>
+                </p>
 
-                {/* Star UI */}
                 <div className="star-display">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span
                       key={star}
                       className="star"
                       style={{
-                        color: star <= report.patient_rating ? "gold" : "#ccc"
+                        color: star <= report.patient_rating ? "gold" : "#ccc",
                       }}
                     >
                       ★
@@ -162,7 +161,9 @@ export function Report() {
                 )}
               </div>
             ) : (
-              <p className="noRatingYet">Patient has not rated your feedback yet.</p>
+              <p className="noRatingYet">
+                Patient has not rated your feedback yet.
+              </p>
             )}
           </>
         ) : (
@@ -178,7 +179,7 @@ export function Report() {
             <button
               className="reportDetails__button"
               onClick={handleReviewSend}
-              disabled={loading}     // 🔥 disabled while sending
+              disabled={loading}
             >
               {loading ? "Sending..." : "Send Review"}
             </button>
@@ -190,6 +191,3 @@ export function Report() {
     </div>
   );
 }
-
-
-
