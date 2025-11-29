@@ -133,7 +133,7 @@ const [structuredData, setStructuredData] = useState(null);
           </div>
         </div>
 
-        {showLoader && <span ref={sectionRef} className="loader"></span>}
+        {showLoader && <span ref={sectionRef} className="loader uploadReport_waiting_loader"></span>}
 
         {condition && smartReport && (
           <AnalyzeReport report={smartReport} originalReport = {selectFileUpload} structuredData={structuredData} />
