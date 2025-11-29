@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../../Styles/sendDoctorPopUp.css";
 import { saveMedicalReport } from "../../services/medicalReport";
+import toast from "react-hot-toast"; // <-- Make sure you have react-hot-toast installed
 
 export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalReport, structuredData }) {
   const [sendReport, setSendReport] = useState(false);
@@ -19,7 +20,16 @@ export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalRepo
       console.log("✅ Saved report:", result);
 
       setSendReport(false);
-      setMessage(result.message || "Report saved successfully!");
+
+      // Show toast notification
+      toast.success(result.message || "Report saved successfully!", {
+        duration: 4000,
+        position: "top-center",
+      });
+
+      // Close popup automatically after success
+      onClose();
+
     } catch (error) {
       console.error("❌ Error sending report:", error);
       setSendReport(false);
@@ -44,8 +54,8 @@ export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalRepo
           <button className="popup-cancel-btn" onClick={onClose}>
             Cancel
           </button>
-          <button className="popup-confirm-btn" onClick={sendReportToDoctor}>
-            Save Report
+          <button className="popup-confirm-btn" onClick={sendReportToDoctor} disabled={sendReport}>
+            {sendReport ? "Saving..." : "Save Report"}
           </button>
         </div>
         {message && <p>{message}</p>}
