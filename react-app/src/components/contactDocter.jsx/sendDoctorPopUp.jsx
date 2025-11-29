@@ -1,14 +1,15 @@
-
-import { useState,useEffect } from "react";
-import "../../Styles/sendDoctorPopUp.css"
+import { useState, useEffect } from "react";
+import "../../Styles/sendDoctorPopUp.css";
 import { sendReportToDoctor } from "../../services/medicalReport";
+import toast from "react-hot-toast";
 
-export function SendReportPopup({ isOpen, onClose,doctor,selectedReports }) {
-     const [sendReport,setSendReport] = useState(false);
-     const [message,setMessage] = useState("");
-      const doctorId = doctor;
-      console.log(doctorId);
-      
+export function SendReportPopup({ isOpen, onClose, doctor, selectedReports }) {
+  const [sendReport, setSendReport] = useState(false);
+  const [message, setMessage] = useState("");
+  const doctorId = doctor;
+
+  console.log(doctorId);
+
   useEffect(() => {
     if (isOpen) {
       setMessage("");
@@ -16,39 +17,43 @@ export function SendReportPopup({ isOpen, onClose,doctor,selectedReports }) {
     }
   }, [isOpen]);
 
-if (!isOpen) return null;
+  if (!isOpen) return null;
 
-async function handleSendReportToDoctor() {
-  const report_ids = selectedReports.map((data) => data._id);
-  setSendReport(true);
-
-  try {
-    const result = await sendReportToDoctor(report_ids, doctor._id);
-    console.log(result);
-
-    if (result?.message) {
-      setMessage(result.message);
-    } else {
-      setMessage("Unexpected response from server");
+  async function handleSendReportToDoctor() {
+    if (!selectedReports || selectedReports.length === 0) {
+      setMessage("No reports selected to send.");
+      return;
     }
-  } catch (error) {
-    console.error("Error sending report:", error);
 
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setMessage(error.response.data?.message || "Request failed");
-    } else {
-      setMessage("An unexpected error occurred. Please try again.");
+    const report_ids = selectedReports.map((data) => data._id);
+    setSendReport(true);
+
+    try {
+      const result = await sendReportToDoctor(report_ids, doctor._id);
+      console.log(result);
+
+      if (result?.message) {
+        toast.success(result.message); // ✅ Show toast
+      } else {
+        toast.success("Report sent successfully!"); // fallback
+      }
+
+      onClose(); // ✅ Close popup immediately
+    } catch (error) {
+      console.error("Error sending report:", error);
+
+      if (
+        error.response &&
+        [400, 401, 404, 500].includes(error.response.status)
+      ) {
+        setMessage(error.response.data?.message || "Request failed");
+      } else {
+        setMessage("An unexpected error occurred. Please try again.");
+      }
+    } finally {
+      setSendReport(false);
     }
-  } finally {
-    setSendReport(false);
   }
-}
-
-
-
 
   return (
     <div className="popup-overlay">
@@ -65,18 +70,18 @@ async function handleSendReportToDoctor() {
           <button className="popup-cancel-btn" onClick={onClose}>
             Cancel
           </button>
-          <button className="popup-confirm-btn" onClick={handleSendReportToDoctor}>
-            Send Report
+          <button
+            className="popup-confirm-btn"
+            onClick={handleSendReportToDoctor}
+            disabled={sendReport} // ✅ Disable while sending
+          >
+            {sendReport ? "Sending..." : "Send Report"}
           </button>
         </div>
-        {
-          message && <p>{message}</p>
-        }
 
-{
-    sendReport && <span className="loader"></span>
-}
+        {message && <p>{message}</p>}
 
+        {sendReport && <span className="loader"></span>}
       </div>
     </div>
   );
