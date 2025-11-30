@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../../Styles/RatingSection.css";
+import toast from "react-hot-toast";
 import { rateDoctorFeedback } from "../../services/medicalReport";
 export function RatingSection({ item, refresh }) {
   const [rating, setRating] = useState(item.patient_rating || 0);
@@ -14,11 +15,11 @@ export function RatingSection({ item, refresh }) {
     try {
       setLoading(true);
       await rateDoctorFeedback(item._id, rating, review);
-      alert("Rating submitted successfully!");
+      toast.success("Rating submitted successfully!");
       refresh();
     } catch (err) {
       console.error(err);
-      alert("Failed to submit rating");
+      toast.error("Failed to submit rating");
     } finally {
       setLoading(false);
     }

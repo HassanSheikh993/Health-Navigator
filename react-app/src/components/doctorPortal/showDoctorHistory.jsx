@@ -3,6 +3,8 @@ import { doctorReviewHistory } from "../../services/doctor";
 import "../../Styles/showDoctorHistory.css"
 import Nav from "../../Health Navigator/Nav";
 import Footer from "../../Health Navigator/Footer";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function DoctorHistory() {
   return (
@@ -18,6 +20,8 @@ export function DoctorHistory() {
 export function ShowDoctorHistory() {
   const [data, setData] = useState([]);
   const [message, setMessage] = useState("");
+
+const navigate = useNavigate();
 
 
   async function fetchData() {
@@ -48,7 +52,9 @@ export function ShowDoctorHistory() {
     }
   }
 
-
+ function handleBack() {
+    navigate(-1);
+  }
 
 
   useEffect(() => {
@@ -57,96 +63,105 @@ export function ShowDoctorHistory() {
 
   return (
     <div className="doctorHistory__container">
+       <div className="reportDetails__topActions">
+        <button className="backBtn" onClick={handleBack}>
+          <ArrowLeft size={20} /> Back
+        </button>
+        </div>
       <h2 className="doctorHistory__heading">Doctor Review History</h2>
       {data.length === 0 ? (
         <p className="doctorHistory__noData">{message}</p>
       ) : (
-        data.map((item) => {
-          const patient = item.patient_id || {};
-          const report = item.report_id || {};
+        data
+          .slice() // clone array
+          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // latest first
+          .map((item) => {
 
-          return (
-            <div key={item._id} className="doctorHistory__card">
-              {/* Patient Info */}
-              <img
-                className="doctorHistory__patientImage"
-                src={
-                  patient.picture
-                    ? `http://localhost:8000${patient.picture}`
-                    : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
-                }
-                alt="Patient"
-                width="80"
-              />
-              <p className="doctorHistory__patientName">
-                <strong>Name:</strong> {patient.name || "NaN"}
-              </p>
-              <p className="doctorHistory__patientEmail">
-                <strong>Email:</strong> {patient.email || "NaN"}
-              </p>
+            const patient = item.patient_id || {};
+            const report = item.report_id || {};
 
-              {/* Report File */}
-              <p className="doctorHistory__report">
-                <strong>Report:</strong>{" "}
-                {report.reportPath ? (
-                  <a
-                    className="doctorHistory__reportLink"
-                    href={`http://localhost:8000/${report.reportPath}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open File
-                  </a>
-                ) : (
-                  "NaN"
-                )}
-              </p>
+            return (
+              <div key={item._id} className="doctorHistory__card">
+                {/* Patient Info */}
+                <img
+                  className="doctorHistory__patientImage"
+                  src={
+                    patient.picture
+                      ? `http://localhost:8000${patient.picture}`
+                      : "https://cdn.pixabay.com/photo/2023/02/18/11/00/icon-7797704_640.png"
+                  }
+                  alt="Patient"
+                  width="80"
+                />
+                <p className="doctorHistory__patientName">
+                  <strong>Name:</strong> {patient.name || "NaN"}
+                </p>
+                <p className="doctorHistory__patientEmail">
+                  <strong>Email:</strong> {patient.email || "NaN"}
+                </p>
 
-              {/* Doctor Review */}
-              <p className="doctorHistory__review">
-                <strong>Doctor Review:</strong>{" "}
-                {item.doctor_review || "NaN"}
-              </p>
+                {/* Report File */}
+                <p className="doctorHistory__report">
+                  <strong>Report:</strong>{" "}
+                  {report.reportPath ? (
+                    <a
+                      className="doctorHistory__reportLink"
+                      href={`http://localhost:8000/${report.reportPath}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Open File
+                    </a>
+                  ) : (
+                    "NaN"
+                  )}
+                </p>
 
-              {/* ⭐ Patient Rating Box */}
-              <div className="patientRatingBox">
-                <p className="patientReviewText"><strong>Patient Rating:</strong></p>
+                {/* Doctor Review */}
+                <p className="doctorHistory__review">
+                  <strong>Doctor Review:</strong>{" "}
+                  {item.doctor_review || "NaN"}
+                </p>
 
-                {item.patient_rating ? (
-                  <div className="star-display">
-                    {[1, 2, 3, 4, 5].map((num) => (
-                      <span
-                        key={num}
-                        className={`star ${num <= item.patient_rating ? "filled-star" : ""}`}
-                      >
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="noRatingYet">No rating yet</p>
-                )}
+                {/* ⭐ Patient Rating Box */}
+                <div className="patientRatingBox">
+                  <p className="patientReviewText"><strong>Patient Rating:</strong></p>
 
-                {item.patient_review && (
-                  <p className="patientReviewText">
-                    <strong>Patient Comment:</strong> {item.patient_review}
-                  </p>
-                )}
+                  {item.patient_rating ? (
+                    <div className="star-display">
+                      {[1, 2, 3, 4, 5].map((num) => (
+                        <span
+                          key={num}
+                          className={`star ${num <= item.patient_rating ? "filled-star" : ""}`}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="noRatingYet">No rating yet</p>
+                  )}
+
+                  {item.patient_review && (
+                    <p className="patientReviewText">
+                      <strong>Patient Comment:</strong> {item.patient_review}
+                    </p>
+                  )}
+                </div>
+
+                {/* Date & Time */}
+                <p className="doctorHistory__date">
+                  <strong>Reviewed At:</strong>{" "}
+                  {item.updatedAt
+                    ? new Date(item.updatedAt).toLocaleString()
+                    : "NaN"}
+                </p>
+
+
+                <hr className="doctorHistory__divider" />
               </div>
-
-              {/* Date & Time */}
-              <p className="doctorHistory__date">
-                <strong>Reviewed At:</strong>{" "}
-                {item.updatedAt
-                  ? new Date(item.updatedAt).toLocaleString()
-                  : "NaN"}
-              </p>
-
-
-              <hr className="doctorHistory__divider" />
-            </div>
-          );
-        })
+            );
+          })
       )}
     </div>
   );

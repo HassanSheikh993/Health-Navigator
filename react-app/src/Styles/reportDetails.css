@@ -345,3 +345,38 @@
   margin: 8px 0;
   line-height: 1.4;
 }
+.reportDetails__topActions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.backBtn,
+.deleteBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.backBtn {
+  background: #e1e1e1;
+}
+
+.backBtn:hover {
+  background: #cfcfcf;
+}
+
+.deleteBtn {
+  background: #ff4b4b;
+  color: white;
+}
+
+.deleteBtn:hover {
+  background: #e03c3c;
+}
