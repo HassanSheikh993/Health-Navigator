@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import { reportRouter } from "./routes/reportRouts.js";
-
+import contactRouter from "./routes/contactRoutes.js";
 import smartReportRoutes from "./routes/smartReportRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -40,7 +40,7 @@ app.use("/api",router)
 app.use("/api",doctorRouter);
 app.use("/api",reportRouter);
 app.use("/api", smartReportRoutes);
-
+app.use("/api", contactRouter);
 app.get("/",(req,res)=>{
     res.send("testing")
 })

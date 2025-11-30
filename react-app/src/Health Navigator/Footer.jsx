@@ -1,10 +1,13 @@
 import React from 'react'
 import logo from '../assets/logo.png'
+import { sendContactMessage } from '../services/api'
 import fbicon from '../assets/facebook.png'
 import instaicon from '../assets/instagram.png'
 import twittericon from '../assets/twitter.png'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { scroller } from 'react-scroll';
+import toast from "react-hot-toast";
+
 function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -22,6 +25,37 @@ function Footer() {
       navigate('/?scroll=features');
     }
   };
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const firstName = e.target[0].value;
+  const lastName = e.target[1].value;
+  const phone = e.target[2].value;
+  const email = e.target[3].value;
+  const message = e.target[4].value;
+
+  const contactData = {
+    firstName,
+    lastName,
+    phone,
+    email,
+    message
+  };
+
+  const result = await sendContactMessage(contactData);
+
+  if (result.error) {
+    toast.error(result.message || "Failed to send message");
+  } else {
+    toast.success(result.message || "Message sent successfully!");
+
+    // optional: clear the form
+    e.target.reset();
+  }
+};
+
   return (
     <>
 
@@ -31,7 +65,7 @@ function Footer() {
       <footer>
         <div className="contact">
           <h1>Contact Us</h1>
-          <form id='contact'>
+          <form id='contact' onSubmit={handleSubmit}>
             <div className="contactForm">
               <input type="text" placeholder='First Name' />
               <input type="text" placeholder='Last Name' />

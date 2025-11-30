@@ -6,6 +6,7 @@ import { deleteSharedReport } from "../../services/doctor";
 import { useEffect, useState } from "react";
 import { getReportStats } from "../../services/medicalReport";
 import { useNavigate } from "react-router-dom";
+import { confirmToast } from "./ConfirmToast";
 import toast from "react-hot-toast";
 
 export function DoctorDashBoard() {
@@ -112,42 +113,21 @@ export function MessageSendByUserToPatient() {
     navigator("/showDoctorHistory")
   }
 
-const handleDelete = async (id) => {
-  toast((t) => (
-    <div className="toast-confirm">
-      <p>Are you sure you want to delete this message?</p>
+  const handleDelete = async (id) => {
+  const confirmed = await confirmToast("Are you sure you want to delete this message?");
 
-      <div className="toast-buttons">
-        <button
-          className="btn-cancel"
-          onClick={() => toast.dismiss(t.id)}
-        >
-          Cancel
-        </button>
+  if (!confirmed) return;
 
-        <button
-          className="btn-delete"
-          onClick={async () => {
-            toast.dismiss(t.id);
+  try {
+    await deleteSharedReport(id);
 
-            try {
-              await deleteSharedReport(id);
+    setReport((prev) => prev.filter((item) => item._id !== id));
 
-              setReport((prev) => prev.filter((item) => item._id !== id));
-
-              toast.success("Message deleted!");
-            } catch (error) {
-              toast.error("Failed to delete message");
-            }
-          }}
-        >
-          Delete
-        </button>
-      </div>
-    </div>
-  ));
+    toast.success("Message deleted!");
+  } catch (error) {
+    toast.error("Failed to delete message");
+  }
 };
-
 
   return (
     <>
@@ -163,16 +143,17 @@ const handleDelete = async (id) => {
 
         {
           errorMessage ? <p>{errorMessage}</p> : <div className="message_user_to_dr_messages">
-
-            {
-              reports.map((data) => (
-                <UserMessage
-                  key={data._id}
-                  data={data}
-                  onDelete={() => handleDelete(data._id)}
-                />
-              ))
-            }
+                  {reports
+                    .slice()  // clone array to avoid mutation
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // newest first
+                    .map((data) => (
+                      <UserMessage
+                        key={data._id}
+                        data={data}
+                        onDelete={() => handleDelete(data._id)}
+                      />
+                    ))
+                  }
 
           </div>
         }

@@ -1,9 +1,12 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import "../../Styles/reportDetails.css";
 import Footer from "../../Health Navigator/Footer";
 import Nav from "../../Health Navigator/Nav";
-import { addDoctorReview } from "../../services/doctor";
+import { addDoctorReview, deleteSharedReport } from "../../services/doctor";
+import toast from "react-hot-toast";
+import { confirmToast } from "./ConfirmToast";
+import { ArrowLeft, Trash2 } from "lucide-react";
 
 export function ReportDetails() {
   return (
@@ -19,11 +22,12 @@ export function Report() {
   const { state } = useLocation();
   const report = state?.report;
 
+  const navigate = useNavigate();
+
   const [review, setReview] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // IMPORTANT: Force re-render after updating report object
   const [, setRefresh] = useState(0);
 
   if (!report) {
@@ -32,7 +36,29 @@ export function Report() {
 
   const patient = report.patient_id || {};
   const reportFile = report.report_id || {};
-  console.log("REPORT FILES BHAIII: ",report)
+
+  // ⬅️ BACK BUTTON
+  function handleBack() {
+    navigate(-1);
+  }
+
+  // 🗑 DELETE REPORT
+
+
+async function handleDelete() {
+  const confirm = await confirmToast("Are you sure you want to delete this report?");
+  if (!confirm) return;
+
+  try {
+    await deleteSharedReport(report._id);
+    toast.success("Report deleted successfully.");
+    navigate(-1);
+  } catch (error) {
+    console.error("Error deleting report:", error);
+    toast.error("Failed to delete report.");
+  }
+}
+
 
   async function handleReviewSend() {
     try {
@@ -40,17 +66,16 @@ export function Report() {
 
       const result = await addDoctorReview(
         review,
-        report._id,                // **this is the SharedReport id**
+        report._id,
       );
 
       if (result?.message) {
         setReviewMessage(result.message);
       }
 
-      // 🔥 Update UI instantly without reload
-      report.doctor_review = review;      // add doctor feedback locally
-      setRefresh((x) => x + 1);            // force React to re-render
-      setReview("");                       // clear textarea
+      report.doctor_review = review;
+      setRefresh((x) => x + 1);
+      setReview("");
 
     } catch (error) {
       console.error("Error sending doctor review:", error);
@@ -62,6 +87,18 @@ export function Report() {
 
   return (
     <div className="reportDetails__container">
+
+      {/* TOP ACTION BUTTONS */}
+      <div className="reportDetails__topActions">
+        <button className="backBtn" onClick={handleBack}>
+          <ArrowLeft size={20} /> Back
+        </button>
+
+        <button className="deleteBtn" onClick={handleDelete}>
+          <Trash2 size={20} /> Delete
+        </button>
+      </div>
+
       <h2 className="reportDetails__title">Report Details</h2>
 
       {/* Patient Info */}
@@ -90,7 +127,6 @@ export function Report() {
         <div className="reportDetails__fileBlock">
           <h4 className="reportDetails__fileLabel">Original Report</h4>
           {reportFile.reportPath ? (
-            
             <a
               className="reportDetails__fileLink"
               href={`http://localhost:8000/${reportFile.reportPath}`}
@@ -118,7 +154,6 @@ export function Report() {
           ) : (
             <p className="reportDetails__fileMissing">Smart Report: NaN</p>
           )}
-
         </div>
       </div>
 
@@ -126,14 +161,12 @@ export function Report() {
       <div className="reportDetails__review">
         <h3 className="reportDetails__reviewTitle">Doctor Review</h3>
 
-        {/* If doctor ALREADY reviewed */}
         {report.doctor_review ? (
           <>
             <p className="doctorReviewText">
               <strong>Your Feedback:</strong> {report.doctor_review}
             </p>
 
-            {/* Patient Rating Section */}
             {report.patient_rating ? (
               <div className="patientRatingBox">
                 <p>
@@ -161,14 +194,11 @@ export function Report() {
                 )}
               </div>
             ) : (
-              <p className="noRatingYet">
-                Patient has not rated your feedback yet.
-              </p>
+              <p className="noRatingYet">Patient has not rated your feedback yet.</p>
             )}
           </>
         ) : (
           <>
-            {/* If doctor has NOT reviewed yet */}
             <textarea
               className="reportDetails__textarea"
               value={review}
