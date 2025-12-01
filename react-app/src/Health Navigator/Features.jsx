@@ -111,9 +111,16 @@ function handleClosePopup() {
                         </br>
                         </h6>
                     </div>
-                    <div className="cardbutton">
+                    {/* <div className="cardbutton">
                     <Link to='/Contact-Doctor'>→</Link>
-                    </div>
+                    </div> */}
+                      <div className="cardbutton">
+    {userData ? (
+      <Link to="/Contact-Doctor">→</Link>
+    ) : (
+      <button onClick={() => setShowPopup(true)} className="link-button">→</button>
+    )}
+  </div>
                 </div>
             </div>
 
