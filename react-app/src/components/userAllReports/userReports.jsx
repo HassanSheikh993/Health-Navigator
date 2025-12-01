@@ -71,7 +71,6 @@ function UserReports() {
     console.log(selectedReports);
   }, [selectedReports]);
 
-  // Checkbox handler
   const handleCheckboxChange = (report) => {
     setSelectedReports((prev) => {
       if (prev.some((r) => r._id === report._id)) {
@@ -82,7 +81,9 @@ function UserReports() {
     });
   };
 
-  // Existing delete function
+  // -------------------------------
+  // DELETE FUNCTION + SUCCESS TOAST
+  // -------------------------------
   async function handleDeleteReports() {
     if (selectedReports.length === 0) {
       setPopupMessage("Please select a file before deleting.");
@@ -91,7 +92,7 @@ function UserReports() {
     }
 
     const reportId = selectedReports.map((data) => data._id);
-    setMessage(""); // reset old message
+    setMessage("");
 
     try {
       const result = await deleteUserReport(reportId);
@@ -101,6 +102,12 @@ function UserReports() {
         setMessage(result.message);
         setSelectedReports([]);
         getAllReports();
+
+        // ✅ SUCCESS TOAST ADDED (TOP CENTER)
+        toast.success("Report(s) deleted successfully!", {
+          position: "top-center",
+        });
+
       } else {
         setMessage("Unexpected response from server.");
       }
@@ -115,7 +122,7 @@ function UserReports() {
     }
   }
 
-  // ✅ Confirmation before delete
+  // DELETE CONFIRM POPUP
   const confirmDelete = () => {
     if (selectedReports.length === 0) {
       setPopupMessage("Please select a file before deleting.");
@@ -136,7 +143,7 @@ function UserReports() {
             className="btn-delete"
             onClick={async () => {
               toast.dismiss(t.id);
-              await handleDeleteReports(); // <-- Runs your existing delete function
+              await handleDeleteReports();
             }}
           >
             Delete
@@ -197,16 +204,13 @@ function UserReports() {
                   selectedReports.some((r) => r._id === report._id) ? "selected" : ""
                 }`}
               >
-                {/* Checkbox */}
                 <input
                   type="checkbox"
                   checked={selectedReports.some((r) => r._id === report._id)}
                   onChange={() => handleCheckboxChange(report)}
                 />
 
-                {/* Content container */}
                 <div className="userReports_content">
-                  {/* Report Path */}
                   <p>
                     <strong>Report:</strong>{" "}
                     {report.reportPath ? (
@@ -222,7 +226,6 @@ function UserReports() {
                     )}
                   </p>
 
-                  {/* Simplified Report */}
                   <p>
                     <strong>Simplified Report:</strong>{" "}
                     {report.smartReport ? (
@@ -238,7 +241,6 @@ function UserReports() {
                     )}
                   </p>
 
-                  {/* Date & Time */}
                   <p>
                     <strong>Created At:</strong>{" "}
                     {report.createdAt
@@ -253,7 +255,6 @@ function UserReports() {
       </div>
 
       <div className="userReports_buttons">
-        {/* ✅ Use confirmation function */}
         <button className="userReport_deleteButton" onClick={confirmDelete}>
           Delete
         </button>

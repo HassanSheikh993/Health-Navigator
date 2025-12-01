@@ -63,8 +63,16 @@ export const addDoctorReview = async (req, res) => {
 
 export const allDoctors = async (req, res) => {
   try {
-    // Get all doctors
-    const doctors = await User.find({ role: "doctor" });
+   
+    // const doctors = await User.find({ role: "doctor" });
+    let query = { role: "doctor" };
+
+
+if (req.user && req.user.role === "doctor") {
+  query._id = { $ne: req.user._id };
+}
+
+const doctors = await User.find(query);
 
     // Get rating stats
     const ratingStats = await SharedReport.aggregate([
@@ -119,6 +127,10 @@ export const searchDoctors = async (req, res) => {
         { email: search }
       ]
     };
+
+      if (req.user && req.user.role === "doctor") {
+      keyword._id = { $ne: req.user._id };
+    }
 
     // 1️⃣ Fetch doctors matching search
     const doctors = await User.find(keyword);
