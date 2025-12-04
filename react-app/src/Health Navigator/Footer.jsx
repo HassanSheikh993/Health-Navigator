@@ -12,55 +12,58 @@ function Footer() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleFeatureClick = (e) => {
-    e.preventDefault();
-
-    if (location.pathname === '/') {
-      scroller.scrollTo('features', {
-        duration: 500,
-        smooth: true,
-        offset: -70,
-      });
-    } else {
-      navigate('/?scroll=features');
-    }
-  };
-
-
-const handleSubmit = async (e) => {
+ const handleFeatureClick = (e) => {
   e.preventDefault();
 
-  const firstName = e.target[0].value;
-  const lastName = e.target[1].value;
-  const phone = e.target[2].value;
-  const email = e.target[3].value;
-  const message = e.target[4].value;
-
-  const contactData = {
-    firstName,
-    lastName,
-    phone,
-    email,
-    message
-  };
-
-  const result = await sendContactMessage(contactData);
-
-  if (result.error) {
-    toast.error(result.message || "Failed to send message");
+  if (location.pathname === "/") {
+    // Scroll directly
+    scroller.scrollTo("features", {
+      duration: 600,
+      delay: 0,
+      smooth: "easeInOutQuart",
+      offset: -70,
+    });
   } else {
-    toast.success(result.message || "Message sent successfully!");
-
-    // optional: clear the form
-    e.target.reset();
+    // Navigate to home and let home component scroll automatically
+    navigate("/?scroll=features");
   }
 };
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const firstName = e.target[0].value;
+    const lastName = e.target[1].value;
+    const phone = e.target[2].value;
+    const email = e.target[3].value;
+    const message = e.target[4].value;
+
+    const contactData = {
+      firstName,
+      lastName,
+      phone,
+      email,
+      message
+    };
+
+    const result = await sendContactMessage(contactData);
+
+    if (result.error) {
+      toast.error(result.message || "Failed to send message");
+    } else {
+      toast.success(result.message || "Message sent successfully!");
+
+      // optional: clear the form
+      e.target.reset();
+    }
+  };
 
   return (
     <>
 
       <div className="Design">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220"><path fill="#fff" fill-opacity="1" d="M0,128L80,112C160,96,320,64,480,80C640,96,800,160,960,165.3C1120,171,1280,117,1360,90.7L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 220"><path fill="#fff" fillOpacity="1" d="M0,128L80,112C160,96,320,64,480,80C640,96,800,160,960,165.3C1120,171,1280,117,1360,90.7L1440,64L1440,0L1360,0C1280,0,1120,0,960,0C800,0,640,0,480,0C320,0,160,0,80,0L0,0Z"></path></svg>
       </div>
       <footer>
         <div className="contact">
@@ -71,7 +74,13 @@ const handleSubmit = async (e) => {
               <input type="text" placeholder='Last Name' />
               <input type="tel" placeholder='Phone Number' />
               <input type="email" placeholder='Email' />
-              <textarea name="contactarea" id="contactdesc">How can we help you?</textarea>
+              <textarea
+                name="contactarea"
+                id="contactdesc"
+                placeholder="How can we help you?"
+                defaultValue=""
+              ></textarea>
+
               <div className="submitbtn">
                 <button>Submit</button>
               </div>
@@ -81,7 +90,7 @@ const handleSubmit = async (e) => {
         <div className="footerInformation">
           <div className="logo">
             {/* <img src={logo}></img> */}
-             <img src="/images/newLogo.png" alt="" />
+            <img src="/images/newLogo.png" alt="" />
           </div>
           <div className='information'>
             <p>
@@ -110,7 +119,7 @@ const handleSubmit = async (e) => {
 
           </div>
           <div>
-            <p style={{ color: "white" }}>C all right reserved .white Space</p>
+            <p style={{ color: "white" }}>© 2025 Health Navigator. All rights reserved.</p>
           </div>
         </div>
       </footer>

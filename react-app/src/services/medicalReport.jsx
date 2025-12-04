@@ -151,11 +151,19 @@ export const uploadMedicalReport = async (report) => {
 };
 
 
-export const saveMedicalReport = async (pdfFile, originalReport, structuredText) => {
+export const saveMedicalReport = async (pdfFile, originalFile, structuredData, ml_result) => {
+
   const formData = new FormData();
   formData.append("aiReportPDF", pdfFile);
-  formData.append("originalReport", originalReport);
-  formData.append("structuredText", structuredText);
+  formData.append("originalReport", originalFile);
+  // formData.append("structuredText", structuredText);
+  formData.append("keyValues", JSON.stringify(structuredData));
+
+  // 🔥 If ml_result exists, send it
+  if (ml_result) {
+    formData.append("ml_result", ml_result);
+  }
+
   const response = await api.post("/save-report", formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

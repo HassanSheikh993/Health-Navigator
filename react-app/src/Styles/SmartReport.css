@@ -1,0 +1,47 @@
+.smartReportContainer {
+  background: white;
+  padding: 30px;
+  border-radius: 14px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  max-width: 800px;
+  margin: auto;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  font-size: 26px;
+  color: #0A4FA3;
+}
+
+.subtitle {
+  color: #555;
+  font-size: 14px;
+}
+
+.markdown-body h2 {
+  border-left: 4px solid #0A4FA3;
+  padding-left: 8px;
+  margin-top: 20px;
+  color: #0A4FA3;
+}
+
+.markdown-body table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.markdown-body td, .markdown-body th {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.footer {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 12px;
+  color: #888;
+}

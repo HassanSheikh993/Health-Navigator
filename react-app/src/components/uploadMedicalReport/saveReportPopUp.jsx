@@ -3,7 +3,7 @@ import "../../Styles/sendDoctorPopUp.css";
 import { saveMedicalReport } from "../../services/medicalReport";
 import toast from "react-hot-toast"; // <-- Make sure you have react-hot-toast installed
 
-export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalReport, structuredData }) {
+export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalFile, structuredData }) {
   const [sendReport, setSendReport] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -16,7 +16,8 @@ export function SaveReportPopup({ isOpen, onClose, report, pdfFile, originalRepo
       // optional cleanup for ```json ... ```
       const cleanReport = report ? report.replace(/```json|```/g, "").trim() : "";
 
-      const result = await saveMedicalReport(pdfFile, originalReport, structuredData);
+     const result = await saveMedicalReport(pdfFile, originalFile, structuredData, report?.ml_result);
+
       console.log("✅ Saved report:", result);
 
       setSendReport(false);

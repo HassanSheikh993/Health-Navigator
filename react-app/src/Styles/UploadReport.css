@@ -47,22 +47,40 @@
   .mainSection_uploadReport .dragAndUploadFile {
     display: flex;
     align-items: center;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    padding: 12px 15px;
+    border: 2px dashed #53C5B2;
+    border-radius: 10px;
+    background-color: #F9FDFD;
+    cursor: pointer;
+    transition: 0.25s ease;
     margin-top: 5%;
-  }
-  
-  .mainSection_uploadReport .dragAndUploadFile .dragAndUploadFile_img {
-    background-color: #BDD7DB;
-    padding: 5px 8px;
-  }
-  
-  .mainSection_uploadReport .dragAndUploadFile img {
-    height: 40px;
-  }
-  
-  .mainSection_uploadReport .dragAndUploadFile p {
-    padding-left: 1rem;
-  }
+}
+
+.mainSection_uploadReport .dragAndUploadFile:hover {
+    background-color: #EFF9F8;
+    border-color: #45ac98;
+}
+
+.mainSection_uploadReport .dragAndUploadFile .dragAndUploadFile_img {
+    background-color: #E1F2F0;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.mainSection_uploadReport .dragAndUploadFile img {
+    height: 35px;
+    opacity: 0.8;
+    
+}
+
+.mainSection_uploadReport .dragAndUploadFile p {
+    padding-left: 12px;
+    margin: 0;
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 500;
+}
+
   
   .border {
     margin: 30px 0px;

@@ -36,6 +36,7 @@ import { LiverReportsBarChart } from "./components/try3";
 import { UploadMedicalReportMainPage } from "./components/uploadMedicalReport/uploadMedicalReportMain";
 import { MainUserReportsWithFeedback } from "./components/userFeedBackReports/getUserReportsWithFeedback";
 import { Unauthorized } from "./components/doctorPortal/Unauthorized";
+import ScrollToTop from "./Health Navigator/ScrollToTop";
 import { Test1 } from "./components/practice/test1";
 
 function App() {
@@ -54,7 +55,9 @@ function App() {
   return (
     <>
       <Toaster position="top-center" />
+      
       <Router>
+        <ScrollToTop />
         <Routes>
           <Route path='/' element={<Homeview />} />
           <Route path='/TrackHealth' element={<TrackHealth />} />

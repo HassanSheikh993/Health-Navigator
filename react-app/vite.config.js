@@ -1,7 +1,29 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import inject from "@rollup/plugin-inject";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-})
+  plugins: [
+    react(),
+    inject({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process',
+    }),
+  ],
+
+  resolve: {
+    alias: {
+      buffer: "buffer",
+      process: "process/browser",
+    },
+  },
+
+  optimizeDeps: {
+    esbuildOptions: {
+      define: {
+        global: "globalThis",
+      }
+    },
+  },
+});
+
