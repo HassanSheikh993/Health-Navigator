@@ -78,7 +78,7 @@ export function ContactDoctor() {
                   />
                 </div>
                 <div>
-                  <h1 className="doctor_name">{doctor.name}</h1>
+                  <h1 className="doctor_name">Dr {doctor.name}</h1>
                   <h2 className="doctor_country">{doctor.country}</h2>
 
                   {/* ⭐ Average Rating Stars */}

@@ -4,8 +4,8 @@ import { auth } from "../middleWares/authMiddleware.js";
 
 export const doctorRouter = express.Router();
 
-doctorRouter.get("/doctors-list",allDoctors);
-doctorRouter.get("/search-doctor",searchDoctors);
+doctorRouter.get("/doctors-list",auth,allDoctors);
+doctorRouter.get("/search-doctor",auth,searchDoctors);
 doctorRouter.post("/rate/:sharedReportId", auth, rateDoctorFeedback);
 doctorRouter.get("/doctors-with-ratings", doctorsWithRatings);
 doctorRouter.get("/doctorReviewHistory", auth, doctorReviewHistory);
