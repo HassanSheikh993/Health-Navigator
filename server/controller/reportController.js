@@ -4,57 +4,63 @@ import { structureReport } from "../utils/structureReport.js";
 import { SharedReport } from "../model/sharedReportModel.js";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
 
+
 export const uploadReport = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
+      return res.status(400).json({
+        success: false,
+        message: "No file uploaded"
+      });
     }
 
     const filePath = req.file.path;
-    // const relativePath = req.file.relativePath || req.file.filename;
-
     console.log("📄 Uploaded file:", filePath);
-    // console.log("👤 User ID:", req.user.id);
 
-
-    // const newReport = await Report.create({
-    //   user: req.user.id,
-    //   reportPath: relativePath,
-    // });
-
-
+    // -------------------------------------------------------
+    // STEP 1 — Run OCR + LLM structuring + ML prediction
+    // -------------------------------------------------------
     console.log("⚙️ Step 1: Structuring medical report...");
+
     const structured = await structureReport(filePath);
 
     if (!structured.success) {
       throw new Error(`Structure failed: ${structured.error}`);
     }
 
-    console.log("✅ Structured JSON created.");
+    console.log("✅ Step 1 completed. Structured JSON ready.");
 
+    // -------------------------------------------------------
+    // STEP 2 — Generate Smart Report using AI + ML result
+    // -------------------------------------------------------
     console.log("⚙️ Step 2: Generating Smart Report...");
-    const smart = await generateSmartReport(structured.structuredText);
+
+    const smart = await generateSmartReport({
+      // Send ALL needed fields to the smart report generator
+      structuredJSON: structured.structured,     // parsed JSON
+      structuredText: structured.structuredText, // raw structured JSON text (string)
+      ml_result: structured.ml_result            // ML output
+    });
 
     if (!smart.success) {
-      throw new Error(`Smart report generation failed: ${smart.report}`);
+      throw new Error(`Smart report generation failed: ${smart.error}`);
     }
 
     console.log("✅ Smart Report generated successfully.");
 
-
-    // newReport.structuredData = structured.structuredText;
-    // newReport.smartReport = smart.report;
-    // await newReport.save();
-
-
+    // -------------------------------------------------------
+    // RESPONSE
+    // -------------------------------------------------------
     res.status(201).json({
       success: true,
       message: "Report uploaded and processed successfully",
-      // report: newReport,
-      structuredData: structured.structuredText,
 
-      smartReport: smart.report,
+      structuredData: structured.structured,         // clean parsed JSON
+      structuredDataRaw: structured.structuredText,  // raw string JSON
+      ml_result: structured.ml_result,               // ML classification
+      smartReport: smart.report                      // final smart report
     });
+
   } catch (err) {
     console.error("❌ Error in uploadReport:", err);
     res.status(500).json({
@@ -77,34 +83,43 @@ export const saveMedicalReport = async (req, res) => {
 
     const originalFile = req.files.originalReport[0];
     const aiReportFile = req.files.aiReportPDF[0];
-    const structuredText = req.body.structuredText;
-    if (!structuredText) {
-      console.warn("⚠️ No structuredText received from frontend.");
-    }
-    console.log(structuredText);
-   
-    // 🧹 Clean markdown JSON text (remove ```json ``` wrappers)
-    let cleanText = structuredText || "";
-    cleanText = cleanText
-      .replace(/```json|```/g, "") // remove markdown fences
-      .trim()
-      // remove any junk before/after JSON
-      .replace(/^[^{\[]+/, "") // remove anything before first { or [
-      .replace(/[^}\]]+$/, ""); // remove anything after last } or ]
+    // const structuredText = req.body.structuredData;
+    // const ml_result = req.body.ml_result;
+    // if (!structuredText) {
+    //   console.warn("⚠️ No structuredText received from frontend.");
+    // }
+    // console.log(structuredText);
 
+    // // 🧹 Clean markdown JSON text (remove ```json ``` wrappers)
+    // let cleanText = structuredText || "";
+    // cleanText = cleanText
+    //   .replace(/```json|```/g, "") // remove markdown fences
+    //   .trim()
+    //   // remove any junk before/after JSON
+    //   .replace(/^[^{\[]+/, "") // remove anything before first { or [
+    //   .replace(/[^}\]]+$/, ""); // remove anything after last } or ]
+
+    // let testsArray = [];
+
+    // try {
+    //   // ✅ Parse only the clean JSON block
+    //   const parsed = JSON.parse(cleanText);
+
+    //   if (Array.isArray(parsed)) {
+    //     testsArray = parsed;
+    //   } else if (parsed.tests && Array.isArray(parsed.tests)) {
+    //     testsArray = parsed.tests;
+    //   } else if (typeof parsed === "object") {
+    //     testsArray = [parsed];
+    //   }
+    const structuredText = req.body.keyValues;   // FIXED
+    const ml_result = req.body.ml_result;
+console.log(structuredText);
     let testsArray = [];
-
     try {
-      // ✅ Parse only the clean JSON block
-      const parsed = JSON.parse(cleanText);
+      testsArray = JSON.parse(structuredText);
 
-      if (Array.isArray(parsed)) {
-        testsArray = parsed;
-      } else if (parsed.tests && Array.isArray(parsed.tests)) {
-        testsArray = parsed.tests;
-      } else if (typeof parsed === "object") {
-        testsArray = [parsed];
-      }
+
     } catch (err) {
       console.warn("⚠️ Could not parse structured text as JSON:", err.message);
       console.log("💡 Cleaned text snippet for debugging:\n", cleanText.slice(0, 300));
@@ -123,6 +138,7 @@ export const saveMedicalReport = async (req, res) => {
       reportPath: originalFile.relativePath, // Store original report path
       smartReport: aiReportFile.relativePath, // Store AI report path
       keyValues: testsArray,
+      ml_result: ml_result
     });
 
 
