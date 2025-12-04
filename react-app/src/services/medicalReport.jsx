@@ -149,27 +149,27 @@ export const uploadMedicalReport = async (report) => {
 
   return response.data;
 };
+export const downloadSmartReport = async (html) => {
+  const response = await api.post(
+    "/generate-pdf",
+    { markdownHtml: html },
+    { responseType: "blob" }
+  );
 
+  return response.data;
+};
 
-export const saveMedicalReport = async (pdfFile, originalFile, structuredData, ml_result) => {
-
+export const saveMedicalReport = async (html, originalFile, structuredData, ml_result) => {
   const formData = new FormData();
-  formData.append("aiReportPDF", pdfFile);
+  formData.append("markdownHtml", html);        // FIXED
   formData.append("originalReport", originalFile);
-  // formData.append("structuredText", structuredText);
   formData.append("keyValues", JSON.stringify(structuredData));
 
-  // 🔥 If ml_result exists, send it
   if (ml_result) {
     formData.append("ml_result", ml_result);
   }
 
-  const response = await api.post("/save-report", formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
-
+  const response = await api.post("/save-report", formData);
   return response.data;
 };
 

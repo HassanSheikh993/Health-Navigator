@@ -11,6 +11,7 @@ import {
   deleteUserReport,
   getUserReportsWithFeedback,
   saveMedicalReport,
+  generatePdfController
 } from "../controller/reportController.js";
 import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js";
 export const reportRouter = express.Router();
@@ -21,10 +22,7 @@ reportRouter.post("/upload-report", uploadMedicalReport.single("report"), upload
 reportRouter.post(
   "/save-report",
   auth,
-  saveMedicalReportMulter.fields([
-    { name: "originalReport", maxCount: 1 },
-    { name: "aiReportPDF", maxCount: 1 }
-  ]),
+  saveMedicalReportMulter.any(),   // accept all form-data fields
   saveMedicalReport
 );
 
@@ -38,3 +36,6 @@ reportRouter.get("/getReportStats", auth, getReportStats);
 
 reportRouter.delete("/deleteUserReport", auth, deleteUserReport);
 reportRouter.get("/getUserReportsWithFeedback", auth, getUserReportsWithFeedback);
+
+
+reportRouter.post("/generate-pdf", generatePdfController);

@@ -3,6 +3,10 @@ import path from "path";
 import { structureReport } from "../utils/structureReport.js";
 import { SharedReport } from "../model/sharedReportModel.js";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
+import { generateMedicalPdf } from "../utils/generatePdf.js";
+import { buildReportHtml } from "../templates/reportTemplate.js";
+import MarkdownIt from "markdown-it";
+import fs from "fs";
 
 
 export const uploadReport = async (req, res) => {
@@ -73,92 +77,163 @@ export const uploadReport = async (req, res) => {
 
 
 
+// export const saveMedicalReport = async (req, res) => {
+//   try {
+//     if (!req.files?.originalReport || !req.files?.aiReportPDF) {
+//       return res.status(400).json({
+//         message: "Both original report and AI report are required"
+//       });
+//     }
+
+//     const originalFile = req.files.originalReport[0];
+//     const aiReportFile = req.files.aiReportPDF[0];
+//     const structuredText = req.body.keyValues;   // FIXED
+//     const ml_result = req.body.ml_result;
+//     console.log(structuredText);
+//     let testsArray = [];
+//     try {
+//       testsArray = JSON.parse(structuredText);
+
+
+//     } catch (err) {
+//       console.warn("⚠️ Could not parse structured text as JSON:", err.message);
+//       console.log("💡 Cleaned text snippet for debugging:\n", cleanText.slice(0, 300));
+//     }
+
+//     console.log("🧪 Extracted tests:", testsArray);
+
+
+//     console.log("reportPath: ", originalFile.relativePath)
+//     console.log("aiReportPath: ", aiReportFile.relativePath)
+
+
+//     // Save to database
+//     const newReport = await Report.create({
+//       user: req.user.id,
+//       reportPath: originalFile.relativePath, // Store original report path
+//       smartReport: aiReportFile.relativePath, // Store AI report path
+//       keyValues: testsArray,
+//       ml_result: ml_result
+//     });
+
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Reports saved successfully",
+//       report: newReport,
+//     });
+//   } catch (err) {
+//     console.error("Error saving report:", err);
+//     res.status(500).json({
+//       success: false,
+//       message: "Error saving reports",
+//       error: err.message,
+//     });
+//   }
+// };
+
+
 export const saveMedicalReport = async (req, res) => {
   try {
-    if (!req.files?.originalReport || !req.files?.aiReportPDF) {
-      return res.status(400).json({
-        message: "Both original report and AI report are required"
-      });
+    const { markdownHtml, keyValues, ml_result } = req.body;
+
+    if (!markdownHtml || typeof markdownHtml !== "string") {
+      return res.status(400).json({ message: "Invalid HTML content" });
     }
 
-    const originalFile = req.files.originalReport[0];
-    const aiReportFile = req.files.aiReportPDF[0];
-    // const structuredText = req.body.structuredData;
-    // const ml_result = req.body.ml_result;
-    // if (!structuredText) {
-    //   console.warn("⚠️ No structuredText received from frontend.");
-    // }
-    // console.log(structuredText);
+    // ----------------------------------------
+    // Build final HTML for PDF
+    // ----------------------------------------
+    const fullHtml = buildReportHtml(markdownHtml);
 
-    // // 🧹 Clean markdown JSON text (remove ```json ``` wrappers)
-    // let cleanText = structuredText || "";
-    // cleanText = cleanText
-    //   .replace(/```json|```/g, "") // remove markdown fences
-    //   .trim()
-    //   // remove any junk before/after JSON
-    //   .replace(/^[^{\[]+/, "") // remove anything before first { or [
-    //   .replace(/[^}\]]+$/, ""); // remove anything after last } or ]
+    // Generate PDF using Puppeteer
+    const pdfBuffer = await generateMedicalPdf(fullHtml);
 
-    // let testsArray = [];
+    // ----------------------------------------
+    // SAVE AI REPORT (PDF) inside: public/aiReports
+    // ----------------------------------------
+    const pdfName = `ai-report-${Date.now()}.pdf`;
+    const folderPath = path.join("public", "aiReports");
 
-    // try {
-    //   // ✅ Parse only the clean JSON block
-    //   const parsed = JSON.parse(cleanText);
-
-    //   if (Array.isArray(parsed)) {
-    //     testsArray = parsed;
-    //   } else if (parsed.tests && Array.isArray(parsed.tests)) {
-    //     testsArray = parsed.tests;
-    //   } else if (typeof parsed === "object") {
-    //     testsArray = [parsed];
-    //   }
-    const structuredText = req.body.keyValues;   // FIXED
-    const ml_result = req.body.ml_result;
-console.log(structuredText);
-    let testsArray = [];
-    try {
-      testsArray = JSON.parse(structuredText);
-
-
-    } catch (err) {
-      console.warn("⚠️ Could not parse structured text as JSON:", err.message);
-      console.log("💡 Cleaned text snippet for debugging:\n", cleanText.slice(0, 300));
+    if (!fs.existsSync(folderPath)) {
+      fs.mkdirSync(folderPath, { recursive: true });
     }
 
-    console.log("🧪 Extracted tests:", testsArray);
+    const pdfPath = path.join(folderPath, pdfName);
+    fs.writeFileSync(pdfPath, pdfBuffer);
 
+    // DB value for AI report
+    const smartReportRel = `aiReports/${pdfName}`;
 
-    console.log("reportPath: ", originalFile.relativePath)
-    console.log("aiReportPath: ", aiReportFile.relativePath)
+    // ----------------------------------------
+    // ORIGINAL REPORT (uploaded by user)
+    // MULTER ALREADY STORES IN /public/originalReports
+    // ----------------------------------------
+    const originalFile = req.files?.find(f => f.fieldname === "originalReport");
 
+    let originalReportRel = "";
+    if (originalFile) {
+      // originalFile.path = "D:/Haseeb Disk/Health-Navigator/server/public/originalReports/xxxx.png"
+      // Convert backslashes to forward slashes
+      const cleaned = originalFile.path.replace(/\\/g, "/");
+      // Remove the "public/" prefix to get the relative URL path
+      originalReportRel = cleaned.replace(/^.*[/\\]public[/\\]/, "");
+    }
 
-    // Save to database
+    // ----------------------------------------
+    // SAVE TO DATABASE
+    // ----------------------------------------
     const newReport = await Report.create({
       user: req.user.id,
-      reportPath: originalFile.relativePath, // Store original report path
-      smartReport: aiReportFile.relativePath, // Store AI report path
-      keyValues: testsArray,
-      ml_result: ml_result
+      reportPath: originalReportRel, // "originalReports/xxx.png"
+      smartReport: smartReportRel,   // "aiReports/xxx.pdf"
+      keyValues: JSON.parse(keyValues),
+      ml_result,
     });
 
-
+    // ----------------------------------------
+    // RESPONSE
+    // ----------------------------------------
     res.status(201).json({
       success: true,
-      message: "Reports saved successfully",
+      message: "Report saved successfully",
+      pdfUrl: "/" + smartReportRel,
       report: newReport,
     });
+
   } catch (err) {
-    console.error("Error saving report:", err);
+    console.error(err);
     res.status(500).json({
-      success: false,
-      message: "Error saving reports",
+      message: "Error generating PDF",
       error: err.message,
     });
   }
 };
 
+export const generatePdfController = async (req, res) => {
+  try {
+    const markdownHtml = req.body.markdownHtml;
 
-// This function is responsible for displaying one single report
+    if (!markdownHtml || typeof markdownHtml !== "string") {
+      return res.status(400).json({ message: "Invalid HTML content" });
+    }
+
+    const fullHtml = buildReportHtml(markdownHtml);
+
+    const pdfBuffer = await generateMedicalPdf(fullHtml);
+
+    res.set({
+      "Content-Type": "application/pdf",
+      "Content-Disposition": "attachment; filename=medical-report.pdf",
+    });
+
+    return res.send(pdfBuffer);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "PDF generation failed", error: err.message });
+  }
+};
 
 export const getSingleReport = async (req, res) => {
   try {
