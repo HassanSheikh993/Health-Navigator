@@ -3,7 +3,6 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-scroll';
 import { logoutUser, loginUserData } from '../services/api';
 import toast from 'react-hot-toast';
-
 function Nav() {
   const [name, setName] = useState("");
   const [userData, setUserData] = useState();

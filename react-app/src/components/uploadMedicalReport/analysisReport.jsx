@@ -1,24 +1,19 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import "../../Styles/UploadReport.css";
 import { SaveReportPopup } from "./saveReportPopUp";
 import { SignInPopUp } from "../signInToContinue/signInPopUp";
 import { loginUserData } from "../../services/api";
-import { uploadMedicalReport } from "../../services/medicalReport";
+import { downloadSmartReport } from "../../services/medicalReport";
 import HtmlTemplate from "./HtmlTemplate";
 
-// NEW IMPORTS (replace React-PDF)
-import { generateReportPdf } from "../../utils/generatePdf";
-import logoBase64 from "../../utils/logoBase64";
-
-export function AnalyzeReport({ report, originalReport, structuredData }) {
+export function AnalyzeReport({ report, originalReport, structuredData, ml_result }) {
   const [showPopup, setShowPopup] = useState(false);
-  const [userData, setLoginData] = useState(null);
-  const [generatedPdf, setGeneratedPdf] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     async function getUser() {
       const result = await loginUserData();
-      setLoginData(result && !result.message ? result : null);
+      setUserData(result && !result.message ? result : null);
     }
     getUser();
   }, []);
@@ -26,42 +21,31 @@ export function AnalyzeReport({ report, originalReport, structuredData }) {
   // ---------------------- DOWNLOAD PDF ----------------------
   const handleDownloadPDF = async () => {
     try {
-      const blob = await generateReportPdf(report, logoBase64);
+      const html = document.querySelector("#markdown-content")?.innerHTML || "";
+      const pdfBlob = await downloadSmartReport(html);
 
-      const url = URL.createObjectURL(blob);
+
+      const url = URL.createObjectURL(pdfBlob);
       const a = document.createElement("a");
       a.href = url;
       a.download = `medical-report-${Date.now()}.pdf`;
       a.click();
     } catch (err) {
-      console.error("PDF generation failed:", err);
+      console.error("PDF download error:", err);
     }
   };
 
   // ---------------------- SAVE TO BACKEND ----------------------
-  const handleSave = async () => {
-    try {
-      const blob = await generateReportPdf(report, logoBase64);
-
-      const pdfFile = new File([blob], `ai-report-${Date.now()}.pdf`, {
-        type: "application/pdf",
-      });
-
-      setGeneratedPdf(pdfFile);
-      setShowPopup(true);
-    } catch (err) {
-      console.error("Save PDF generation failed:", err);
-    }
+  const handleSave = () => {
+    setShowPopup(true);
   };
 
   return (
     <div className="AIGeneratedAnalysis_container">
       <h2>AI-GENERATED ANALYSIS RESULTS</h2>
 
-      {/* PREVIEW USING YOUR HTML MARKDOWN TEMPLATE */}
       <HtmlTemplate markdownText={report} />
 
-      {/* BUTTONS */}
       <div className="AIGeneratedAnalysis_shareButton">
         <p>Keep a Copy of Your Report – Save Now!</p>
 
@@ -71,15 +55,14 @@ export function AnalyzeReport({ report, originalReport, structuredData }) {
         </div>
       </div>
 
-      {/* SAVE OR LOGIN POPUPS */}
       {userData && (
         <SaveReportPopup
           isOpen={showPopup}
           onClose={() => setShowPopup(false)}
-          report={report}
+          reportHtml={document.querySelector("#markdown-content")?.innerHTML || ""}
           originalFile={originalReport}
           structuredData={structuredData}
-          pdfFile={generatedPdf}
+          ml_result={ml_result}
         />
       )}
 
