@@ -44,6 +44,10 @@ function handleFeedBack() {
     }
   }
 
+  function handleOnClick(){
+     navigate("/")
+  }
+
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(e) {
@@ -68,7 +72,7 @@ function handleFeedBack() {
     <>
       <div className="header">
         <div className="logo">
-          <img src="/images/newLogo.png" alt="" style={{ width: "80px" }} />
+          <img src="/images/newLogo.png" alt="" onClick={handleOnClick} className='nav_logo'/>
           <h4  className= "logoName" >Health Navigator</h4>
         </div>
 

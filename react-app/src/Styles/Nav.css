@@ -224,6 +224,11 @@
   animation: loading 1.5s infinite;
 }
 
+.nav_logo{
+  cursor: pointer;
+   width: "80px"
+}
+
 @keyframes loading {
   0% {
     background-position: 200% 0;

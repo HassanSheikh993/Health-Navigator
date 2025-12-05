@@ -1,33 +1,48 @@
-import { useState, useMemo } from "react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line, AreaChart, Area, ResponsiveContainer } from "recharts";
+import { useState, useMemo, useEffect } from "react";
+import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, 
+  LineChart, Line, AreaChart, Area, ResponsiveContainer,
+  ComposedChart, Scatter 
+} from "recharts";
 import "../../Styles/GenerateGraph.css";
 
 export function GenerateGraphs({ selectedReports }) {
   const [chartType, setChartType] = useState("bar");
   const [selectedMetrics, setSelectedMetrics] = useState([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
- 
+  const colors = {
+    metrics: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
+  };
+
+  // Create a map of metric names to their colors
+  const getMetricColor = (metricName) => {
+    // Find the index of this metric in allMetrics
+    const metricIndex = allMetrics.findIndex(m => m.name === metricName);
+    if (metricIndex >= 0) {
+      return colors.metrics[metricIndex % colors.metrics.length];
+    }
+    return colors.metrics[0]; // fallback
+  };
+
   const { allMetrics, commonMetrics } = useMemo(() => {
-    const metrics = [];
     const metricCounts = {};
 
-  
     selectedReports.forEach((report) => {
-      if (report.keyValues && Array.isArray(report.keyValues)) {
-        report.keyValues.forEach((kv) => {
-          if (kv && kv.name) {
-            if (!metricCounts[kv.name]) {
-              metricCounts[kv.name] = {
-                name: kv.name,
-                unit: kv.unit || '',
-                range: kv.range || '',
-                count: 0
-              };
-            }
-            metricCounts[kv.name].count++;
+      const testArray = report.keyValues?.tests || [];
+      testArray.forEach((kv) => {
+        if (kv && kv.name) {
+          if (!metricCounts[kv.name]) {
+            metricCounts[kv.name] = {
+              name: kv.name,
+              unit: kv.unit || '',
+              range: kv.range || '',
+              count: 0
+            };
           }
-        });
-      }
+          metricCounts[kv.name].count++;
+        }
+      });
     });
 
     const allMetricsArray = Object.values(metricCounts);
@@ -41,11 +56,14 @@ export function GenerateGraphs({ selectedReports }) {
     };
   }, [selectedReports]);
 
-  useState(() => {
-    if (selectedMetrics.length === 0 && commonMetrics.length > 0) {
+  // Use useEffect for initialization
+  useEffect(() => {
+    // Only initialize once when component mounts and we have common metrics
+    if (!isInitialized && commonMetrics.length > 0 && selectedMetrics.length === 0) {
       setSelectedMetrics(commonMetrics);
+      setIsInitialized(true);
     }
-  });
+  }, [commonMetrics, selectedMetrics.length, isInitialized]);
 
   const chartData = useMemo(() => {
     return selectedReports.map((report, idx) => {
@@ -61,22 +79,20 @@ export function GenerateGraphs({ selectedReports }) {
       };
       
       selectedMetrics.forEach((metricName) => {
-        if (report.keyValues && Array.isArray(report.keyValues)) {
-          const keyValueObj = report.keyValues.find(kv => kv.name === metricName);
-          const value = keyValueObj ? parseFloat(keyValueObj.value) || 0 : null;
-          obj[metricName] = value;
-        } else {
-          obj[metricName] = null;
+        const testArray = report.keyValues?.tests || [];
+        const keyValueObj = testArray.find(kv => kv.name === metricName);
+        // Handle special cases like "<10"
+        let value = null;
+        if (keyValueObj && keyValueObj.value) {
+          const numValue = parseFloat(keyValueObj.value);
+          value = isNaN(numValue) ? 0 : numValue;
         }
+        obj[metricName] = value;
       });
       
       return obj;
     });
   }, [selectedReports, selectedMetrics]);
-
-  const colors = {
-    metrics: ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf']
-  };
 
   const toggleMetric = (metricName) => {
     setSelectedMetrics(prev => 
@@ -95,7 +111,7 @@ export function GenerateGraphs({ selectedReports }) {
   };
 
   const selectCommonMetrics = () => {
-    setSelectedMetrics(commonMetrics);
+    setSelectedMetrics([...commonMetrics]); // Create a new array
   };
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -160,15 +176,15 @@ export function GenerateGraphs({ selectedReports }) {
                 wrapperStyle={{ fontSize: '11px' }}
                 iconSize={10}
               />
-              {selectedMetrics.map((metric, index) => (
+              {selectedMetrics.map((metric) => (
                 <Line
                   key={metric}
                   type="monotone"
                   dataKey={metric}
-                  stroke={colors.metrics[index % colors.metrics.length]}
+                  stroke={getMetricColor(metric)}
                   strokeWidth={2.5}
-                  dot={{ fill: colors.metrics[index % colors.metrics.length], strokeWidth: 1, r: 4 }}
-                  activeDot={{ r: 6, stroke: colors.metrics[index % colors.metrics.length], strokeWidth: 2 }}
+                  dot={{ fill: getMetricColor(metric), strokeWidth: 1, r: 4 }}
+                  activeDot={{ r: 6, stroke: getMetricColor(metric), strokeWidth: 2 }}
                   connectNulls={true}
                 />
               ))}
@@ -200,13 +216,13 @@ export function GenerateGraphs({ selectedReports }) {
                 wrapperStyle={{ fontSize: '11px' }}
                 iconSize={10}
               />
-              {selectedMetrics.map((metric, index) => (
+              {selectedMetrics.map((metric) => (
                 <Area
                   key={metric}
                   type="monotone"
                   dataKey={metric}
-                  stroke={colors.metrics[index % colors.metrics.length]}
-                  fill={colors.metrics[index % colors.metrics.length]}
+                  stroke={getMetricColor(metric)}
+                  fill={getMetricColor(metric)}
                   fillOpacity={0.2}
                   strokeWidth={2}
                   connectNulls={true}
@@ -214,6 +230,186 @@ export function GenerateGraphs({ selectedReports }) {
               ))}
             </AreaChart>
           </ResponsiveContainer>
+        );
+
+      case "report-line":
+        // NEW: Individual report line charts
+        return (
+          <div className="report-charts-container">
+            {selectedReports.map((report, reportIndex) => {
+              // Prepare data for this specific report
+              const reportData = selectedMetrics.map(metricName => {
+                const testArray = report.keyValues?.tests || [];
+                const keyValueObj = testArray.find(kv => kv.name === metricName);
+                
+                // Handle special cases like "<10"
+                let value = null;
+                if (keyValueObj && keyValueObj.value) {
+                  const numValue = parseFloat(keyValueObj.value);
+                  value = isNaN(numValue) ? 0 : numValue;
+                }
+                
+                return {
+                  metric: metricName,
+                  value: value,
+                  unit: keyValueObj?.unit || '',
+                  range: keyValueObj?.range || '',
+                  reportName: `Report ${reportIndex + 1}`,
+                  reportDate: new Date(report.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })
+                };
+              }).filter(item => item.value !== null); // Remove metrics without values
+
+              if (reportData.length === 0) {
+                return (
+                  <div key={reportIndex} className="individual-report-chart">
+                    <h3 className="report-chart-title">
+                      {`Report ${reportIndex + 1}`}
+                      <span className="report-chart-date">
+                        {new Date(report.createdAt).toLocaleDateString('en-US', {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric'
+                        })}
+                      </span>
+                    </h3>
+                    <div className="no-data-in-report">
+                      <p>No selected metrics found in this report.</p>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <div key={reportIndex} className="individual-report-chart">
+                  <h3 className="report-chart-title">
+                    {`Report ${reportIndex + 1}`}
+                    <span className="report-chart-date">{reportData[0].reportDate}</span>
+                  </h3>
+                  <div className="chart-description">
+                    <p>Line chart showing test values for individual metrics</p>
+                  </div>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <ComposedChart
+                      data={reportData}
+                      margin={{ top: 20, right: 30, left: 20, bottom: 50 }}
+                    >
+                      <CartesianGrid 
+                        strokeDasharray="3 3" 
+                        stroke="#f5f5f5" 
+                        vertical={false}
+                      />
+                      <XAxis 
+                        dataKey="metric" 
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                        tick={{ fontSize: 11 }}
+                        interval={0}
+                        label={{ 
+                          value: 'Test Metrics', 
+                          position: 'insideBottom', 
+                          offset: -40,
+                          style: { fontSize: 12, fontWeight: 'bold' }
+                        }}
+                      />
+                      <YAxis 
+                        tick={{ fontSize: 11 }}
+                        width={60}
+                        label={{ 
+                          value: 'Value', 
+                          angle: -90, 
+                          position: 'insideLeft',
+                          style: { fontSize: 12, fontWeight: 'bold' }
+                        }}
+                      />
+                      <Tooltip 
+                        content={({ active, payload, label }) => {
+                          if (active && payload && payload.length) {
+                            const data = payload[0].payload;
+                            return (
+                              <div className="custom-tooltip">
+                                <div className="tooltip-header">
+                                  <strong>{data.metric}</strong>
+                                  <div className="tooltip-date">{data.reportName}</div>
+                                </div>
+                                <div className="tooltip-content">
+                                  <div className="tooltip-item">
+                                    <div className="tooltip-metric">Value:</div>
+                                    <div className="tooltip-value">
+                                      <strong>{data.value}</strong>
+                                    </div>
+                                  </div>
+                                  {data.unit && (
+                                    <div className="tooltip-item">
+                                      <div className="tooltip-metric">Unit:</div>
+                                      <div className="tooltip-value">{data.unit}</div>
+                                    </div>
+                                  )}
+                                  {data.range && (
+                                    <div className="tooltip-item">
+                                      <div className="tooltip-metric">Reference Range:</div>
+                                      <div className="tooltip-value">{data.range}</div>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          }
+                          return null;
+                        }}
+                      />
+                      <defs>
+                        <linearGradient id={`colorGradient${reportIndex}`} x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8}/>
+                          <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.8}/>
+                        </linearGradient>
+                      </defs>
+                      <Line
+                        type="monotone"
+                        dataKey="value"
+                        stroke={`url(#colorGradient${reportIndex})`}
+                        strokeWidth={3}
+                        dot={{ 
+                          fill: `url(#colorGradient${reportIndex})`, 
+                          strokeWidth: 2, 
+                          r: 6,
+                          stroke: '#fff'
+                        }}
+                        activeDot={{ 
+                          r: 8, 
+                          stroke: `url(#colorGradient${reportIndex})`, 
+                          strokeWidth: 2,
+                          fill: '#fff'
+                        }}
+                        connectNulls={true}
+                        name="Test Value"
+                      />
+                      <Scatter
+                        data={reportData}
+                        fill="#8884d8"
+                        shape="circle"
+                        name="Data Points"
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                  <div className="report-summary">
+                    <div className="summary-item">
+                      <span className="summary-label">Metrics Displayed:</span>
+                      <span className="summary-value">{reportData.length}</span>
+                    </div>
+                    <div className="summary-item">
+                      <span className="summary-label">Report Date:</span>
+                      <span className="summary-value">{reportData[0].reportDate}</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         );
 
       default: // bar chart
@@ -240,11 +436,11 @@ export function GenerateGraphs({ selectedReports }) {
                 wrapperStyle={{ fontSize: '11px' }}
                 iconSize={10}
               />
-              {selectedMetrics.map((metric, index) => (
+              {selectedMetrics.map((metric) => (
                 <Bar
                   key={metric}
                   dataKey={metric}
-                  fill={colors.metrics[index % colors.metrics.length]}
+                  fill={getMetricColor(metric)}
                   fillOpacity={0.8}
                   radius={[3, 3, 0, 0]}
                 />
@@ -283,7 +479,7 @@ export function GenerateGraphs({ selectedReports }) {
         </div>
       </div>
 
-      {/* Chart Type Selector */}
+      {/* Chart Type Selector - UPDATED with new button */}
       <div className="chart-controls">
         <div className="control-group">
           <label>Chart Type:</label>
@@ -309,6 +505,14 @@ export function GenerateGraphs({ selectedReports }) {
               <span className="btn-icon">🔽</span>
               Area Chart
             </button>
+            {/* NEW: Report Line Chart Button */}
+            <button 
+              className={`chart-type-btn ${chartType === 'report-line' ? 'active' : ''}`}
+              onClick={() => setChartType('report-line')}
+            >
+              <span className="btn-icon">📋</span>
+              Report Line Chart
+            </button>
           </div>
         </div>
       </div>
@@ -318,13 +522,25 @@ export function GenerateGraphs({ selectedReports }) {
         <div className="metric-header">
           <label>Select Metrics:</label>
           <div className="metric-actions">
-            <button className="action-btn small" onClick={selectCommonMetrics}>
+            <button 
+              className="action-btn small" 
+              onClick={selectCommonMetrics}
+              disabled={commonMetrics.length === 0}
+            >
               Common Only
             </button>
-            <button className="action-btn small" onClick={selectAllMetrics}>
+            <button 
+              className="action-btn small" 
+              onClick={selectAllMetrics}
+              disabled={allMetrics.length === 0}
+            >
               Select All
             </button>
-            <button className="action-btn small" onClick={clearAllMetrics}>
+            <button 
+              className="action-btn small" 
+              onClick={clearAllMetrics}
+              disabled={selectedMetrics.length === 0}
+            >
               Clear All
             </button>
           </div>
@@ -333,6 +549,7 @@ export function GenerateGraphs({ selectedReports }) {
           {allMetrics.map((metric, index) => {
             const isCommon = commonMetrics.includes(metric.name);
             const isSelected = selectedMetrics.includes(metric.name);
+            const metricColor = colors.metrics[index % colors.metrics.length];
             
             return (
               <div
@@ -340,7 +557,7 @@ export function GenerateGraphs({ selectedReports }) {
                 className={`metric-card ${isSelected ? 'active' : ''} ${isCommon ? 'common-metric' : ''}`}
                 onClick={() => toggleMetric(metric.name)}
               >
-                <div className="metric-color" style={{ backgroundColor: colors.metrics[index % colors.metrics.length] }}></div>
+                <div className="metric-color" style={{ backgroundColor: metricColor }}></div>
                 <div className="metric-info">
                   <div className="metric-name">
                     {metric.name}
@@ -376,7 +593,7 @@ export function GenerateGraphs({ selectedReports }) {
       </div>
 
       {/* Summary Stats */}
-      {selectedMetrics.length > 0 && (
+      {selectedMetrics.length > 0 && chartType !== "report-line" && (
         <div className="chart-summary">
           <div className="summary-stats">
             <div className="stat-item">
