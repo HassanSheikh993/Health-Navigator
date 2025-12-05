@@ -29,6 +29,7 @@ function HeroSection() {
                     </div>
                     <div className="heroimg">
                         <img src={heroimg}></img>
+                         {/* <img src="../../public/images/drhassan-bg.png"></img> */}
                     </div>
                 </div>
 

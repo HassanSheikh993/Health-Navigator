@@ -101,8 +101,8 @@ useEffect(() => {
 
 
           <div className="cardtitle">
-            <h5>CONNECT TO DOCTOR</h5>
-            <h6>Sending report to the doctors <br>
+            <h5>DOCTOR INFORMATION</h5>
+            <h6>View profiles, specialties, and contact details of available doctors. <br>
             </br>
               <br>
               </br>
