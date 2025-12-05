@@ -26,7 +26,7 @@ export const generateSmartReport = async ({ structuredJSON, structuredText, ml_r
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "arcee-ai/trinity-mini:free",
+        model: "openai/gpt-oss-safeguard-20b",
         messages: [
           {
             role: "system",

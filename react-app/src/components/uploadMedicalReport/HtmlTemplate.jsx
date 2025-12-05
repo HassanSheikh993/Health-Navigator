@@ -19,7 +19,7 @@ export default function HtmlTemplate({ markdownText }) {
         </div>
       </div>
 
-      <div className="html-content-box markdown-body">
+      <div className="html-content-box markdown-body" id="markdown-content">
         <ReactMarkdown remarkPlugins={[remarkGfm]}>
           {markdownText}
         </ReactMarkdown>

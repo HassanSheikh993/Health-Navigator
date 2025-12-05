@@ -210,9 +210,12 @@
 .navBar a:focus,
 .loginbtn button:focus,
 .nav_profile_icon:focus {
-  outline: 2px solid #2563eb;
-  outline-offset: 2px;
+
+  outline: none;
+  /* text-decoration: underline; */
+  text-decoration-color: #2563eb;
 }
+
 
 /* Loading state for profile image */
 .nav_userProfile_image {
