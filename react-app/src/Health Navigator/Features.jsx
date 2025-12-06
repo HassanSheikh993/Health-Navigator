@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import reportupload from '../assets/reportupload.png'
 import doctor from '../assets/doctor.png'
 import trendimg from '../assets/trend.png'
+import we from '../assets/we.png';
+
 import docs from '../assets/docs.png'
 import docimg from '../assets/docimg2.png'
 import { useLocation } from "react-router-dom";
@@ -27,7 +29,7 @@ const location = useLocation();
       setLoginData(result); // user logged in
     }
 
-    console.log("YEH HAI RESULT ", result);
+    console.log(result);
   }
 useEffect(() => {
     if (location.search === "?scroll=features") {
@@ -102,10 +104,11 @@ useEffect(() => {
 
           <div className="cardtitle">
             <h5>DOCTOR INFORMATION</h5>
-            <h6>View profiles, specialties, and contact details of available doctors. <br>
-            </br>
-              <br>
-              </br>
+            <h6>View profiles, specialties, and contact details of available doctors. 
+         <br />
+             <br />
+
+
             </h6>
           </div>
           <div className="cardbutton">
@@ -123,8 +126,8 @@ useEffect(() => {
 
         <div className="sectioncontent">
           <div className="sectionimg">
-            <img src={docs} id='img1'></img>
-            <img src={docimg} id='img2'></img>
+            <img src={we} id='img1'></img>
+            {/* <img src={hassan} id='img2'></img> */}
           </div>
           <div className="sectiontext">
             <div className="sectionheading">

@@ -7,6 +7,7 @@ function Nav() {
   const [name, setName] = useState("");
   const [userData, setUserData] = useState();
   const [dropDown, setDropDown] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
   const navigate = useNavigate();
 
   console.log("userData ", userData)
@@ -75,8 +76,14 @@ function handleFeedBack() {
           <img src="/images/newLogo.png" alt="" onClick={handleOnClick} className='nav_logo'/>
           <h4  className= "logoName" >Health Navigator</h4>
         </div>
+ <div className="hamburger" onClick={() => setMobileMenu(prev => !prev)}>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-        <nav className="navBar">
+    <nav className={`navBar ${mobileMenu ? "active" : ""}`}>
+        
           <ul>
             <li><RouterLink to="/">Home</RouterLink></li>
             <li><RouterLink to="/About">About</RouterLink></li>

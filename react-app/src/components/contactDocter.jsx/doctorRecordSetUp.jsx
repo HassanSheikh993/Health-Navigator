@@ -1,14 +1,29 @@
 export function DoctorRecordSetUp({ data }) {
+      const displayValue = (value) => {
+        return value && value !== "NaN" ? value : "—";
+    };
     return (
         <>
-        {console.log("DATAAAAAAAAAAA G ", data)}
-            {data.city ? <p><strong>City:</strong> {data.city}</p>: <p><strong>City: </strong>NaN</p>}
-            {data.contactNumber ? <p><strong>Contact:</strong> {data.contactNumber}</p> : <p><strong>Contact: </strong>NaN</p> }
-            {data.email ? <p><strong>Email:</strong> {data.email}</p> : <p><strong>:Email: </strong>NaN </p> }
-            {data.address ? <p><strong>Address:</strong> {data.address}</p> : <p><strong>Address: </strong>NaN </p> } 
-            {data.specialization ? <p><strong>Specialization:</strong> {data.specialization}</p> : <p><strong>Specialization: </strong>NaN </p> } 
-            {data.description ? <p><strong>Description:</strong> {data.description}</p> : <p><strong>Description: </strong>NaN </p> } 
-        
+        {console.log(data)}
+        <div className="doctor_details_grid">
+                 <div><strong>City:</strong></div>
+            <div>{displayValue(data.city)}</div>
+
+            <div><strong>Contact:</strong></div>
+            <div>{displayValue(data.contactNumber)}</div>
+
+            <div><strong>Email:</strong></div>
+            <div>{displayValue(data.email)}</div>
+
+            <div><strong>Address:</strong></div>
+            <div>{displayValue(data.address)}</div>
+
+            <div><strong>Specialization:</strong></div>
+            <div>{displayValue(data.specialization)}</div>
+
+            <div><strong>Description:</strong></div>
+            <div>{displayValue(data.description)}</div>
+        </div>
         </>
     );
 }

@@ -45,6 +45,7 @@ margin-bottom: 50px;
 .heroimg img{
     width: 500px;
 }
+
 /* .heading button{
     background-color: rgb(83, 193,174);
     border: none;
@@ -244,4 +245,59 @@ border-radius: 20px;
  
   color: white;
   transform: rotateY(180deg);
+}
+/* RESPONSIVE FIX FOR 1920px & LARGE DESKTOP */
+@media screen and (min-width: 1600px) {
+    .bannercontent {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 40px; /* space between text and girl image */
+        width: 100%;
+    }
+
+    .heading {
+        flex: 1; /* allow heading to take full flexible space */
+        max-width: 55%; /* prevent it from becoming too wide */
+     
+    }
+
+    .heading h1 {
+        font-size: 75px;
+        white-space: normal; /* ensure text wraps naturally */
+    }
+
+    .heroimg {
+        flex: 0.5;
+        display: flex;
+        justify-content: flex-end;
+        
+        margin-right: 60px;
+    }
+
+    .heroimg img {
+        width: 650px;
+        max-width: 100%;
+    }
+    .front-box {
+        width: 40%;
+       
+        height: 200px;
+    }
+    .front-box-front h3{
+        font-size: 35px;
+        
+    }
+      .front-box-front h5{
+        font-size: 25px;
+        
+    }
+      .front-box-back h3{
+        font-size: 35px;
+        
+    }
+      .front-box-back h5{
+        font-size: 25px;
+        
+    }
 }

@@ -522,6 +522,7 @@
   display: flex;
   gap: 12px;
   align-items: center;
+  margin-top: 20px;
   flex-shrink: 0;
 }
 
@@ -612,6 +613,7 @@
 .doctor_extra_details {
   width: 100%;
   margin-top: 20px;
+  margin-left: 40px;
   padding-top: 20px;
   border-top: 1px solid #e8f4f8;
   transition: all 0.3s ease;
@@ -626,6 +628,13 @@
   display: none;
 }
 
+.doctor_details_grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 12px 40px;
+  width: 100%;
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -638,17 +647,10 @@
 }
 
 /* Doctor Details Text */
-.doctor_extra_details p {
-  margin: 10px 0;
-  padding: 6px 0;
-  color: #495057;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  border-bottom: 1px solid #f8f9fa;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.doctor_details_grid div {
+  display: block !important;
 }
+
 
 .doctor_extra_details p:last-child {
   border-bottom: none;

@@ -237,3 +237,43 @@
     background-position: -200% 0;
   }
 }
+/* Hamburger Icon */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 28px;
+  height: 3px;
+  background: #2563eb;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+}
+
+/* Show Hamburger in Mobile */
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .navBar {
+    display: none;
+    width: 100%;
+    background: white;
+    padding: 1rem 0;
+  }
+
+  /* Show menu when active */
+  .navBar.active {
+    display: block;
+  }
+
+  .navBar ul {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}

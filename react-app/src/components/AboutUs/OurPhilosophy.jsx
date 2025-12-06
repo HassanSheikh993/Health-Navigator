@@ -1,4 +1,5 @@
 import "../../styles/OurPhilosophy.css"
+
 export function OurPhilosophy(){
     return(
 

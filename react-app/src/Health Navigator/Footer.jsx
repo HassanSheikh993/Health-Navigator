@@ -118,7 +118,7 @@ function Footer() {
             </ul>
 
           </div>
-          <div>
+          <div className="copyright">
             <p style={{ color: "white" }}>© 2025 Health Navigator. All rights reserved.</p>
           </div>
         </div>

@@ -2,7 +2,7 @@ import { React } from 'react'
 import banner from '../assets/banner.png'
 import heroimg from '../assets/heroimg.png'
 import { scroller } from 'react-scroll';
-
+// import ourImage from '../assets/ourImage.png'
 import { cookiesData } from "../services/api.jsx"
 function HeroSection() {
 

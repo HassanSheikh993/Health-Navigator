@@ -1,8 +1,13 @@
 import React from "react";
+import hassan from '../../assets/hassan.png'
+import { Link } from 'react-scroll'
+
 import "../../styles/CombinedComponent.css"
 
-
 export function CombinedComponent() {
+
+
+
   return (
     <div>
       {/* Main Component */}
@@ -32,7 +37,9 @@ export function CombinedComponent() {
                 reports, track your health trends, and connect with the right
                 healthcare professionals effortlessly.
               </p>
-              <a href="#">Contact us</a>
+              <Link className="contactBtn" to="contact" smooth={true} duration={300} offset={-70} style={{ cursor: 'pointer' }}>
+                Contact Us
+              </Link>
             </div>
           </div>
         </div>
@@ -44,15 +51,15 @@ export function CombinedComponent() {
           <div className="mission_vision_detail">
             <h3>MISSION AND VISION</h3>
             <p>
-             Our mission is to simplify healthcare by making medical information accessible and understandable for everyone. We aim to empower individuals especially those without medical backgrounds—to take control of their health through innovative technology. By generating easy-to-read Smart Reports from complex liver function tests and hepatitis markers, we help users make informed decisions, track their health over time, and collaborate with doctors more effectively
+              Our mission is to simplify healthcare by making medical information accessible and understandable for everyone. We aim to empower individuals especially those without medical backgrounds to take control of their health through innovative technology. By generating easy-to-read Smart Reports from complex liver function tests and hepatitis markers, we help users make informed decisions, track their health over time, and collaborate with doctors more effectively
               <br />
               <br />
-            To become a leading digital health platform that transforms medical data into meaningful, personalized guidance — bridging the gap between healthcare and technology for a healthier tomorrow.
+              To become a leading digital health platform that transforms medical data into meaningful, personalized guidance bridging the gap between healthcare and technology for a healthier tomorrow.
             </p>
           </div>
 
           <div className="mission_vision_image">
-            <img src="/images/mission.png" alt="Mission" />
+            <img src={hassan} alt="Mission" />
           </div>
         </div>
 
@@ -72,7 +79,7 @@ export function CombinedComponent() {
         </div>
         <div className=" mission_vision_heart_image"><img src="/images/heart1.png" alt="" /></div>
       </div>
-      
+
     </div>
   );
 }
