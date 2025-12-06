@@ -67,7 +67,7 @@ function App() {
           <Route path="/upload-report" element={<UploadMedicalReportMainPage />} />
 
           <Route path="/About" element={<About />} />
-          <Route path="/contact-doctor" element={<MainContactDoctor />} />
+          {/* <Route path="/contact-doctor" element={<MainContactDoctor />} /> */}
           <Route path="/edit-profile" element={<Profile />} />
           {/* <Route path="/doctor-portal" element={<DoctorPortal />} /> */}
           <Route path="/verify-otp" element={<OtpVerification />} />
@@ -78,7 +78,7 @@ function App() {
 
           <Route path="/reportDetails" element={<ReportDetails />} />
           <Route path="/showDoctorHistory" element={<DoctorHistory />} />
-          <Route path="/allReports" element={<AllUserReport />} />
+          {/* <Route path="/allReports" element={<AllUserReport />} /> */}
           <Route path="/userFeedBack-history" element={<MainUserReportsWithFeedback />} />
 
           {/* <Route path="/try" element={<LiverReportsBarChart/>} />
@@ -95,6 +95,40 @@ function App() {
               )
             }
           />
+
+
+
+
+          <Route
+            path="/allReports"
+            element={
+              loading ? (
+                <p>Loading...</p>
+              ) : user?(
+                <AllUserReport />
+              ) : (
+                <Unauthorized />
+              )
+            }
+          />
+
+
+
+
+          <Route
+            path="/contact-doctor"
+            element={
+              loading ? (
+                <p>Loading...</p>
+              ) : user?(
+                <MainContactDoctor />
+              ) : (
+                <Unauthorized />
+              )
+            }
+          />
+
+
 
           <Route path="/test1" element={<Test1 />} />
 

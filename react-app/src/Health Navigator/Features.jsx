@@ -109,8 +109,13 @@ useEffect(() => {
             </h6>
           </div>
           <div className="cardbutton">
-            <Link to='/Contact-Doctor'>→</Link>
+            {userData ? (
+              <Link to="/Contact-Doctor">→</Link>
+            ) : (
+              <button onClick={() => setShowPopup(true)} className="link-button">→</button>
+            )}
           </div>
+          
         </div>
       </div>
 

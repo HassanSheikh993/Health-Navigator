@@ -192,45 +192,45 @@ export function GenerateGraphs({ selectedReports }) {
           </ResponsiveContainer>
         );
 
-      case "area":
-        return (
-          <ResponsiveContainer width="100%" height={450}>
-            <AreaChart {...commonProps}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
-              <XAxis 
-                dataKey="name" 
-                angle={-45}
-                textAnchor="end"
-                height={60}
-                tick={{ fontSize: 11 }}
-                interval={0}
-              />
-              <YAxis 
-                tick={{ fontSize: 11 }}
-                width={60}
-              />
-              <Tooltip content={<CustomTooltip />} />
-              <Legend 
-                verticalAlign="top" 
-                height={40}
-                wrapperStyle={{ fontSize: '11px' }}
-                iconSize={10}
-              />
-              {selectedMetrics.map((metric) => (
-                <Area
-                  key={metric}
-                  type="monotone"
-                  dataKey={metric}
-                  stroke={getMetricColor(metric)}
-                  fill={getMetricColor(metric)}
-                  fillOpacity={0.2}
-                  strokeWidth={2}
-                  connectNulls={true}
-                />
-              ))}
-            </AreaChart>
-          </ResponsiveContainer>
-        );
+      // case "area":
+      //   return (
+      //     <ResponsiveContainer width="100%" height={450}>
+      //       <AreaChart {...commonProps}>
+      //         <CartesianGrid strokeDasharray="3 3" stroke="#f5f5f5" />
+      //         <XAxis 
+      //           dataKey="name" 
+      //           angle={-45}
+      //           textAnchor="end"
+      //           height={60}
+      //           tick={{ fontSize: 11 }}
+      //           interval={0}
+      //         />
+      //         <YAxis 
+      //           tick={{ fontSize: 11 }}
+      //           width={60}
+      //         />
+      //         <Tooltip content={<CustomTooltip />} />
+      //         <Legend 
+      //           verticalAlign="top" 
+      //           height={40}
+      //           wrapperStyle={{ fontSize: '11px' }}
+      //           iconSize={10}
+      //         />
+      //         {selectedMetrics.map((metric) => (
+      //           <Area
+      //             key={metric}
+      //             type="monotone"
+      //             dataKey={metric}
+      //             stroke={getMetricColor(metric)}
+      //             fill={getMetricColor(metric)}
+      //             fillOpacity={0.2}
+      //             strokeWidth={2}
+      //             connectNulls={true}
+      //           />
+      //         ))}
+      //       </AreaChart>
+      //     </ResponsiveContainer>
+      //   );
 
       case "report-line":
         // NEW: Individual report line charts
@@ -491,20 +491,20 @@ export function GenerateGraphs({ selectedReports }) {
               <span className="btn-icon">📊</span>
               Bar Chart
             </button>
-            <button 
+            {/* <button 
               className={`chart-type-btn ${chartType === 'line' ? 'active' : ''}`}
               onClick={() => setChartType('line')}
             >
               <span className="btn-icon">📈</span>
               Line Chart
-            </button>
-            <button 
+            </button> */}
+            {/* <button 
               className={`chart-type-btn ${chartType === 'area' ? 'active' : ''}`}
               onClick={() => setChartType('area')}
             >
               <span className="btn-icon">🔽</span>
               Area Chart
-            </button>
+            </button> */}
             {/* NEW: Report Line Chart Button */}
             <button 
               className={`chart-type-btn ${chartType === 'report-line' ? 'active' : ''}`}
