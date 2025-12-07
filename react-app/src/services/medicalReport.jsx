@@ -141,14 +141,30 @@ export const uploadMedicalReport = async (report) => {
   const formData = new FormData();
   formData.append("report", report);
 
-  const response = await api.post("/upload-report", formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-  });
+  try {
+    const response = await api.post("/upload-report", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
-  return response.data;
+    // Success (200)
+    return response.data;
+
+  } catch (error) {
+    // Axios sends backend error JSON inside error.response.data
+    if (error.response && error.response.data) {
+      return error.response.data;   // 👈 return backend { success:false, message:"..." }
+    }
+
+    // Network or unexpected error
+    return {
+      success: false,
+      message: "Network error. Please try again.",
+    };
+  }
 };
+
 export const downloadSmartReport = async (html) => {
   const response = await api.post(
     "/generate-pdf",

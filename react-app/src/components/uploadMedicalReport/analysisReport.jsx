@@ -46,14 +46,17 @@ export function AnalyzeReport({ report, originalReport, structuredData, ml_resul
 
       <HtmlTemplate markdownText={report} />
 
-      <div className="AIGeneratedAnalysis_shareButton">
-        <p>Keep a Copy of Your Report – Save Now!</p>
+      {/* ❗ SHOW BUTTONS ONLY IF VALID REPORT IS GENERATED */}
+      {structuredData && (
+        <div className="AIGeneratedAnalysis_shareButton">
+          <p>Keep a Copy of Your Report – Save Now!</p>
 
-        <div className="buttonGroup">
-          <button onClick={handleSave}>Save</button>
-          <button onClick={handleDownloadPDF}>Download PDF</button>
+          <div className="buttonGroup">
+            <button onClick={handleSave}>Save</button>
+            <button onClick={handleDownloadPDF}>Download PDF</button>
+          </div>
         </div>
-      </div>
+      )}
 
       {userData && (
         <SaveReportPopup
