@@ -4,7 +4,10 @@ import fs from "fs";
 import FormData from "form-data";
 import path from "path";
 import dotenv from "dotenv";
+import { isLiverReport } from "../utils/isLiverReport.js";
 import { runLiverPrediction } from "../AI_Model/runLiverPrediction.js";
+import { normalizeTestName, TEST_NAME_MAP } from "../utils/liverMapping.js";
+
 
 dotenv.config();
 
@@ -13,26 +16,25 @@ const OCR_SERVICE_URL = "http://localhost:5001/extract";
 
 // ---------------------------
 // 🔒 JSON Schema Normalizer
-// ---------------------------
 function normalizeStructuredJSON(data) {
-  const safe = {
+  return {
     patient: {
-      name: data?.patient?.name || "",
-      age: data?.patient?.age || "",
-      gender: data?.patient?.gender || ""
+      name: data?.patient?.name ?? "",
+      age: data?.patient?.age ?? "",
+      gender: data?.patient?.gender ?? ""
     },
     tests: Array.isArray(data?.tests)
       ? data.tests.map(t => ({
-          name: t?.name || "",
-          value: t?.value || "",
-          unit: t?.unit || "",
-          range: t?.range || "",
-          flag: t?.flag || ""
-        }))
+        name: t?.name ?? "",
+        ml_key: t?.ml_key ?? "",
+        value: t?.value === null || t?.value === undefined ? null : t.value,
+        unit: t?.unit ?? "",
+        range: t?.range ?? "",
+        flag: t?.flag ?? ""
+      }))
       : [],
-    remarks: data?.remarks || ""
+    remarks: data?.remarks ?? ""
   };
-  return safe;
 }
 
 // ---------------------------
@@ -75,6 +77,19 @@ export const structureReport = async (filePath) => {
     if (!extractedText) throw new Error("OCR extracted no text.");
 
     console.log("✅ OCR Extraction Completed");
+    // ---------------------------
+    // 🛑 Validate: Is this a Liver Report?
+    // ---------------------------
+    if (!isLiverReport(extractedText)) {
+      console.log("❌ Not a liver report. Rejecting...");
+      return {
+        success: false,
+        structuredText: "",
+        error: "❌ Please upload a valid Liver Function Test (LFT) report.",
+      };
+    }
+
+    console.log("✅ Liver report validated. Continuing...");
 
     // ---------------------------
     // 🤖 LLM Structuring (UPDATED PROMPT)
@@ -92,15 +107,34 @@ export const structureReport = async (filePath) => {
         messages: [
           {
             role: "system",
-            content: `You extract medical report information and return ONLY valid JSON.
+            content: `You are a medical report parser.  
+Your task is to extract Liver Function Test (LFT) values and return them in a STRICT JSON format.
 
 RULES:
-1. The JSON structure must ALWAYS match the schema below.
-2. You MUST include ALL fields. No missing keys, no renaming.
-3. Values may be "" or null if unavailable, but keys must exist.
-4. Test names must NEVER be changed. If a test is missing, include it with null value.
+1. ALWAYS return only JSON.
+2. NEVER rename keys.
+3. Each test MUST include an "ml_key" field that matches our predefined ML keys.
+4. The value of "ml_key" MUST be one of these:
 
-STRICT JSON SCHEMA:
+[
+  "total_bilirubin",
+  "direct_bilirubin",
+  "indirect_bilirubin",
+  "sgpt",
+  "sgot",
+  "alkphos",
+  "total_proteins",
+  "albumin",
+  "globulin",
+  "ag_ratio"
+]
+
+5. You MUST assign the correct ml_key based on the test name.
+6. If a test exists but no numeric value is present → set value = null.
+7. If a test does not appear in the report → DO NOT add it. Only include extracted tests.
+
+RETURN STRICT JSON IN THIS FORMAT:
+
 {
   "patient": {
     "name": "",
@@ -110,6 +144,7 @@ STRICT JSON SCHEMA:
   "tests": [
     {
       "name": "",
+      "ml_key": "",
       "value": "",
       "unit": "",
       "range": "",
@@ -118,7 +153,6 @@ STRICT JSON SCHEMA:
   ],
   "remarks": ""
 }
-
 Return ONLY JSON. No text before or after.`
           },
           {
@@ -131,18 +165,18 @@ Return ONLY JSON. No text before or after.`
 
     const llmJson = await structureResponse.json();
     console.log("🔍 FULL OpenRouter Response:", JSON.stringify(llmJson, null, 2));
-// If API returned an error, throw immediately
-if (llmJson?.error || llmJson?.detail) {
-  console.log("❌ OpenRouter Error:", llmJson);
-  throw new Error("OpenRouter API Error → " + JSON.stringify(llmJson));
-}
+    // If API returned an error, throw immediately
+    if (llmJson?.error || llmJson?.detail) {
+      console.log("❌ OpenRouter Error:", llmJson);
+      throw new Error("OpenRouter API Error → " + JSON.stringify(llmJson));
+    }
 
-const rawLLMText =
-  llmJson?.choices?.[0]?.message?.content ||
-  llmJson?.output_text ||
-  llmJson?.output?.[0]?.content ||
-  llmJson?.message ||
-  "";
+    const rawLLMText =
+      llmJson?.choices?.[0]?.message?.content ||
+      llmJson?.output_text ||
+      llmJson?.output?.[0]?.content ||
+      llmJson?.message ||
+      "";
 
 
     console.log("🧠 LLM Raw Output:", rawLLMText);
@@ -178,14 +212,23 @@ const rawLLMText =
     // ---------------------------
     // 🔢 Convert tests array to ML-friendly map
     // ---------------------------
+
+
     const testMap = {};
+
     if (Array.isArray(parsedJSON.tests)) {
       for (const t of parsedJSON.tests) {
-        if (!t.name || t.value == null) continue;
-        const key = t.name.toLowerCase().replace(/\s+/g, "_");
-        testMap[key] = Number(t.value);
+        let val = t.value;
+        if (typeof val === "string") {
+          val = val.replace("<", "").replace(">", "");
+          val = parseFloat(val);
+        }
+        if (isNaN(val)) val = null;
+        testMap[t.ml_key] = val;
+
       }
     }
+
 
     // ---------------------------
     // 🔒 REQUIRED TEST Fallbacks (NEW)
@@ -202,33 +245,30 @@ const rawLLMText =
     ];
 
     for (const k of REQUIRED_TESTS) {
-      if (!testMap[k]) testMap[k] = 0;
+      if (testMap[k] === undefined) testMap[k] = 0;
+
     }
 
     // ---------------------------
     // 🧠 Build ML Input (UPDATED safeNumber)
     // ---------------------------
     const mlData = {
-      age: safeNumber(parsedJSON?.patient?.age),
-      gender: parsedJSON?.patient?.gender || "",
+      age: safeNumber(parsedJSON.patient.age),
+      gender: parsedJSON.patient.gender || "",
 
-      total_bilirubin: safeNumber(
-        testMap["serum_bilirubin_(total)"] || testMap["total_bilirubin"]
-      ),
-      direct_bilirubin: safeNumber(
-        testMap["serum_bilirubin_(direct)"] || testMap["direct_bilirubin"]
-      ),
-
-      alkphos: safeNumber(testMap["serum_alkaline_phosphatase"] || testMap["alkphos"]),
-
-      sgpt: safeNumber(testMap["sgpt_(alt)"] || testMap["sgpt"]),
-      sgot: safeNumber(testMap["sgot_(ast)"] || testMap["sgot"]),
-
-      total_proteins: safeNumber(testMap["serum_protein"] || testMap["total_protein"]),
-      albumin: safeNumber(testMap["serum_albumin"] || testMap["albumin"]),
-
-      ag_ratio: safeNumber(testMap["aig_ratio"] || testMap["ag_ratio"]),
+      total_bilirubin: safeNumber(testMap.total_bilirubin),
+      direct_bilirubin: safeNumber(testMap.direct_bilirubin),
+      indirect_bilirubin: safeNumber(testMap.indirect_bilirubin),
+      alkphos: safeNumber(testMap.alkphos),
+      sgpt: safeNumber(testMap.sgpt),
+      sgot: safeNumber(testMap.sgot),
+      total_proteins: safeNumber(testMap.total_proteins),
+      albumin: safeNumber(testMap.albumin),
+      globulin: safeNumber(testMap.globulin),
+      ag_ratio: safeNumber(testMap.ag_ratio),
     };
+
+
 
     console.log("🧪 ML Input:", mlData);
 

@@ -28,8 +28,11 @@ export const uploadReport = async (req, res) => {
 
     const structured = await structureReport(filePath);
 
-    if (!structured.success) {
-      throw new Error(`Structure failed: ${structured.error}`);
+       if (!structured.success) {
+      return res.status(400).json({
+        success: false,
+        message: structured.error   // 👈 send real LFT error
+      });
     }
 
     console.log("✅ Step 1 completed. Structured JSON ready.");

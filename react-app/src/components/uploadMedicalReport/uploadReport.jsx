@@ -10,7 +10,7 @@ export function UploadReport() {
   const [showLoader, setShowLoader] = useState(false);
   const [showNoFileSelected, setShowNoFileSelected] = useState(false);
   const [smartReport, setSmartReport] = useState(null);
-const [structuredData, setStructuredData] = useState(null); 
+  const [structuredData, setStructuredData] = useState(null);
   const fileInputRef = useRef(null);
   const sectionRef = useRef(null);
 
@@ -37,13 +37,17 @@ const [structuredData, setStructuredData] = useState(null);
       const result = await uploadMedicalReport(selectFileUpload);
       console.log("✅ Smart Report Response:", result);
 
-      if (result.success && result.smartReport) {
-        setSmartReport(result.smartReport);
-        setStructuredData(result.structuredData || null);
-      } else {
-        setSmartReport("No AI-generated content available.");
+      // If backend says it's not a valid report (400 error)
+      if (!result.success) {
+        setSmartReport(result.message || "Invalid medical report.");
         setStructuredData(null);
+        return;
       }
+
+      // If it's valid and has a smart report
+      setSmartReport(result.smartReport || "No AI-generated content available.");
+      setStructuredData(result.structuredData || null);
+
     } catch (error) {
       console.error("❌ Error analyzing report:", error);
       setSmartReport("Error while generating report. Please try again.");
@@ -105,7 +109,7 @@ const [structuredData, setStructuredData] = useState(null);
 
             <p className="border"></p>
 
-             <button onClick={handleAnalyzeReport} className="uploadReport_button">Analyze Report</button>
+            <button onClick={handleAnalyzeReport} className="uploadReport_button">Analyze Report</button>
             {showNoFileSelected && (
               <p className="noFileSelected_message">No File Selected</p>
             )}
@@ -136,7 +140,7 @@ const [structuredData, setStructuredData] = useState(null);
         {showLoader && <span ref={sectionRef} className="loader uploadReport_waiting_loader"></span>}
 
         {condition && smartReport && (
-          <AnalyzeReport report={smartReport} originalReport = {selectFileUpload} structuredData={structuredData} />
+          <AnalyzeReport report={smartReport} originalReport={selectFileUpload} structuredData={structuredData} />
         )}
       </div>
     </>

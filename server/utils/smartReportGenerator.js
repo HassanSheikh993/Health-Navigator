@@ -53,7 +53,7 @@ REQUIRED STRUCTURE:
 (Include a summary of the report and mention the ML Result status with a clear flag)
 
 # Detailed Test Explanations
-(Each test explained medically: what it means, what high/low indicates, and the patient’s results)
+(Each test explained medically: what it means, what high/low indicates, and the patient’s results, and never in a table form)
 
 # Overall Interpretation
 (Provide a medical interpretation combining all results and referencing the ML Result flag)
