@@ -306,7 +306,7 @@ export function GenerateGraphs({ selectedReports }) {
                         dataKey="metric" 
                         angle={-45}
                         textAnchor="end"
-                        height={60}
+                        height={70}
                         tick={{ fontSize: 11 }}
                         interval={0}
                         label={{ 
@@ -318,7 +318,7 @@ export function GenerateGraphs({ selectedReports }) {
                       />
                       <YAxis 
                         tick={{ fontSize: 11 }}
-                        width={60}
+                        width={70}
                         label={{ 
                           value: 'Value', 
                           angle: -90, 
@@ -412,7 +412,7 @@ export function GenerateGraphs({ selectedReports }) {
           </div>
         );
 
-      default: // bar chart
+      default: ////////////////////////////////////// bar chart
         return (
           <ResponsiveContainer width="100%" height={450}>
             <BarChart {...commonProps}>
@@ -451,16 +451,16 @@ export function GenerateGraphs({ selectedReports }) {
     }
   };
 
-  if (selectedReports.length === 0) {
-    return (
-      <div className="chart-container professional-chart">
-        <div className="no-data">
-          <h3>No Reports Selected</h3>
-          <p>Please select reports to generate comparison graphs.</p>
-        </div>
+  if (selectedReports.length < 2 || selectedReports.length > 3) {
+  return (
+    <div className="chart-container professional-chart">
+      <div className="no-data">
+        <h3>Invalid Selection</h3>
+        <p>Please select at least 2 and no more than 3 reports for analysis.</p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   return (
     <div className="chart-container professional-chart">
