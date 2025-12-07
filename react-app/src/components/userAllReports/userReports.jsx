@@ -38,30 +38,55 @@ function UserReports() {
     }
   }, [selectedReports]);
 
+  // async function getAllReports() {
+  //   try {
+  //     const result = await displayReports();
+  //     console.log(result);
+
+  //     if (!result || result.length === 0) {
+  //       setData([]);
+  //       setMessage("No reports available.");
+  //     } else {
+  //       setData(result);
+  //       setMessage("");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching reports:", error);
+
+  //     if (error.response && [400, 401, 404, 500].includes(error.response.status)) {
+  //       setMessage(error.response.data?.message || "Failed to fetch reports.");
+  //     } else {
+  //       setMessage("An unexpected error occurred. Please try again.");
+  //     }
+
+  //     setData([]);
+  //   }
+  // }
+
+
   async function getAllReports() {
-    try {
-      const result = await displayReports();
-      console.log(result);
+  try {
+    const result = await displayReports();
 
-      if (!result || result.length === 0) {
-        setData([]);
-        setMessage("No reports available.");
-      } else {
-        setData(result);
-        setMessage("");
-      }
-    } catch (error) {
-      console.error("Error fetching reports:", error);
-
-      if (error.response && [400, 401, 404, 500].includes(error.response.status)) {
-        setMessage(error.response.data?.message || "Failed to fetch reports.");
-      } else {
-        setMessage("An unexpected error occurred. Please try again.");
-      }
-
+    if (!result || result.length === 0) {
       setData([]);
+      setMessage("No reports available.");
+    } else {
+      // Sort newest first
+      const sorted = result.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+
+      setData(sorted);
+      setMessage("");
     }
+  } catch (error) {
+    console.error("Error fetching reports:", error);
+    setMessage("Failed to fetch reports.");
+    setData([]);
   }
+}
+
 
   useEffect(() => {
     getAllReports();
