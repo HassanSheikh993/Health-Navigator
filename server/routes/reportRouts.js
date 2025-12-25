@@ -1,20 +1,40 @@
+// routes/reportRouter.js
 import express from "express";
-import { addDoctorReview, deleteUserReport, displayReports, doctorReviewHistory, getAllReportsForDoctor, getReportStats, getUserReportsWithFeedback, sendReportToDoctor, uploadReport } from "../controller/reportController.js";
 import { auth } from "../middleWares/authMiddleware.js";
 import { uploadMedicalReport } from "../middleWares/uploadMedicalReport.js";
-
+import {
+  uploadReport,
+  displayReports,
+  sendReportToDoctor,
+  getAllReportsForDoctor,
+  getReportStats,
+  deleteUserReport,
+  getUserReportsWithFeedback,
+  saveMedicalReport,
+} from "../controller/reportController.js";
+import { saveMedicalReportMulter } from "../middleWares/saveReportsMiddleware.js";
 export const reportRouter = express.Router();
 
-reportRouter.post("/upload-report",auth, uploadMedicalReport.single("report"), uploadReport);
-reportRouter.get("/allReports",auth,displayReports)
-reportRouter.post("/sendReports",auth,sendReportToDoctor)
-reportRouter.get("/getDoctorReports",auth,getAllReportsForDoctor)
-reportRouter.put("/addDoctorReview",auth,addDoctorReview)
-reportRouter.get("/getReportStats",auth,getReportStats)
+// ✅ Upload & Auto Smart Report Generation
+reportRouter.post("/upload-report", uploadMedicalReport.single("report"), uploadReport);
 
-reportRouter.get("/doctorReviewHistory",auth,doctorReviewHistory)
+reportRouter.post(
+  "/save-report",
+  auth,
+  saveMedicalReportMulter.fields([
+    { name: "originalReport", maxCount: 1 },
+    { name: "aiReportPDF", maxCount: 1 }
+  ]),
+  saveMedicalReport
+);
 
-reportRouter.delete("/deleteUserReport",auth,deleteUserReport);
 
-reportRouter.get("/getUserReportsWithFeedback",auth,getUserReportsWithFeedback)
+// ✅ Standard routes
+reportRouter.get("/allReports", auth, displayReports);
+reportRouter.post("/sendReports", auth, sendReportToDoctor);
+reportRouter.get("/getDoctorReports", auth, getAllReportsForDoctor);
 
+reportRouter.get("/getReportStats", auth, getReportStats);
+
+reportRouter.delete("/deleteUserReport", auth, deleteUserReport);
+reportRouter.get("/getUserReportsWithFeedback", auth, getUserReportsWithFeedback);

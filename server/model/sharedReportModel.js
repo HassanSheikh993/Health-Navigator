@@ -6,7 +6,10 @@ const sharedReportModelSchema = mongoose.Schema({
    doctor_id:{ type: mongoose.Schema.Types.ObjectId, ref: "user", required: true },
    viewedByDoctor: { type: Boolean, default: false },
    doctor_review: { type: String, default: "" },
-   doctor_reviewedAt: { type: Date } 
-},{ timestamps: true })
+   doctor_reviewedAt: { type: Date },
+   patient_rating: { type: Number, min: 1, max: 5, default: null },
+  patient_review: { type: String, default: "" },
+  ratedAt: { type: Date, default: null }
+}, { timestamps: true });
 
 export const SharedReport = mongoose.model("sharedReport",sharedReportModelSchema);

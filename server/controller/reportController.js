@@ -1,52 +1,148 @@
 import { Report } from "../model/reportModel.js";
 import path from "path";
-import { structureMedicalReport } from "../utils/structureReport.js";
+import { structureReport } from "../utils/structureReport.js";
+import { SharedReport } from "../model/sharedReportModel.js";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
 
 export const uploadReport = async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "No file uploaded" });
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
 
     const filePath = req.file.path;
-    const relativePath = req.file.relativePath;
+    // const relativePath = req.file.relativePath || req.file.filename;
 
     console.log("📄 Uploaded file:", filePath);
-    console.log("👤 User ID:", req.user.id);
-
-    // Step 1 — Save basic report entry in DB
-    const newReport = await Report.create({
-      user: req.user.id,
-      reportPath: relativePath,
-    });
-
-    // Step 2 — Generate Smart Report (internally calls OCR + structuring)
-  
-
-    const smartReport = await generateSmartReport(filePath);
+    // console.log("👤 User ID:", req.user.id);
 
 
-    console.log("💬 Smart report generated.");
+    // const newReport = await Report.create({
+    //   user: req.user.id,
+    //   reportPath: relativePath,
+    // });
 
-    // Step 3 — Save Smart Report in DB
-    newReport.smartReport = smartReport.report;
-    await newReport.save();
+
+    console.log("⚙️ Step 1: Structuring medical report...");
+    const structured = await structureReport(filePath);
+
+    if (!structured.success) {
+      throw new Error(`Structure failed: ${structured.error}`);
+    }
+
+    console.log("✅ Structured JSON created.");
+
+    console.log("⚙️ Step 2: Generating Smart Report...");
+    const smart = await generateSmartReport(structured.structuredText);
+
+    if (!smart.success) {
+      throw new Error(`Smart report generation failed: ${smart.report}`);
+    }
+
+    console.log("✅ Smart Report generated successfully.");
+
+
+    // newReport.structuredData = structured.structuredText;
+    // newReport.smartReport = smart.report;
+    // await newReport.save();
+
 
     res.status(201).json({
+      success: true,
       message: "Report uploaded and processed successfully",
-      report: newReport,
-      smartReport: smartReport.report,
+      // report: newReport,
+      structuredData: structured.structuredText,
+
+      smartReport: smart.report,
     });
   } catch (err) {
     console.error("❌ Error in uploadReport:", err);
     res.status(500).json({
+      success: false,
       message: "Error uploading or processing report",
       error: err.message,
     });
   }
 };
 
-// This function is responsible for displaying one single report
 
+
+export const saveMedicalReport = async (req, res) => {
+  try {
+    if (!req.files?.originalReport || !req.files?.aiReportPDF) {
+      return res.status(400).json({
+        message: "Both original report and AI report are required"
+      });
+    }
+
+    const originalFile = req.files.originalReport[0];
+    const aiReportFile = req.files.aiReportPDF[0];
+    const structuredText = req.body.structuredText;
+    if (!structuredText) {
+      console.warn("⚠️ No structuredText received from frontend.");
+    }
+    console.log(structuredText);
+   
+    // 🧹 Clean markdown JSON text (remove ```json ``` wrappers)
+    let cleanText = structuredText || "";
+    cleanText = cleanText
+      .replace(/```json|```/g, "") // remove markdown fences
+      .trim()
+      // remove any junk before/after JSON
+      .replace(/^[^{\[]+/, "") // remove anything before first { or [
+      .replace(/[^}\]]+$/, ""); // remove anything after last } or ]
+
+    let testsArray = [];
+
+    try {
+      // ✅ Parse only the clean JSON block
+      const parsed = JSON.parse(cleanText);
+
+      if (Array.isArray(parsed)) {
+        testsArray = parsed;
+      } else if (parsed.tests && Array.isArray(parsed.tests)) {
+        testsArray = parsed.tests;
+      } else if (typeof parsed === "object") {
+        testsArray = [parsed];
+      }
+    } catch (err) {
+      console.warn("⚠️ Could not parse structured text as JSON:", err.message);
+      console.log("💡 Cleaned text snippet for debugging:\n", cleanText.slice(0, 300));
+    }
+
+    console.log("🧪 Extracted tests:", testsArray);
+
+
+    console.log("reportPath: ", originalFile.relativePath)
+    console.log("aiReportPath: ", aiReportFile.relativePath)
+
+
+    // Save to database
+    const newReport = await Report.create({
+      user: req.user.id,
+      reportPath: originalFile.relativePath, // Store original report path
+      smartReport: aiReportFile.relativePath, // Store AI report path
+      keyValues: testsArray,
+    });
+
+
+    res.status(201).json({
+      success: true,
+      message: "Reports saved successfully",
+      report: newReport,
+    });
+  } catch (err) {
+    console.error("Error saving report:", err);
+    res.status(500).json({
+      success: false,
+      message: "Error saving reports",
+      error: err.message,
+    });
+  }
+};
+
+
+// This function is responsible for displaying one single report
 
 export const getSingleReport = async (req, res) => {
   try {
@@ -105,7 +201,8 @@ export const getAllReportsForDoctor = async (req, res) => {
 
     const result = await SharedReport.find({ doctor_id: doctor_id })
       .populate("patient_id", "_id name email picture")
-      .populate("report_id", "reportPath simplifiedReport");
+      .populate("doctor_id", "_id email")
+      .populate("report_id", "reportPath smartReport");
 
     if (!result || result.length === 0) {
       return res.status(404).json({ message: "No reports" });
@@ -117,35 +214,6 @@ export const getAllReportsForDoctor = async (req, res) => {
     console.log("Error in getAllReportsForDoctor function ", err);
     res.status(500).json({ message: "Error getAllReportsForDoctor", error: err.message });
   }
-}
-
-export const addDoctorReview = async (req, res) => {
-  try {
-    const { doctorReviewedText, patient_id, report_id } = req.body;
-    if (!doctorReviewedText || !patient_id || !report_id) return res.status(400).json({ message: "Incomplete Data" });
-
-
-    const result = await SharedReport.updateOne(
-      { doctor_id: req.user.id, patient_id: patient_id, report_id: report_id },
-      {
-        $set: {
-          doctor_review: doctorReviewedText,
-          viewedByDoctor: true,
-          doctor_reviewedAt: new Date()
-        }
-      });
-
-    if (result.modifiedCount > 0) {
-      return res.status(201).json({ message: "Review Sent" });
-    } else {
-      return res.status(404).json({ message: "No matching report found" });
-    }
-
-  } catch (err) {
-    console.log("Error in addDoctorReview function ", err);
-    res.status(500).json({ message: "Error addDoctorReview", error: err.message });
-  }
-
 }
 
 
@@ -177,32 +245,6 @@ export const getReportStats = async (req, res) => {
   }
 };
 
-
-export const doctorReviewHistory = async (req, res) => {
-  try {
-    const doctor_id = req.user.id;
-    const result = await SharedReport.find({
-      $and: [
-        { doctor_id: doctor_id },
-        { viewedByDoctor: true }
-      ]
-    }).populate("patient_id", "_id name email picture")
-      .populate("report_id", "_id reportPath")
-
-
-    if (!result || result.length === 0) {
-      return res.status(200).json([]);
-    }
-
-    res.status(200).json(result);
-
-
-  } catch (err) {
-    console.log("Error in doctorReviewHistory function ", err);
-    res.status(500).json({ message: "Error doctorReviewHistory", error: err.message });
-
-  }
-}
 
 
 export const deleteUserReport = async (req, res) => {

@@ -1,26 +1,34 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import "../../Styles/reportDetails.css"
+import "../../Styles/reportDetails.css";
 import Footer from "../../Health Navigator/Footer";
 import Nav from "../../Health Navigator/Nav";
-import { addDoctorReview } from "../../services/medicalReport";
+import { addDoctorReview, deleteSharedReport } from "../../services/doctor";
+import toast from "react-hot-toast";
+import { confirmToast } from "./ConfirmToast";
+import { ArrowLeft, Trash2 } from "lucide-react";
 
-export function ReportDetails(){
-return(
+export function ReportDetails() {
+  return (
     <>
-    <Nav/>
-<Report/>
-<Footer/>
+      <Nav />
+      <Report />
+      <Footer />
     </>
-)
+  );
 }
 
 export function Report() {
   const { state } = useLocation();
   const report = state?.report;
 
+  const navigate = useNavigate();
+
   const [review, setReview] = useState("");
   const [reviewMessage, setReviewMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const [, setRefresh] = useState(0);
 
   if (!report) {
     return <p className="reportDetails__noData">No Report Data Found</p>;
@@ -29,82 +37,68 @@ export function Report() {
   const patient = report.patient_id || {};
   const reportFile = report.report_id || {};
 
+  // ⬅️ BACK BUTTON
+  function handleBack() {
+    navigate(-1);
+  }
 
-  // async function handleReviewSend(){
-
-  //     const result = await addDoctorReview(review,report.doctor_email,report.patient_id,report.report_id._id);
-  //     setReviewMessage(result.message);
-  // }
+  // 🗑 DELETE REPORT
 
 
+async function handleDelete() {
+  const confirm = await confirmToast("Are you sure you want to delete this report?");
+  if (!confirm) return;
 
-  async function handleReviewSend() {
   try {
-    const result = await addDoctorReview(
-      review,
-      report.doctor_email,
-      report.patient_id,
-      report.report_id._id
-    );
-
-    if (result && result.message) {
-      setReviewMessage(result.message);
-    } else {
-      setReviewMessage("Unexpected response from the server.");
-    }
+    await deleteSharedReport(report._id);
+    toast.success("Report deleted successfully.");
+    navigate(-1);
   } catch (error) {
-    console.error("Error sending doctor review:", error);
-
-    if (
-      error.response &&
-      [400, 401, 404, 500].includes(error.response.status)
-    ) {
-      setReviewMessage(
-        error.response.data?.message || "Failed to send review."
-      );
-    } else {
-      setReviewMessage("An unexpected error occurred. Please try again.");
-    }
+    console.error("Error deleting report:", error);
+    toast.error("Failed to delete report.");
   }
 }
 
 
+  async function handleReviewSend() {
+    try {
+      setLoading(true);
 
+      const result = await addDoctorReview(
+        review,
+        report._id,
+      );
 
-// async function handleReviewSend() {
-//   try {
-//     const result = await addDoctorReview(
-//       review,
-//       report.doctor_email,
-//       report.patient_id,
-//       report.report_id._id
-//     );
+      if (result?.message) {
+        setReviewMessage(result.message);
+      }
 
-//     if (result?.message) {
-//       setReviewMessage(result.message);
-//     } else {
-//       setReviewMessage("Unexpected response from server.");
-//     }
-//   } catch (error) {
-//     console.error("Error sending review:", error);
+      report.doctor_review = review;
+      setRefresh((x) => x + 1);
+      setReview("");
 
-//     if (
-//       error.response &&
-//       [400, 401, 404, 500].includes(error.response.status)
-//     ) {
-//       setReviewMessage(error.response.data?.message || "Failed to send review.");
-//     } else {
-//       setReviewMessage("An unexpected error occurred. Please try again.");
-//     }
-//   }
-// }
-
-
-
-
+    } catch (error) {
+      console.error("Error sending doctor review:", error);
+      setReviewMessage("Failed to send review.");
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="reportDetails__container">
+
+      {/* TOP ACTION BUTTONS */}
+      <div className="reportDetails__topActions">
+        <button className="backBtn" onClick={handleBack}>
+          <ArrowLeft size={20} /> Back
+        </button>
+
+        <button className="deleteBtn" onClick={handleDelete}>
+          <Trash2 size={20} /> Delete
+        </button>
+      </div>
+
       <h2 className="reportDetails__title">Report Details</h2>
 
       {/* Patient Info */}
@@ -119,12 +113,8 @@ export function Report() {
           alt="Patient"
           width="100"
         />
-        <p className="reportDetails__patientName">
-          Name: {patient.name || "NaN"}
-        </p>
-        <p className="reportDetails__patientEmail">
-          Email: {patient.email || "NaN"}
-        </p>
+        <p className="reportDetails__patientName">Name: {patient.name || "NaN"}</p>
+        <p className="reportDetails__patientEmail">Email: {patient.email || "NaN"}</p>
         <p className="reportDetails__date">
           Date: {new Date(report.createdAt).toLocaleString() || "NaN"}
         </p>
@@ -151,18 +141,18 @@ export function Report() {
         </div>
 
         <div className="reportDetails__fileBlock">
-          <h4 className="reportDetails__fileLabel">Simplified Report</h4>
-          {reportFile.simplifiedReport ? (
+          <h4 className="reportDetails__fileLabel">Smart Report</h4>
+          {reportFile.smartReport ? (
             <a
               className="reportDetails__fileLink"
-              href={`http://localhost:8000/${reportFile.simplifiedReport}`}
+              href={`http://localhost:8000/${reportFile.smartReport}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              Open Simplified Report
+              Open Smart Report
             </a>
           ) : (
-            <p className="reportDetails__fileMissing">Simplified Report: NaN</p>
+            <p className="reportDetails__fileMissing">Smart Report: NaN</p>
           )}
         </div>
       </div>
@@ -170,23 +160,64 @@ export function Report() {
       {/* Doctor Review */}
       <div className="reportDetails__review">
         <h3 className="reportDetails__reviewTitle">Doctor Review</h3>
-        <textarea
-          className="reportDetails__textarea"
-          value={review}
-          onChange={(e) => setReview(e.target.value)}
-          placeholder="Write your review here..."
-        />
-        <br />
-        <button
-          className="reportDetails__button"
-          onClick={handleReviewSend}
-        >
-          Send Review
-        </button>
+
+        {report.doctor_review ? (
+          <>
+            <p className="doctorReviewText">
+              <strong>Your Feedback:</strong> {report.doctor_review}
+            </p>
+
+            {report.patient_rating ? (
+              <div className="patientRatingBox">
+                <p>
+                  <strong>Patient Rating:</strong>
+                </p>
+
+                <div className="star-display">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      className="star"
+                      style={{
+                        color: star <= report.patient_rating ? "gold" : "#ccc",
+                      }}
+                    >
+                      ★
+                    </span>
+                  ))}
+                </div>
+
+                {report.patient_review && (
+                  <p className="patientReviewText">
+                    <strong>Patient Comment:</strong> {report.patient_review}
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="noRatingYet">Patient has not rated your feedback yet.</p>
+            )}
+          </>
+        ) : (
+          <>
+            <textarea
+              className="reportDetails__textarea"
+              value={review}
+              onChange={(e) => setReview(e.target.value)}
+              placeholder="Write your feedback here..."
+            />
+
+            <button
+              className="reportDetails__button"
+              onClick={handleReviewSend}
+              disabled={loading}
+            >
+              {loading ? "Sending..." : "Send Review"}
+            </button>
+          </>
+        )}
       </div>
-      {reviewMessage && <p>{reviewMessage}</p>}
+
+      {reviewMessage && <p className="successMessage">{reviewMessage}</p>}
     </div>
   );
 }
-
-

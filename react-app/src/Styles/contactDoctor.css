@@ -3,6 +3,11 @@
     padding: 0;
     box-sizing: border-box;
 }
+.avgRatingText {
+  font-size: 14px;
+  color: #555;
+  margin-top: 3px;
+}
 
 
 .doctor_container_heroSection {
@@ -81,59 +86,8 @@
 
 
 
-.search-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 50px;
-    padding: 0 20px;
-  }
-  
-  .search-input {
-    width: 400px;
-    padding: 12px 20px;
-    padding-right: 50px;
-    border: 2px solid #4ca3dd;
-    border-radius: 50px;
-    font-size: 16px;
-    outline: none;
-    transition: 0.3s ease;
-  }
-  
-  .search-input:focus {
-    border-color: #3b82f6;
-    box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
-  }
-  
-  .search-button {
-    margin-left: -45px;
-    background-color: #4ca3dd;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    width: 40px;
-    height: 40px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .search-button:hover {
-    background-color: #3182ce;
-  }
-  
-
   @media (max-width: 768px) {
-    .search-input {
-      width: 300px;
-      font-size: 15px;
-    }
   
-    .search-button {
-      width: 36px;
-      height: 36px;
-      font-size: 14px;
-    }
 
     .heading_paragraph p{
       text-align: center;
@@ -480,424 +434,515 @@
 
  /* ---------------------- */
 
-
-
-
-
-
-/* Dashboard Styles */
-.DoctorDashBoard_container {
-    padding: 30px 20px;
-    margin-bottom: 30px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 0 0 24px 24px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
-.DoctorDashBoard_container_h1 {
-    text-align: center;
-    font-size: 2.4rem;
-    margin-bottom: 30px;
-    font-weight: 700;
-    color: #2d3748;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    letter-spacing: -0.5px;
-}
-
-.top_part {
-    display: flex;
-    gap: 25px;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: stretch;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.notification_box {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    text-align: center;
-    flex: 1 1 280px;
-    min-width: 250px;
-    max-width: 380px;
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.notification_box::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(135deg, #2ecc71, #3498db);
-}
-
-.notification_box:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 36px rgba(31, 38, 135, 0.15);
-}
-
-.notification_box_heading {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: #4a5568;
-    font-weight: 500;
-}
-
-.notification_box h2 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #2ecc71, #3498db);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Messages Section */
-.message_user_to_dr_container {
-    padding: 30px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.message_user_to_dr_container h3 {
-    text-align: center;
-    margin-bottom: 15px;
-    color: #2d3748;
-    font-size: 1.6rem;
-    font-weight: 600;
-}
-
-.message_user_to_dr_container h4 {
-    text-align: center;
-    margin-bottom: 30px;
-    font-weight: 400;
-    color: #718096;
-    font-size: 1.1rem;
-}
-
-.message_user_to_dr_messages {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 25px;
-    padding: 0 10px;
-}
-
-.user_messages {
-    background: linear-gradient(135deg, rgba(46, 204, 113, 0.9) 0%, rgba(52, 152, 219, 0.9) 100%);
-    border-radius: 20px;
-    padding: 25px;
-    color: #fff;
-    text-align: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-}
-
-.user_messages::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
-    transform: rotate(30deg);
-}
-
-.user_messages:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(46, 204, 113, 0.2);
-}
-
-.user_messages h3 {
-    font-size: 1.3rem;
-    margin-bottom: 12px;
-    font-weight: 600;
-    position: relative;
-    z-index: 1;
-}
-
-.user_messages h4 {
-    font-size: 1.05rem;
-    font-weight: 400;
-    opacity: 0.9;
-    margin: 0;
-    position: relative;
-    z-index: 1;
-}
-
-/* Contact Doctor Styles */
-.search_filter {
-    padding: 25px 20px;
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    display: flex;
-    justify-content: center;
-}
-
-.search-container {
-    position: relative;
-    width: 100%;
-    max-width: 650px;
-    display: flex;
-    align-items: center;
-}
-
-.search-input {
-    width: 100%;
-    padding: 16px 25px;
-    border: none;
-    border-radius: 50px;
-    font-size: 16px;
-    background: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    box-shadow: 0 5px 20px rgba(46, 204, 113, 0.25);
-    background: rgba(255, 255, 255, 0.95);
-}
-
-.search-button {
-    position: absolute;
-    right: 8px;
-    background: linear-gradient(135deg, #2ecc71, #3498db);
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
-    transition: all 0.3s ease;
-}
-
-.search-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(46, 204, 113, 0.4);
-}
-
+/* Contact Doctor Main Container */
 .doctor_record_main_container {
-    padding: 30px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    display: grid;
-    
-    gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
+/* Doctor Record Card - Single Line Layout */
 .doctor_record {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(31, 38, 135, 0.1);
-    transition: all 0.3s ease;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    position: relative;
-}
-
-.doctor_record::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(135deg, #2ecc71, #3498db);
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid #e8f4f8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
 }
 
 .doctor_record:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 35px rgba(31, 38, 135, 0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.12);
+  border-color: #0077b6;
 }
 
-.doctor_record_upper_part {
-    padding: 25px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
-}
-
+/* Doctor Info Section - Left Side */
 .doctor_record_upper_part_name_country {
-    display: flex;
-    align-items: center;
-    gap: 18px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex: 1;
 }
 
+/* Doctor Image */
 .doctor_record_upper_part_image {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid rgba(255, 255, 255, 0.7);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #e8f4f8;
+  background: #f8f9fa;
+  flex-shrink: 0;
 }
 
+/* Doctor Text Info */
 .doctor_name {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: #2d3748;
-    margin-bottom: 6px;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
 }
 
 .doctor_country {
-    font-size: 1rem;
-    color: #718096;
-    font-weight: 500;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #6c757d;
+  margin: 0 0 8px 0;
 }
 
+/* Star Rating */
+.star-display {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.star {
+  font-size: 1.1rem;
+}
+
+.avgRatingText {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Buttons Container - Right Side */
 .doctor_buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    align-items: flex-end;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .toggle_btn, .send_report_btn {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  min-width: 120px;
 }
 
 .toggle_btn {
-    background: rgba(237, 242, 247, 0.8);
-    color: #4a5568;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  background: #f8f9fa;
+  color: #495057;
+  border: 1px solid #dee2e6;
 }
 
 .toggle_btn:hover {
-    background: rgba(226, 232, 240, 0.9);
-    transform: translateY(-2px);
+  background: #e9ecef;
+  border-color: #adb5bd;
 }
 
 .send_report_btn {
-    background: linear-gradient(135deg, #2ecc71, #3498db);
-    color: white;
-    box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 119, 182, 0.3);
 }
 
 .send_report_btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+  background: linear-gradient(135deg, #006da4, #0096c7);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.4);
+  transform: translateY(-1px);
 }
 
+/* Search Section */
+.search_filter {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 20px 0;
+}
+
+.search-container {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border: 1px solid #e8f4f8;
+}
+
+.search-input {
+  flex: 1;
+  padding: 16px 20px;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  background: transparent;
+  color: #2c3e50;
+}
+
+.search-input::placeholder {
+  color: #6c757d;
+  opacity: 0.8;
+}
+
+.search-button {
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #0077b6, #00b4d8);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+  min-width: 60px;
+}
+
+.search-button:hover {
+  background: linear-gradient(135deg, #006da4, #0096c7);
+}
+
+/* Extra Details Section - Full Width Below */
 .doctor_extra_details {
-    padding: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: all 0.4s ease;
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e8f4f8;
+  transition: all 0.3s ease;
+  grid-column: 1 / -1;
 }
 
 .doctor_extra_details.show {
-    padding: 25px;
-    max-height: 500px;
+  animation: slideDown 0.3s ease-out;
 }
 
 .doctor_extra_details.hide {
-    max-height: 0;
+  display: none;
 }
 
-/* Responsive Design */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Doctor Details Text */
+.doctor_extra_details p {
+  margin: 10px 0;
+  padding: 6px 0;
+  color: #495057;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  border-bottom: 1px solid #f8f9fa;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.doctor_extra_details p:last-child {
+  border-bottom: none;
+}
+
+.doctor_extra_details strong {
+  color: #2c3e50;
+  font-weight: 600;
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+/* ===== MEDIA QUERIES ===== */
+
+/* Large Tablets and Small Laptops */
 @media (max-width: 1024px) {
-    .doctor_record_main_container {
-        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    }
+  .doctor_record_main_container {
+    max-width: 900px;
+    padding: 20px;
+  }
+  
+  .doctor_record {
+    padding: 20px;
+    gap: 15px;
+  }
+  
+  .doctor_record_upper_part_name_country {
+    gap: 15px;
+  }
+  
+  .doctor_record_upper_part_image {
+    width: 65px;
+    height: 65px;
+  }
+  
+  .doctor_name {
+    font-size: 1.2rem;
+  }
 }
 
+/* Tablets */
 @media (max-width: 768px) {
-    .DoctorDashBoard_container_h1 {
-        font-size: 2rem;
-    }
-    
-    .doctor_record_main_container {
-        grid-template-columns: 1fr;
-        gap: 25px;
-        padding: 20px;
-    }
-    
-    .doctor_record_upper_part {
-        flex-direction: column;
-        gap: 20px;
-    }
-    
-    .doctor_buttons {
-        flex-direction: row;
-        width: 100%;
-        justify-content: flex-end;
-    }
-    
-    .notification_box h2 {
-        font-size: 3rem;
-    }
+  .doctor_record_main_container {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .doctor_record {
+    padding: 20px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  
+  .doctor_record_upper_part_name_country {
+    justify-content: flex-start;
+  }
+  
+  .doctor_buttons {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .toggle_btn, .send_report_btn {
+    flex: 1;
+    min-width: auto;
+    padding: 12px 16px;
+  }
+  
+  .search_filter {
+    padding: 20px 16px 0;
+  }
+  
+  .search-container {
+    flex-direction: column;
+    border-radius: 12px;
+    max-width: 500px;
+  }
+  
+  .search-input {
+    padding: 14px 16px;
+  }
+  
+  .search-button {
+    padding: 12px 16px;
+    border-radius: 0 0 12px 12px;
+  }
+  
+  .doctor_extra_details p {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+  
+  .doctor_extra_details strong {
+    min-width: auto;
+  }
 }
 
+/* Large Mobile Phones */
+@media (max-width: 600px) {
+  .doctor_record_main_container {
+    padding: 12px;
+    gap: 12px;
+  }
+  
+  .doctor_record {
+    padding: 18px;
+    border-radius: 12px;
+  }
+  
+  .doctor_record_upper_part_name_country {
+    gap: 12px;
+  }
+  
+  .doctor_record_upper_part_image {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .doctor_name {
+    font-size: 1.15rem;
+  }
+  
+  .doctor_country {
+    font-size: 0.9rem;
+  }
+  
+  .star {
+    font-size: 1rem;
+  }
+  
+  .avgRatingText {
+    font-size: 0.85rem;
+  }
+  
+  .search_filter {
+    padding: 15px 12px 0;
+  }
+}
+
+/* Small Mobile Phones */
 @media (max-width: 480px) {
-    .search-container {
-        max-width: 100%;
-    }
-    
-    .doctor_record_upper_part_name_country {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-    }
-    
-    .doctor_buttons {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .toggle_btn, .send_report_btn {
-        width: 100%;
-        text-align: center;
-    }
-    
-    .message_user_to_dr_messages {
-        grid-template-columns: 1fr;
-    }
-    
-    .DoctorDashBoard_container {
-        border-radius: 0 0 20px 20px;
-    }
+  .doctor_record_upper_part_name_country {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .doctor_record_upper_part_image {
+    width: 55px;
+    height: 55px;
+  }
+  
+  .doctor_name {
+    font-size: 1.1rem;
+  }
+  
+  .doctor_country {
+    font-size: 0.85rem;
+  }
+  
+  .doctor_buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .toggle_btn, .send_report_btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .search-container {
+    border-radius: 10px;
+  }
+  
+  .search-input {
+    padding: 12px 16px;
+    font-size: 0.95rem;
+  }
+  
+  .search-button {
+    padding: 14px 16px;
+    font-size: 1rem;
+  }
+  
+  .doctor_extra_details {
+    margin-top: 16px;
+    padding-top: 16px;
+  }
+  
+  .doctor_extra_details p {
+    font-size: 0.9rem;
+    margin: 8px 0;
+    padding: 4px 0;
+  }
 }
 
-/* Animation for elements */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+/* Extra Small Mobile Phones */
+@media (max-width: 360px) {
+  .doctor_record_main_container {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .doctor_record {
+    padding: 16px;
+  }
+  
+  .doctor_record_upper_part_image {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .doctor_name {
+    font-size: 1rem;
+  }
+  
+  .toggle_btn, .send_report_btn {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    min-width: auto;
+  }
+  
+  .search-input {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .search-button {
+    padding: 12px 14px;
+  }
 }
 
-.doctor_record, .notification_box, .user_messages {
-    animation: fadeIn 0.5s ease-out forwards;
+/* High Resolution Displays */
+@media (min-width: 1440px) {
+  .doctor_record_main_container {
+    max-width: 1400px;
+  }
+  
+  .doctor_record {
+    padding: 28px;
+  }
+  
+  .doctor_record_upper_part_image {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .doctor_name {
+    font-size: 1.4rem;
+  }
+  
+  .toggle_btn, .send_report_btn {
+    padding: 12px 24px;
+    font-size: 1rem;
+  }
 }
 
-.doctor_record:nth-child(2) { animation-delay: 0.1s; }
-.doctor_record:nth-child(3) { animation-delay: 0.2s; }
-.doctor_record:nth-child(4) { animation-delay: 0.3s; }
-.doctor_record:nth-child(5) { animation-delay: 0.4s; }
+/* Print Styles */
+@media print {
+  .doctor_record {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .doctor_buttons {
+    display: none;
+  }
+  
+  .search_filter {
+    display: none;
+  }
+}
+
+/* Loading State Animation */
+.doctor_record:empty::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

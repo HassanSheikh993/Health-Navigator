@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import { reportRouter } from "./routes/reportRouts.js";
-
+import contactRouter from "./routes/contactRoutes.js";
 import smartReportRoutes from "./routes/smartReportRoutes.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,12 +32,15 @@ app.use(cookieParser())
 
 app.use('/uploadProfileImages', express.static(path.join(__dirname, 'public', 'uploadProfileImages')));
 app.use('/medicalReports', express.static(path.join(__dirname, 'public', 'medicalReports')));
+app.use('/originalReports', express.static(path.join(__dirname, 'public', 'originalReports')));
+app.use('/aiReports', express.static(path.join(__dirname, 'public', 'aiReports')));
+app.use('/defaultProfileImage', express.static(path.join(__dirname, 'public', 'defaultProfileImage')));
 
 app.use("/api",router)
 app.use("/api",doctorRouter);
 app.use("/api",reportRouter);
 app.use("/api", smartReportRoutes);
-
+app.use("/api", contactRouter);
 app.get("/",(req,res)=>{
     res.send("testing")
 })

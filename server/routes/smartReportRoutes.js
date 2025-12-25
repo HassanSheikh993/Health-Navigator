@@ -3,7 +3,7 @@ import multer from "multer";
 import fs from "fs";
 import path from "path";
 import { generateSmartReport } from "../utils/smartReportGenerator.js";
-import { structureMedicalReport } from "../utils/structureReport.js"; // optional
+import { structureReport } from "../utils/structureReport.js"; // optional
 
 const smartReportRoutes = express.Router();
 
@@ -53,7 +53,7 @@ smartReportRoutes.post("/structure-report", upload.single("file"), async (req, r
     const filePath = req.file.path;
     console.log("📄 Received file for structuring:", filePath);
 
-    const report = await structureMedicalReport(filePath);
+    const report = await structureReport(filePath);
 
     fs.unlink(filePath, (err) => {
       if (err) console.error("⚠️ Error deleting temp file:", err);

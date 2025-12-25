@@ -3,14 +3,13 @@ import { getUserReportsWithFeedback } from "../../services/medicalReport";
 import "../../Styles/UserReportsWithFeedback.css"
 import Nav from "../../Health Navigator/Nav";
 import Footer from "../../Health Navigator/Footer";
-
-
-export function MainUserReportsWithFeedback(){
-  return(
+import { RatingSection } from "../userFeedBackReports/RatingSection";
+export function MainUserReportsWithFeedback() {
+  return (
     <>
-    <Nav/>
-    <UserReportsWithFeedback/>
-    <Footer/>
+      <Nav />
+      <UserReportsWithFeedback />
+      <Footer />
     </>
   )
 }
@@ -22,7 +21,7 @@ export function UserReportsWithFeedback() {
   async function getData() {
     try {
       const result = await getUserReportsWithFeedback();
-      console.log("BBBB: ",result)
+      console.log("BBBB: ", result)
 
       if (!result || result.length === 0) {
         setData([]);
@@ -81,6 +80,7 @@ export function UserReportsWithFeedback() {
       {filteredData.map((item) => {
         const doctor = item.doctor_id || {};
         const report = item.report_id || {};
+        console.log("aryyyyy ggg ",report.reportPath)
 
         const doctorImage = doctor.picture
           ? `http://localhost:8000${doctor.picture}`
@@ -104,17 +104,17 @@ export function UserReportsWithFeedback() {
 
             {/* Report Link */}
             {report.reportPath && (
-              <button
-                className="userReportFeedBack_viewReportButton"
-                onClick={() =>
-                  window.open(
-                    `http://localhost:8000${report.reportPath}`,
-                    "_blank"
-                  )
-                }
+              <div
+                className="userReportFeedBack__fileLink"
               >
-                View Report
-              </button>
+                <a
+              href={`http://localhost:8000/${report.reportPath}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open Report
+            </a>
+              </div>
             )}
 
             {/* Feedback & Time (only if reviewed) */}
@@ -128,6 +128,10 @@ export function UserReportsWithFeedback() {
                   {new Date(item.updatedAt).toLocaleString()}
                 </p>
               </>
+            )}
+            {/* ⭐ Patient Rating System */}
+            {item.viewedByDoctor && (
+              <RatingSection item={item} refresh={getData} />
             )}
           </div>
         );

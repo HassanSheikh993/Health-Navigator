@@ -16,7 +16,7 @@ const transporter = nodemailer.createTransport({
 export async function sendEmail(email, verificationCode) {
     try {
         const info = await transporter.sendMail({
-            from: '"Health Navigator" <hassansheikh993@gmail.com>',
+            from: '"Health Navigator" <dontfollow55@gmail.com>',
             to: email,
             subject: "Email Verification",
             text: "EMAIL VERIFICATION",

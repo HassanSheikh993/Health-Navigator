@@ -218,10 +218,9 @@ setPreviewImage(
                         </div>
                     </form>
 
-                    <h5 className="updateProfile_message">{message}</h5>
+                    
                 </div>
             </div>
         </>
     )
 }
-

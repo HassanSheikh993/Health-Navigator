@@ -70,10 +70,10 @@
 // }
 
 
-export const displayAllReports = async()=>{
-  const result = await fetch("http://localhost:8000/api/sendReportToDoctor",{
-    method:"GET",
-    credentials:"include"
+export const displayAllReports = async () => {
+  const result = await fetch("http://localhost:8000/api/sendReportToDoctor", {
+    method: "GET",
+    credentials: "include"
   })
 
   const res = result.json();
@@ -139,14 +139,29 @@ import api from './apiConnection';
 
 export const uploadMedicalReport = async (report) => {
   const formData = new FormData();
-  formData.append("report", report); 
+  formData.append("report", report);
 
   const response = await api.post("/upload-report", formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
   });
-  
+
+  return response.data;
+};
+
+
+export const saveMedicalReport = async (pdfFile, originalReport, structuredText) => {
+  const formData = new FormData();
+  formData.append("aiReportPDF", pdfFile);
+  formData.append("originalReport", originalReport);
+  formData.append("structuredText", structuredText);
+  const response = await api.post("/save-report", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
   return response.data;
 };
 
@@ -156,7 +171,7 @@ export const sendReportToDoctor = async (reports, doctor_id) => {
     reports: reports,
     doctor_id: doctor_id
   });
-  
+
   return response.data;
 };
 
@@ -164,7 +179,7 @@ export const deleteUserReport = async (reportId) => {
   const response = await api.delete("/deleteUserReport", {
     data: { ids: reportId }
   });
-  
+
   return response.data;
 };
 
@@ -186,26 +201,15 @@ export const getUserReportsWithFeedback = async () => {
   return response.data;
 };
 
-
-export const doctorReviewHistory = async () => {
-  const response = await api.get("/doctorReviewHistory");
-  return response.data;
-};
-
 export const getReportStats = async () => {
   const response = await api.get("/getReportStats");
   return response.data;
 };
 
-export const addDoctorReview = async (review, doctor_email, patient_id, report_id) => {
-  const dataToSend = {
-    doctorReviewedText: review,
-    doctor_email,
-    patient_id,
-    report_id
-  };
-
-  const response = await api.put("/addDoctorReview", dataToSend);
-  console.log(response.data);
+export const rateDoctorFeedback = async (sharedReportId, rating, review) => {
+  const response = await api.post(`/rate/${sharedReportId}`, {
+    rating,
+    review
+  });
   return response.data;
 };

@@ -1,63 +1,88 @@
-// server/utils/structureReport.js
+// structureReport.js
 import fetch from "node-fetch";
+import fs from "fs";
+import FormData from "form-data";
+import path from "path";
 import dotenv from "dotenv";
 dotenv.config();
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY; // Replace with your key
-console.log("STRUCUTURE REPORT ",OPENROUTER_API_KEY);
 
-export const structureMedicalReport = async (extractedText) => {
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
+const OCR_SERVICE_URL = "http://localhost:5001/extract";
+
+export const structureReport = async (filePath) => {
   try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    console.log("📄 Sending file to OCR service...");
+    const absolutePath = path.resolve(filePath);
+    console.log("📂 Absolute file path:", absolutePath);
+
+    const formData = new FormData();
+    formData.append("file", fs.createReadStream(absolutePath));
+
+    // 🧠 OCR extraction
+    const ocrResponse = await fetch(OCR_SERVICE_URL, {
+      method: "POST",
+      body: formData,
+      headers: formData.getHeaders(),
+    });
+
+    const rawText = await ocrResponse.text();
+    console.log("🧾 Raw OCR response:", rawText);
+
+    let ocrData;
+    try {
+      ocrData = JSON.parse(rawText);
+    } catch (e) {
+      throw new Error("OCR service returned invalid JSON: " + rawText);
+    }
+
+    const extractedText = ocrData.extracted_text || ocrData.text || "";
+    if (!extractedText) throw new Error("No text extracted from OCR service.");
+
+    console.log("✅ OCR Extraction Completed");
+
+    // 🔧 Structure using LLM
+    console.log("🧠 Structuring extracted data...");
+    const structureResponse = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "mistralai/mistral-7b-instruct:free", // reliable free model
+        model: "openai/gpt-oss-20b:free",
         messages: [
           {
             role: "system",
-            content: `You are a medical data extraction expert. Your job is to analyze raw OCR medical report text and convert it into structured JSON.`,
+            content: "You are an AI that structures raw medical report text into clean, machine-readable JSON format.",
           },
           {
             role: "user",
-            content: `Here is the extracted medical report text:\n\n${extractedText}\n\nConvert it into valid JSON with this exact structure:
+            content: `Convert the following medical report text into structured JSON:
+${extractedText}
 
+Example JSON:
 {
-  "patient": {
-    "name": "",
-    "age": "",
-    "gender": "",
-    "report_date": ""
-  },
+  "patient": {"name": "...", "age": "...", "gender": "..."},
   "tests": [
-    {
-      "test_name": "",
-      "result": "",
-      "unit": "",
-      "normal_range": "",
-      "flag": "High" | "Low" | "Normal"
-    }
+    {"name": "ALT", "value": "55", "unit": "U/L", "range": "0–40", "flag": "high"}
   ],
-  "summary": "Short summary of key findings"
-}
-
-⚠️ Important: Return only valid JSON (no markdown, no explanation).`,
+  "remarks": "..."
+}`,
           },
         ],
       }),
     });
 
-    const data = await response.json();
-    const content = data?.choices?.[0]?.message?.content;
+    const structuredResult = await structureResponse.json();
+console.log(structuredResult);
+    const structuredText = structuredResult?.choices?.[0]?.message?.content;
+console.log(structuredText);
+    if (!structuredText) throw new Error("Failed to structure report text.");
 
-    // Ensure we safely parse valid JSON only
-    if (!content) throw new Error("No structured content returned");
-    const cleanJson = content.trim().replace(/^```json|```$/g, "");
-    return JSON.parse(cleanJson);
-  } catch (err) {
-    console.error("Error structuring medical report:", err);
-    return null;
+    console.log("✅ Structured JSON generated successfully");
+    return { success: true, structuredText };
+  } catch (error) {
+    console.error("❌ Error structuring report:", error.message);
+    return { success: false, structuredText: "", error: error.message };
   }
 };

@@ -112,24 +112,34 @@
 }
 
 /* View Report Button */
-.userReportFeedBack_viewReportButton {
-  display: inline-block;
-  margin-top: 0.5rem;
-  padding: 0.4rem 0.8rem;
+.userReportFeedBack__fileLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
   background: #2563eb;
-  color: #ffffff;
-  border: none;
-  border-radius: 5px;
-  font-size: 0.9rem;
+  border-radius: 6px;
   font-weight: 500;
-  cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
 }
 
-.userReportFeedBack_viewReportButton:hover {
-  background: #1d4ed8;
-  transform: translateY(-1px);
+.userReportFeedBack__fileLink a{
+  color: white;
+  text-decoration: none;
 }
+
+
+.userReportFeedBack__fileLink:hover {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.userReportFeedBack__fileLink::before {
+  margin-right: 0.5rem;
+}
+
+
 
 /* Feedback Section */
 .userReportFeedBack_feedback {

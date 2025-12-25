@@ -2,13 +2,15 @@ import { useEffect, useState, useRef } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Link } from 'react-scroll';
 import { logoutUser, loginUserData } from '../services/api';
+import toast from 'react-hot-toast';
 
 function Nav() {
   const [name, setName] = useState("");
-  const [userData,setUserData] = useState();
+  const [userData, setUserData] = useState();
   const [dropDown, setDropDown] = useState(false);
   const navigate = useNavigate();
 
+  console.log("userData ", userData)
   // Refs for detecting outside click
   const profileIconRef = useRef(null);
   const dropDownRef = useRef(null);
@@ -29,11 +31,17 @@ function Nav() {
   function handleGoToProfile() {
     navigate("/edit-profile");
   }
-
+  function handleDashboard() {
+    navigate("/doctor-portal");
+  }
+function handleFeedBack() {
+    navigate("/userFeedBack-history");
+  }
   async function handleLogout() {
     let result = await logoutUser();
     if (result.status === true) {
       navigate("/Register");
+      toast.success("Logout Successfully")
     }
   }
 
@@ -62,7 +70,9 @@ function Nav() {
       <div className="header">
         <div className="logo">
           <img src="/images/newLogo.png" alt="" style={{ width: "80px" }} />
+          <h4  className= "logoName" >Health Navigator</h4>
         </div>
+
         <nav className="navBar">
           <ul>
             <li><RouterLink to="/">Home</RouterLink></li>
@@ -81,12 +91,16 @@ function Nav() {
               onClick={handleProfileButton}
               ref={profileIconRef}
             >
-            
-<img
-  className="nav_userProfile_image"
-  src={userData.picture ? `http://localhost:8000${userData.picture}` : "/images/user.png"}
-  alt="User Profile"
-/>            </div>
+
+              <img
+                className="nav_userProfile_image"
+                src={`http://localhost:8000${userData.picture}`}
+                alt="User Profile"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/images/user.png";
+                }}
+              />          </div>
           ) : (
             <button onClick={() => navigate('/Register')}>Login/Register</button>
           )}
@@ -95,6 +109,11 @@ function Nav() {
         {dropDown && (
           <div className="nav_dropDown_container" ref={dropDownRef}>
             <p className="nav_dropDown_item" onClick={handleGoToProfile}>Profile</p>
+            {userData?.role === "doctor" && (
+  <p className="nav_dropDown_item" onClick={handleDashboard}>Dashboard</p>
+)}
+
+            <p className="nav_dropDown_item" onClick={handleFeedBack}>Feedback History</p>
             <p className="nav_dropDown_item" onClick={handleLogout}>Logout</p>
           </div>
         )}

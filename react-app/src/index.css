@@ -1,0 +1,46 @@
+.toast-confirm {
+  padding: 12px 16px;
+  background: #ffffff;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #333;
+  min-width: 260px;
+}
+
+.toast-confirm p {
+  margin: 0 0 10px 0;
+}
+
+.toast-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.btn-cancel {
+  background: #e5e5e5;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+.btn-cancel:hover {
+  background: #d4d4d4;
+}
+
+.btn-delete {
+  background: #e11d48;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.15s ease-in-out;
+}
+
+.btn-delete:hover {
+  background: #be123c;
+}
+

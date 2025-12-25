@@ -7,15 +7,17 @@ import './Styles/Nav.css'
 import './Styles/HeroSection.css'
 import './Styles/Features.css'
 import './Styles/TrackHealthcover.css'
+import { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
 
-
+import { loginUserData } from "./services/api";
 import Register from "./components/Registration";
 import OtpVerification from "./components/OtpVerification";
 import Homeview from './Health Navigator/Homeview';
 import TrackHealth from './Health Navigator/TrackHealth';
-import {UploadReport} from "./components/uploadMedicalReport/uploadReport"   //
-import {About} from "./components/AboutUs/aboutpage"
-import {MainContactDoctor} from "./components/contactDocter.jsx/mainComponetToRun"
+import { UploadReport } from "./components/uploadMedicalReport/uploadReport"   //
+import { About } from "./components/AboutUs/aboutpage"
+import { MainContactDoctor } from "./components/contactDocter.jsx/mainComponetToRun"
 import { EditProfile } from "./components/profileSetup/editProfile";
 import { DoctorPortal } from "./components/doctorPortal/doctorPortal";
 
@@ -29,59 +31,78 @@ import { DoctorHistory, ShowDoctorHistory } from "./components/doctorPortal/show
 import { UserMessage } from "./components/doctorPortal/userMessage";
 import { AllUserReport } from "./components/userAllReports/userReports";
 import { LiverReportsChart } from "./components/try";
-import{ LiverReportsLineChart } from "./components/try2";
+import { LiverReportsLineChart } from "./components/try2";
 import { LiverReportsBarChart } from "./components/try3";
 import { UploadMedicalReportMainPage } from "./components/uploadMedicalReport/uploadMedicalReportMain";
 import { MainUserReportsWithFeedback } from "./components/userFeedBackReports/getUserReportsWithFeedback";
+import { Unauthorized } from "./components/doctorPortal/Unauthorized";
 import { Test1 } from "./components/practice/test1";
 
-
-
-
-
-
 function App() {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const userData = await loginUserData();
+      setUser(userData);
+      setLoading(false);
+    }
+    fetchUserData();
+  }, []);
+
   return (
     <>
-   
-<Router>
-  <Routes>
-    <Route path='/' element={<Homeview/>}/>
-    <Route path='/TrackHealth' element={<TrackHealth/>}/>
+      <Toaster position="top-center" />
+      <Router>
+        <Routes>
+          <Route path='/' element={<Homeview />} />
+          <Route path='/TrackHealth' element={<TrackHealth />} />
 
-      <Route path="/Register" element={<Register />} />
-        {/* <Route path="/upload-report" element={<UploadReport />} /> */}
-                <Route path="/upload-report" element={<UploadMedicalReportMainPage />} />
+          <Route path="/Register" element={<Register />} />
+          {/* <Route path="/upload-report" element={<UploadReport />} /> */}
+          <Route path="/upload-report" element={<UploadMedicalReportMainPage />} />
 
-        <Route path="/About" element={<About />} />
-        <Route path="/contact-doctor" element={<MainContactDoctor />} />
-        <Route path="/edit-profile" element={<Profile />} />
-        <Route path="/doctor-portal" element={<DoctorPortal />} />
-        <Route path="/verify-otp" element={<OtpVerification />} />
+          <Route path="/About" element={<About />} />
+          <Route path="/contact-doctor" element={<MainContactDoctor />} />
+          <Route path="/edit-profile" element={<Profile />} />
+          {/* <Route path="/doctor-portal" element={<DoctorPortal />} /> */}
+          <Route path="/verify-otp" element={<OtpVerification />} />
 
-        <Route path="/forget-password" element={<ForgetPassword/>} />
-        <Route path="/Otp-ForgetPassword" element={<OtpForgetPassword/>} />
-        <Route path="/update-password" element={<UserPasswordUpdate/>} />
+          <Route path="/forget-password" element={<ForgetPassword />} />
+          <Route path="/Otp-ForgetPassword" element={<OtpForgetPassword />} />
+          <Route path="/update-password" element={<UserPasswordUpdate />} />
 
-        <Route path="/reportDetails" element={<ReportDetails/>} />
-         <Route path="/showDoctorHistory" element={<DoctorHistory/>} />
-          <Route path="/allReports" element={<AllUserReport/>} />
-          <Route path="/userFeedBack-history" element={<MainUserReportsWithFeedback/>} />
-          
+          <Route path="/reportDetails" element={<ReportDetails />} />
+          <Route path="/showDoctorHistory" element={<DoctorHistory />} />
+          <Route path="/allReports" element={<AllUserReport />} />
+          <Route path="/userFeedBack-history" element={<MainUserReportsWithFeedback />} />
+
           {/* <Route path="/try" element={<LiverReportsBarChart/>} />
           <Route path="/try2" element={<LiverReportsLineChart/>} /> */}
+          <Route
+            path="/doctor-portal"
+            element={
+              loading ? (
+                <p>Loading...</p>
+              ) : user?.role === "doctor" ? (
+                <DoctorPortal />
+              ) : (
+                <Unauthorized />
+              )
+            }
+          />
+
+          <Route path="/test1" element={<Test1 />} />
 
 
-     <Route path="/test1" element={<Test1/>} />
-        
-       
 
-  </Routes>
+        </Routes>
 
-</Router>
+      </Router>
 
 
- </>
+    </>
   );
- }
+}
 export default App

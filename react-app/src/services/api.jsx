@@ -72,3 +72,10 @@ export const loginUserData = async () => {
     return null;
   }
 };
+
+export async function sendContactMessage(contactData) {
+  const result = await handleRequest(
+    api.post("/contact", contactData)
+  );
+  return result;
+}
